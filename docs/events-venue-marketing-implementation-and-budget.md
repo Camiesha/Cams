@@ -69,6 +69,41 @@ A 90-day sequence. SEO work runs quietly in parallel from Week 1 because it is s
 
 Costs split into **one-time build** and **monthly recurring**, because they behave differently: the build is a capitalizable-style outlay amortized over the year, the monthly cost is what the business must sustain.
 
+### Tier 0 — the genuinely cheapest version
+
+There is something cheaper than Lean. It is not a smaller version of the same plan — it is the same plan paid in **hours instead of dollars**.
+
+| Line item | Tier 0 approach | Cash |
+|---|---|---:|
+| Tracking & analytics setup | **Buy this one piece** — one-off freelancer, verified | $400–800 |
+| Landing pages | Built on the existing site, in-house | $0 |
+| Event brochure | Designed in-house using our own photos | $0 |
+| Photography | Alvin Studio, in-house | $0 |
+| CRM | Free tier (HubSpot free, Zoho free) | $0 |
+| Follow-up email | Free-tier sending, ample at ~50 leads/month | $0 |
+| Follow-up SMS | Pay per message | ~$15/mo |
+| Tour scheduling | Google Calendar appointments or Calendly free | $0 |
+| Call tracking | Skipped — ask "how did you hear about us?" instead | $0 |
+| Ad spend | None to start, or a $300–500/month toe in the water | $0–500/mo |
+| Management | Internal hours | $0 |
+
+**90-day cash: roughly $700** without ads, or about **$1,700** with a minimal ad test — against **$5,600** for Lean.
+
+**What it actually costs.** Forty to fifty-five hours of internal time to build, then four to six hours a month to run. At a loaded internal rate of $30 an hour, that is $1,200–1,650 of real cost that never appears on an invoice. Cheaper in cash, not free — and the hours come out of someone who currently has another job.
+
+**The one place not to economize.** DIY tracking is where this approach fails, and it fails *invisibly*: a conversion tag that looks installed but never fires produces confident numbers that are wrong, which is worse than no numbers at all. Pay the $400–800 to have tracking set up and verified by someone who does it regularly. It is the highest-leverage line item in this entire document.
+
+**Three moves that cost nothing and should happen regardless of tier:**
+1. Complete the Google Business Profile — hours, categories, event types, our own photos. For a local venue this is frequently worth more than a small ad budget.
+2. Ask for a review after every completed event, and reply to all of them.
+3. Cut response time to new inquiries. If leads currently wait a day and we move to minutes, we convert leads we are *already* paying for. Those are free bookings.
+
+**And the cheapest move of all:** if ads are running right now without working conversion tracking, that spend is the leak. Fixing or pausing it is immediately cash-positive and costs nothing.
+
+**The trade-offs, stated plainly.** It is slower — eight to twelve weeks of part-time work rather than six. Free CRM tiers carry contact and automation caps we would hit somewhere north of ~200 leads a month. And without ads, lead flow depends on organic and referral, which builds over months rather than weeks.
+
+### The three paid tiers
+
 ### One-time build
 
 | Line item | Lean | Standard | Full |
@@ -149,7 +184,7 @@ Pick by booking value, not by ambition:
 
 | Average contribution per booking | Recommendation |
 |---|---|
-| Under $1,500 | **Lean only** — or fix packaging and pricing before spending on traffic |
+| Under $1,500 | **Tier 0** — prove the funnel with hours, not cash; or fix packaging and pricing first |
 | $1,500 – $3,000 | **Lean**, then Standard only after Gate 3 clears |
 | $3,000 – $6,000 | **Standard** |
 | Over $6,000 | **Standard now**, Full once the funnel is proven |
