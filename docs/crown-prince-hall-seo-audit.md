@@ -10,7 +10,7 @@
 
 ## 0. How this audit was done, and what to double-check
 
-The venue's website and its Yelp listing could not be fetched directly from the audit environment (the outbound network policy blocks both domains). Everything below is built from what Google, Yelp and directory sites currently *show* about the site: the indexed title tag, the indexed meta description, the indexed page list, and the listing data (address, phone, hours, categories, amenities). That is exactly what searchers and Google see, so the on-page and local findings are reliable. What could **not** be checked is listed at the end (Section 7) with a 20-minute checklist to close the gaps.
+The audit environment could not load the website or Yelp directly (the outbound network policy blocks both domains). The on-page findings are built from two sources: what Google's index shows for the site (title tag, meta description, indexed URLs) and the **full homepage copy supplied by the venue** (navigation, every section heading, the included-items list, packages, FAQ questions, form fields, house notes and footer). Local-listing findings (hours, categories, same-address listings) come from Yelp and directory snapshots and are marked accordingly. What could **not** be checked is listed at the end (Section 7) with a short checklist to close the gaps.
 
 Fields marked **VERIFY** are values taken from third-party listings or left as placeholders. Confirm them before pasting.
 
@@ -25,11 +25,16 @@ Fields marked **VERIFY** are values taken from third-party listings or left as p
 |---|---|---|
 | Title tag | `Crown Prince Event Hall — San José Event & Banquet Venue` (56 chars) | OK length, but the money keyword "banquet hall San Jose" is not present as a phrase, and "San José" (accented) is used instead of the form people type. |
 | Meta description | Starts "Crown Prince Event Hall is a 4,100 sq ft event-ready venue in San José for weddings, quinceañeras, debuts, birthdays, graduations, and corporate celebrations — up to 300 guests, with stage, dance floor, full bar, 360° virtual tour, and 100+ gated parking." | ~250 characters. Google truncates at roughly 155–160. The strongest hooks (300 guests, parking) get cut on mobile. |
-| Indexed pages | Only the homepage appears for `site:crownprincehall.com` | The site is either a single long page with anchor sections, or the event-type pages are not indexable. Either way there is **no dedicated page** to rank for "wedding venue San Jose," "quinceañera venue San Jose," or "corporate event venue San Jose." This is the single largest organic gap. |
+| Indexed pages | Only the homepage appears for `site:crownprincehall.com` | Confirmed: the site is **one page** with anchor sections (`#venue`, `#events`, `#included`, `#gallery`, `#faq`, `#inquiry`). There is **no dedicated URL** to rank for "wedding venue San Jose," "quinceañera venue San Jose," "debut venue San Jose" or "corporate event venue San Jose." This is the single largest organic gap. |
+| H1 / hero | "A grand stage for life's celebrations" | Beautiful, but keyword-free. Google reads the H1 as the page topic. Keep the line as the sub-headline; put the keyword in the H1 (§2.1). |
+| Section headings | "Celebrations We Host," "The Venue," "Event-Ready, Built In," "Packages," "Word of Mouth," "Good to Know," "Check Your Date" | Every H2 is a label, not a query. None contains "San Jose," "banquet hall," "venue" or an event type. §2.1 maps each one to a keyword-bearing replacement that keeps the voice. |
+| Square footage | Hero says "4,000+" and "Over 4,000"; the reviews section says "4,100" | Pick one figure (4,100) and use it everywhere, including schema and GBP. Inconsistent facts weaken entity confidence. |
+| FAQ | Eight questions already on the page (catering, alcohol, vendors, setup time, parking, family-friendly, smoking, exact price) | Good content with **no FAQPage schema**, so it earns no rich result. §4.5 supplies schema for the existing eight questions. |
+| Reviews on site | "Be among the first to celebrate here" with an empty five-star block | An empty star row can read as a rating of zero to a skimming visitor. Replace with the review program in §6.7 and remove the stars until real ones exist. |
 | Structured data | None visible in search features (no FAQ rich result, no sitelinks, no business rich data) | No JSON-LD detected in the index snapshot. Section 3 supplies it. |
 | Brand name | "Crown Prince Event Hall" (site, Yelp) vs "Crown Prince Hall" (domain, in-copy) | Pick one legal/display name and use it identically on the site, GBP, Yelp, and every directory. Recommendation: **Crown Prince Event Hall** (matches Yelp and the indexed title). |
-| Phone (VERIFY) | 408-408-1654 (from directory data) | Confirm this is the tracked, answered line. Must match GBP exactly. |
-| Hours | Yelp shows **"Open 24 hours, 7 days"** | Almost certainly wrong for a venue office and a known trust/quality signal for Google. Publish real inquiry/tour hours (Section 3, Section 5). |
+| Phone | 408-408-1654, verified on the site header, footer and form (tap-to-call) | Consistent. Use the same format on GBP and Yelp. Add call tracking only via a GBP-safe method (a tracking number as primary on GBP with the real number as "additional"). |
+| Hours | Site says "tours available seven days a week" with no hours; Yelp shows **"Open 24 hours, 7 days"** | No hours on the site and 24-hour hours on Yelp is the worst combination for trust. Publish real inquiry/tour hours on the site footer, in schema (§3) and on GBP (§6.4). |
 | Yelp categories | Venues & Event Spaces, Wedding Planning, **Country Dance Halls** | "Country Dance Halls" is a mis-category. Remove it. It dilutes relevance and attracts the wrong searches. |
 | Same-address listings | "The Nobel Venue" is also listed at 1654 Burdette Dr (Yelp) | If this is a former name or a prior tenant, request a merge/closure on Google and Yelp. Two venue listings at one address split reviews and confuse the map pack. |
 | Reviews | Yelp listing is new with few reviews | Reviews are the #1 map-pack ranking factor after proximity. See High-priority row in Section 1a. |
@@ -46,12 +51,16 @@ Fields marked **VERIFY** are values taken from third-party listings or left as p
 | **HIGH** | Launch a review program: ask every completed event within 48 hours, target 5+ Google reviews per month, reply to all | Newest venue on the block with few reviews cannot win the map pack on proximity alone. | §6 |
 | **MEDIUM** | Add the three AI Overview answer blocks under H2 headers (cost, what's included, capacity) | Captures zero-click and AI-answer traffic for the questions people actually ask. | §4 |
 | **MEDIUM** | Build the brochure landing section with a 6-field form, tap-to-call, and GA4 `generate_lead` event | Current CTA choice is split between tour and contact; a single "get the brochure" micro-conversion converts colder traffic. | §5 |
-| **MEDIUM** | Add an FAQ section (5 questions) with matching JSON-LD | Rich results + AI Overview eligibility + fewer repetitive phone questions. | §4 |
+| **MEDIUM** | Add FAQPage JSON-LD to the eight FAQ questions already on the page | The content exists; the schema is what earns the rich result and AI Overview eligibility. | §4 |
+| **MEDIUM** | Quick win before any rebuild: rename the existing section headings and the H1 on the one-page site | Zero design work, same voice, and every H2 starts carrying a query. | §2.1 |
+| **MEDIUM** | Rename the five CTA labels that all lead to the same quote form; make "Book a Tour" actually book a tour | The most visible button on the site promises something it does not do. | §5.1 |
 | **MEDIUM** | Publish an XML sitemap, submit it in Google Search Console, and confirm each new page has a self-referencing canonical | Only one URL is indexed today; new pages need a clean path in. | §7 |
 | **MEDIUM** | Use "San Jose" (no accent) in titles, meta descriptions, H1s and URLs; keep "San José" in body copy if it is brand style | Exact-match of the typed query in the title and H1 is still a relevance signal. | §2 |
 | **LOW** | Add `sameAs` links (Instagram, Facebook, Yelp, The Knot, WeddingWire, Eventective) to the JSON-LD and to the footer | Entity confirmation for Google; also cheap referral traffic. | §3 |
 | **LOW** | Image alt text on every gallery photo in the pattern "[event type] at Crown Prince Event Hall, San Jose" | Google Images is a real discovery channel for venues. | §7 |
 | **LOW** | Bilingual (Spanish) quinceañera page or section: "Salón para quinceañeras en San José" | East San Jose search demand for quince venues is heavily Spanish-language. | §2 |
+| **LOW** | Give "Weekday Flex" (Monday–Thursday hourly) its own H2 and, later, its own page: "Hourly Event Space Rental in San Jose" | Hourly weekday rental is a distinct, low-competition query set (meetings, rehearsals, community groups) and fills the calendar's emptiest days. | §2.1 |
+| **LOW** | Add "Debut & Sweet 16" wording to the parties page and schema | The site already lists debuts; "debut venue San Jose" is a specific, under-served Filipino-community query. | §2.5, §3 |
 | **LOW** | Add neighborhood and landmark mentions in body copy (East San Jose, Evergreen, Tully Rd, near Hwy 101/680, 15 min from downtown San Jose) | Local relevance for "near me" and neighborhood-modified queries. | §2 |
 
 ---
@@ -72,24 +81,41 @@ Banquet Hall in San Jose, CA | Crown Prince Event Hall
 Crown Prince Event Hall: 4,100 sq ft San Jose banquet hall for up to 300 guests. Stage, dance floor, full bar, 100+ gated parking. Book a free tour today.
 ```
 
-**Heading structure**
+**Heading structure — recommended for the current one-page site (rename in place, keep the sub-lines)**
+
+| Section | Current heading | Recommended heading |
+|---|---|---|
+| Hero | H1 "A grand stage for life's celebrations" | **H1** San Jose Banquet Hall & Event Venue for Up to 300 Guests<br>*sub-line:* A grand stage for life's celebrations |
+| #events | "Celebrations We Host" | **H2** Weddings, Quinceañeras, Debuts & Corporate Events in San Jose<br>H3 Weddings · H3 Quinceañeras · H3 Debuts & Sweet 16 · H3 Birthdays & Anniversaries · H3 Graduations · H3 Corporate & Community · H3 Concerts & Productions |
+| #venue | "The Venue" | **H2** The Venue: 4,100 Sq Ft, Stage, Dance Floor & Full Bar |
+| #included | "Event-Ready, Built In" | **H2** What's Included in Every Weekend Package |
+| Packages | "Packages" | **H2** Event Packages for San Jose Weddings, Parties & Corporate Events<br>H3 per package (Weekend Essentials, Wedding / Debut Premium, Celebration Plus, Corporate & Community, Concert / Production, Weekday Flex) |
+| Parking | "Parking & Location" | **H2** Parking & Location in East San Jose (100+ Gated Spaces) |
+| Reviews | "Word of Mouth" | **H2** Reviews from San Jose Celebrations *(publish when the first three exist; hide until then)* |
+| #faq | "Good to Know" | **H2** Frequently Asked Questions About Crown Prince Event Hall |
+| #inquiry | "Check Your Date" | **H2** Check Your Date & Get a Same-Day Quote |
+| New | — | **H2** How Much Does a Banquet Hall in San Jose Cost? (§4.1) |
+| New | — | **H2** Download the 2026 Pricing & Floor Plan Brochure (§5.2) |
+
+**Heading structure — target once the event pages exist**
 ```
 H1  San Jose Banquet Hall & Event Venue for Up to 300 Guests
-  H2  One Hall, Every Celebration — Weddings, Quinceañeras, Corporate Events & Parties
-    H3  Weddings
-    H3  Quinceañeras
-    H3  Corporate & Community Events
-    H3  Birthdays, Anniversaries & Milestone Parties
-  H2  What's Included in Every Crown Prince Event Hall Booking
+  H2  Weddings, Quinceañeras, Debuts & Corporate Events in San Jose
+    H3  Weddings            → /weddings
+    H3  Quinceañeras        → /quinceaneras
+    H3  Corporate & Community Events → /corporate-events
+    H3  Birthdays, Debuts, Graduations & Milestone Parties → /parties
+  H2  What's Included in Every Weekend Package
   H2  Capacity, Layouts & Floor Plans
     H3  Banquet seating (up to 300)
     H3  Ceremony + reception layout
     H3  Stage & dance-floor layout
-  H2  Parking, Location & Getting Here
+  H2  Event Packages
+  H2  Parking & Location in East San Jose
   H2  How Much Does a Banquet Hall in San Jose Cost?
   H2  Download the 2026 Pricing & Floor Plan Brochure
-  H2  Frequently Asked Questions
-  H2  Book a Free Venue Tour
+  H2  Frequently Asked Questions About Crown Prince Event Hall
+  H2  Check Your Date & Get a Same-Day Quote
 ```
 
 ### 2.2 Weddings — `/weddings`
@@ -101,7 +127,7 @@ San Jose Wedding Venue for 300 Guests | Crown Prince Hall
 
 **Meta description (156 chars)**
 ```
-Ceremony and reception under one roof in San Jose. Bridal suite, grand entrance, stage, dance floor, full bar, 100+ gated parking. Get the wedding brochure.
+Ceremony and reception under one roof in San Jose. Stage, dance floor, full bar, AV engineer, VIP grand entrance, 100+ gated parking. Get the wedding brochure.
 ```
 
 **Heading structure**
@@ -111,7 +137,7 @@ H1  Wedding Venue in San Jose, CA — Ceremony & Reception in One Hall
   H2  Wedding Layouts & Capacity
     H3  Ceremony seating
     H3  Reception with dance floor (up to 300)
-    H3  Bridal / VIP prep room
+    H3  Bridal / VIP prep room (Wedding / Debut Premium)
   H2  What's Included in a Wedding Booking
   H2  Catering, Bar & Vendor Policy
   H2  Wedding Gallery & 360° Virtual Tour
@@ -256,7 +282,7 @@ Paste once, in the `<head>` (or just before `</body>`) of **every** page. Fill t
   "@id": "https://crownprincehall.com/#venue",
   "name": "Crown Prince Event Hall",
   "alternateName": "Crown Prince Hall",
-  "description": "Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA for weddings, quinceañeras, corporate events, birthdays and milestone celebrations for up to 300 guests, with a stage, dance floor, full bar and 100+ gated parking spaces.",
+  "description": "Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA for weddings, quinceañeras, debuts, corporate events, birthdays and milestone celebrations for up to 300 guests, with a stage, dance floor, full bar, on-site AV engineer and 100+ gated parking spaces.",
   "url": "https://crownprincehall.com/",
   "telephone": "+1-408-408-1654",
   "email": "VERIFY@crownprincehall.com",
@@ -324,20 +350,28 @@ Paste once, in the `<head>` (or just before `</body>`) of **every** page. Fill t
     { "@type": "LocationFeatureSpecification", "name": "Stage", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Dance floor", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Full bar with bar packages", "value": true },
-    { "@type": "LocationFeatureSpecification", "name": "Bridal / VIP prep room", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Bridal / VIP prep room (add-on)", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "On-site AV engineer and event attendants", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Refrigerator and deep freezer for caterers", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Black or white tablecloths included", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Sound system and microphones", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Big-screen TVs for presentations", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "DJ lights and uplighting", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Gold Chiavari chairs and banquet tables", "value": true },
     { "@type": "LocationFeatureSpecification", "name": "Red carpet entrance", "value": true },
-    { "@type": "LocationFeatureSpecification", "name": "Wheelchair accessible", "value": "VERIFY" },
-    { "@type": "LocationFeatureSpecification", "name": "Outside catering allowed", "value": "VERIFY" }
+    { "@type": "LocationFeatureSpecification", "name": "Outside catering allowed with approval", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Outside alcohol allowed", "value": false },
+    { "@type": "LocationFeatureSpecification", "name": "All ages welcome", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Wheelchair accessible", "value": "VERIFY" }
   ],
   "makesOffer": [
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding venue rental", "areaServed": "San Jose, CA" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Quinceañera venue rental", "areaServed": "San Jose, CA" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate event space rental", "areaServed": "San Jose, CA" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Birthday and milestone party venue rental", "areaServed": "San Jose, CA" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Debut and Sweet 16 venue rental", "areaServed": "San Jose, CA" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Concert and stage production venue rental", "areaServed": "San Jose, CA" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Weekday hourly event space rental (Monday to Thursday)", "areaServed": "San Jose, CA" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bar packages and bartending", "areaServed": "San Jose, CA" } }
   ],
   "sameAs": [
@@ -375,7 +409,7 @@ Each block goes **directly under the H2**, before any images or buttons. Keep th
 
 ### 4.1 H2: How Much Does a Banquet Hall in San Jose Cost?
 
-**Version A — as requested (publishes a Crown Prince starting figure; fill VERIFY):**
+**Version A — as requested (publishes a Crown Prince starting figure; fill VERIFY). Note the live site already says "every package is quoted transparently, with all fees stated up front" and "Request Pricing" on every package, so Version B below is the one that matches both the site and the playbook:**
 
 > Banquet halls in San Jose typically cost between $2,500 and $12,000 for a full-day rental, and $65 to $150 per guest when catering and bar are bundled, depending on the day of the week, season, guest count and hours. Crown Prince Event Hall's 2026 venue rental starts at **$VERIFY** for up to 300 guests and includes the stage, dance floor, gold Chiavari chairs, banquet tables, sound system, lighting and 100+ gated parking spaces. Download the 2026 Pricing & Floor Plan Brochure for the full rate card.
 
@@ -391,36 +425,45 @@ Each block goes **directly under the H2**, before any images or buttons. Keep th
 
 ### 4.2 H2: What Is Included in Crown Prince Event Hall Packages?
 
-> Every Crown Prince Event Hall booking includes exclusive use of the 4,100 sq ft hall for up to 300 guests, a large stage and open dance floor, gold Chiavari chairs and banquet tables, a sound system with microphone, DJ lights, uplights and house colored lighting, big-screen TVs, a bridal or VIP prep room, red-carpet entrance, and a private gated lot with 100+ parking spaces. Structured bar packages, valet parking and vendor coordination can be added to any event.
+> Every Crown Prince Event Hall weekend package includes a 6-hour event window plus 2 complimentary setup hours, event attendants for 8 hours, an on-site AV engineer, a large stage and open dance floor, gold or silver Chiavari chairs with banquet tables, black or white tablecloths, big-screen TVs, a sound system with microphone, DJ lights, uplights and house colored lighting, a refrigerator and deep freezer for your caterer, and a private gated lot with 100+ spaces. Bar packages, a bridal/VIP prep room, DJ, photobooth and VIP grand entrance are add-ons.
 
-(78 words)
+(89 words)
 
 ### 4.3 H2: How Many Guests Can Crown Prince Event Hall Hold?
 
-> Crown Prince Event Hall seats up to 300 guests for a banquet with a dance floor and stage, and accommodates around 350 for a standing reception or cocktail-style corporate mixer (VERIFY standing figure with the fire-marshal occupancy). The 4,100 sq ft floor can be set as a ceremony-plus-reception layout, a theater or classroom layout for presentations, or a full banquet with round tables of 8 to 10. Floor plans for each layout are in the free brochure.
+> Crown Prince Event Hall seats up to 300 guests for a banquet with a dance floor and stage, and accommodates around 350 for a standing reception or cocktail-style corporate mixer (VERIFY standing figure with the fire-marshal occupancy; the site says final capacities depend on layout). The 4,100 sq ft floor can be set as a ceremony-plus-reception layout, a theater or classroom layout for presentations, or a full banquet with round tables of 8 to 10. Floor plans for each layout are in the free brochure.
 
-(77 words)
+(85 words)
 
-### 4.4 FAQ Section — page copy
+### 4.4 FAQ Section — the eight questions already on the page, with paste-ready answers
 
-Place under an H2 "Frequently Asked Questions." Each question is an H3.
+The site already has the right questions under "Good to Know." Keep them, rename the H2 to "Frequently Asked Questions About Crown Prince Event Hall," and use these answers (each is a direct first sentence, then one or two supporting sentences, which is what AI Overviews lift). Where the live accordion text differs, either paste these answers in or edit the JSON-LD to match what is on the page; the two must be identical.
 
-**H3: Where is Crown Prince Event Hall located and is there parking?**
-Crown Prince Event Hall is at 1654 Burdette Dr, San Jose, CA 95121, in East San Jose near Tully Road, about 15 minutes from downtown San Jose and close to Highways 101 and 680. The venue has a private gated lot with more than 100 spaces, free street parking, and optional valet service for formal events.
+**H3: Can we bring our own catering?**
+Yes. Outside catering is welcome at Crown Prince Event Hall with venue approval. Your caterer gets a refrigerator and deep freezer on site and two complimentary setup hours before doors open. Chafers and table runners are available as add-ons.
 
-**H3: Can I bring my own caterer or food to Crown Prince Event Hall?**
-VERIFY — recommended answer: Yes. Crown Prince Event Hall welcomes outside caterers and family-prepared food for weddings, quinceañeras and cultural celebrations. Licensed caterers must provide proof of insurance. Alcohol is served through the venue's full bar and bar packages.
+**H3: Can we bring our own alcohol?**
+No. All alcohol is served through the venue's full bar under a structured bar package, with a bartender included, so the event stays licensed and insured. Choose your bar package when you request a quote.
 
-**H3: How far in advance should I book a wedding or quinceañera at Crown Prince Event Hall?**
-Saturday dates from April through October book 9 to 12 months ahead. Friday, Sunday and off-season Saturdays are often available 3 to 6 months out. A signed agreement and deposit hold your date; the venue offers a 90-day refund policy (VERIFY terms).
+**H3: Can we use our own vendors?**
+Yes. Your own decorator, DJ, photographer, photobooth and caterer are welcome with approval (VERIFY any insurance requirement). Vendors load in during the two complimentary setup hours, and the house AV engineer connects your DJ or slideshow to the sound system and screens.
 
-**H3: What is included in the rental price at Crown Prince Event Hall?**
-Every rental includes exclusive use of the 4,100 sq ft hall, stage, dance floor, gold Chiavari chairs, banquet tables, sound system with microphone, DJ and uplighting, big-screen TVs, a bridal/VIP prep room, and 100+ gated parking spaces. Bar packages, valet and extended hours are available as add-ons.
+**H3: How much time do we get for setup?**
+Weekend packages include a 6-hour event window plus 2 complimentary setup hours before doors open. Extra event or setup hours can be added to your quote. Weekday Flex bookings (Monday to Thursday) are scheduled by the hour.
 
-**H3: Does Crown Prince Event Hall host corporate events and meetings?**
-Yes. The hall hosts corporate banquets, holiday parties, product launches, town halls, mixers and community events for Silicon Valley companies. Big-screen TVs, a sound system, a stage with podium and flexible theater, classroom or banquet layouts are included, with parking for 100+ attendees.
+**H3: Is there really enough parking?**
+Yes. Crown Prince Event Hall has a private gated lot with more than 100 spaces, free onsite and street parking, and an optional valet service for formal arrivals. That covers a full 300-guest event without guests circling the block.
 
-### 4.5 FAQ JSON-LD (paste into the `<head>` of the page carrying the FAQ)
+**H3: Is the venue family-friendly?**
+Yes. All ages are welcome, including children at weddings, quinceañeras, debuts and graduations. The hall is one open level with a stage, dance floor and family-scale seating (VERIFY: add stroller/wheelchair access and changing-table details).
+
+**H3: Is smoking allowed?**
+No smoking indoors. (VERIFY: name the designated outdoor smoking area, if any.) Security cameras are in use for guest safety.
+
+**H3: How do I get an exact price?**
+Send your date, guest count, event type and bar or catering preference through the "Check Your Date" form or call or text 408-408-1654. Standard events receive a tailored quote the same day with every fee stated up front, and every inquiry gets a reply within one business hour.
+
+### 4.5 FAQ JSON-LD (paste into the `<head>` of the homepage; one FAQPage per page only)
 
 ```html
 <script type="application/ld+json">
@@ -430,42 +473,66 @@ Yes. The hall hosts corporate banquets, holiday parties, product launches, town 
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Where is Crown Prince Event Hall located and is there parking?",
+      "name": "Can we bring our own catering?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Crown Prince Event Hall is at 1654 Burdette Dr, San Jose, CA 95121, in East San Jose near Tully Road, about 15 minutes from downtown San Jose and close to Highways 101 and 680. The venue has a private gated lot with more than 100 spaces, free street parking, and optional valet service for formal events."
+        "text": "Yes. Outside catering is welcome at Crown Prince Event Hall with venue approval. Your caterer gets a refrigerator and deep freezer on site and two complimentary setup hours before doors open. Chafers and table runners are available as add-ons."
       }
     },
     {
       "@type": "Question",
-      "name": "Can I bring my own caterer or food to Crown Prince Event Hall?",
+      "name": "Can we bring our own alcohol?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Crown Prince Event Hall welcomes outside caterers and family-prepared food for weddings, quinceañeras and cultural celebrations. Licensed caterers must provide proof of insurance. Alcohol is served through the venue's full bar and bar packages."
+        "text": "No. All alcohol is served through the venue's full bar under a structured bar package, with a bartender included, so the event stays licensed and insured. Choose your bar package when you request a quote."
       }
     },
     {
       "@type": "Question",
-      "name": "How far in advance should I book a wedding or quinceañera at Crown Prince Event Hall?",
+      "name": "Can we use our own vendors?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Saturday dates from April through October book 9 to 12 months ahead. Friday, Sunday and off-season Saturdays are often available 3 to 6 months out. A signed agreement and deposit hold your date, and the venue offers a 90-day refund policy."
+        "text": "Yes. Your own decorator, DJ, photographer, photobooth and caterer are welcome with approval. Vendors load in during the two complimentary setup hours, and the house AV engineer connects your DJ or slideshow to the sound system and screens."
       }
     },
     {
       "@type": "Question",
-      "name": "What is included in the rental price at Crown Prince Event Hall?",
+      "name": "How much time do we get for setup?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Every rental includes exclusive use of the 4,100 sq ft hall, stage, dance floor, gold Chiavari chairs, banquet tables, sound system with microphone, DJ and uplighting, big-screen TVs, a bridal/VIP prep room, and 100+ gated parking spaces. Bar packages, valet and extended hours are available as add-ons."
+        "text": "Weekend packages include a 6-hour event window plus 2 complimentary setup hours before doors open. Extra event or setup hours can be added to your quote. Weekday Flex bookings (Monday to Thursday) are scheduled by the hour."
       }
     },
     {
       "@type": "Question",
-      "name": "Does Crown Prince Event Hall host corporate events and meetings?",
+      "name": "Is there really enough parking?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The hall hosts corporate banquets, holiday parties, product launches, town halls, mixers and community events for Silicon Valley companies. Big-screen TVs, a sound system, a stage with podium and flexible theater, classroom or banquet layouts are included, with parking for 100+ attendees."
+        "text": "Yes. Crown Prince Event Hall has a private gated lot with more than 100 spaces, free onsite and street parking, and an optional valet service for formal arrivals. That covers a full 300-guest event without guests circling the block."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the venue family-friendly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All ages are welcome, including children at weddings, quinceañeras, debuts and graduations. The hall is one open level with a stage, dance floor and family-scale seating."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is smoking allowed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No smoking indoors. Security cameras are in use for guest safety."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get an exact price?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Send your date, guest count, event type and bar or catering preference through the Check Your Date form or call or text 408-408-1654. Standard events receive a tailored quote the same day with every fee stated up front, and every inquiry gets a reply within one business hour."
       }
     }
   ]
@@ -473,7 +540,7 @@ Yes. The hall hosts corporate banquets, holiday parties, product launches, town 
 </script>
 ```
 
-Rule: the JSON-LD answers must match the visible on-page text word for word, or Google will drop the rich result. If you edit a VERIFY answer on the page, edit it in the script too.
+Rule: the JSON-LD answers must match the visible on-page text, or Google drops the rich result. The script above omits the VERIFY asides; once you settle those details on the page, add the same words to the script.
 
 ---
 
@@ -481,23 +548,44 @@ Rule: the JSON-LD answers must match the visible on-page text word for word, or 
 
 ### 5.1 Critique of the current calls to action
 
-Based on the indexed copy, the site currently asks for two hard commitments at once, "book a tour" and "contact us," plus a soft "360° virtual tour." Problems:
+What the homepage actually does today:
 
-1. **The primary ask is too big for cold traffic.** Someone who typed "banquet hall San Jose" is comparing five venues in one sitting. A tour is a 60-minute commitment on a specific day; most visitors are not ready. They leave without giving you anything to follow up on.
-2. **Two equal CTAs split conversion.** "Book a tour" and "contact us" compete for the same click and neither says what the visitor *gets*.
-3. **No exchange of value.** There is no reason to hand over an email except to be sold to. A brochure with floor plans is the reason.
-4. **The 360° tour is a retention tool, not a conversion tool.** Keep it, but do not make it a button in the hero. Put it under the gallery.
-5. **Phone is not the visible mobile CTA.** Venue searches are mostly on phones. A sticky tap-to-call bar on mobile is a free lead source.
+| Button text | Where it appears | Where it goes |
+|---|---|---|
+| Book a Tour | Header nav | `#inquiry` (the quote form) |
+| Book a Private Tour | Hero, reviews section | `#inquiry` |
+| Inquire → | All seven event cards | `#inquiry` |
+| Request Pricing | All six package cards | `#inquiry` |
+| Request My Quote | The form's submit button | Submits the form |
+| 360° Virtual Tour | Hero, venue section, tour section | Opens the virtual tour |
 
-**Recommended CTA hierarchy (every page, in this order):**
+Five labels, one destination, and the destination is a quote form with seven required fields: name, phone, email, event type, preferred date (three dropdowns), guest count, and bar/catering choice.
 
-| Position | CTA | Type | What it converts |
+1. **"Book a Tour" does not book a tour.** The most visible button on the site, in the header on every scroll, opens a form that asks for a preferred event date and a bar package. A visitor who clicked to see the space is now being asked to commit to a date. Either wire the button to a real tour scheduler (Google Business Profile bookings, Calendly or an appointment page with the seven-days-a-week hours) or rename it "Get a Quote."
+2. **The only conversion is a full quote request.** That is the right ask for a warm visitor who already has a date. It is too much for the majority who typed "banquet hall San Jose" and are opening five tabs. There is no lower step, so they leave and you have nothing to follow up on.
+3. **No exchange of value.** Every button asks for something; none offers something. Floor plans and a written "what's included" are the natural thing to trade for an email and phone number.
+4. **The date field is three dropdowns.** Month, day and year selects are the slowest way to enter a date on a phone, and there is no "not sure yet" option even though most early-stage planners do not have one.
+5. **"Request Pricing" on every package sets an expectation the site then declines.** The visitor expects a number; the form returns a promise of a same-day quote. The brochure section (§5.2) closes that gap honestly, and Version B does it without publishing a rate.
+6. **Phone is present but not sticky.** It sits in the header and footer. On mobile, a fixed bottom bar with "Call or text" and "Get the brochure" turns scrollers into calls.
+7. **What is already right, keep it:** the one-business-hour response promise, the same-day quote for standard events, the event-type and guest-count dropdowns (they pre-qualify the lead for free), the bar/catering question (it drives the quote), and the 360° tour as an engagement tool below the hero.
+
+**Recommended CTA ladder (every page, in this order):**
+
+| Position | CTA | Type | Who it converts |
 |---|---|---|---|
-| Hero, primary button | **Download the 2026 Pricing & Floor Plan Brochure** (or "Get the 2026 Event Guide & Floor Plans" in the no-price variant) | Micro-conversion, 6-field form | Cold and warm traffic, 60–70 % of leads |
-| Hero, secondary text link | **Book a free tour →** | Hard conversion, calendar embed | Warm traffic already sold on the space |
-| Sticky mobile bar | **Call (408) 408-1654** · **Get Brochure** | Tap-to-call + form | Mobile searchers who want an answer now |
+| Header nav | **Get a Quote** (or a real tour scheduler labelled "Book a Tour") | Hard conversion | Warm visitors with a date |
+| Hero, primary button | **Download the 2026 Pricing & Floor Plan Brochure** (no-price variant: "Get the 2026 Event Guide & Floor Plans") | Micro-conversion, 6-field form | Cold and warm traffic, typically 60–70 % of leads |
+| Hero, secondary text link | **Check your date →** (existing quote form) | Hard conversion | Visitors ready to price a specific date |
+| Event and package cards | **See floor plans & what's included** → brochure; **Get a quote** → form | Two labels that say what happens | Card-level intent |
+| Sticky mobile bar | **Call or text 408-408-1654** · **Get brochure** | Tap-to-call + form | Mobile searchers |
 | After gallery | **Take the 360° virtual tour** | Engagement | Time on page, confidence |
 | Footer of every page | Brochure block repeated (§5.2) | Micro-conversion | Scrollers who read to the end |
+
+**Fixes to the existing quote form (keep the form, tune it):**
+- Replace the three date dropdowns with a single date picker plus a "Not sure yet" checkbox.
+- Make "Bar & Catering" optional; keep it, it helps the quote, but do not let it block submission.
+- Add an "Under 50" guest option so Weekday Flex inquiries (meetings, rehearsals) are not forced into the wrong bracket.
+- Add hidden fields `utm_source`, `utm_medium`, `utm_campaign`, `landing_page`, `gclid`, and fire a GA4 `generate_lead` event on submit so each booking can be traced to what it cost to acquire.
 
 ### 5.2 Brochure section — copy and layout
 
@@ -575,9 +663,9 @@ Hidden fields: `utm_source`, `utm_medium`, `utm_campaign`, `landing_page`, `gcli
 3. Within 60 seconds: email with the brochure attached, SMS "Thanks {first name}, your Crown Prince Event Hall brochure is on its way. Want to see the space? Pick a tour time: {link}."
 4. A person calls within one business hour. The site already promises this; the promise should be visible next to the form.
 
-### 5.3 Why this converts better than "book a tour" alone
+### 5.3 Why this converts better than the quote form alone
 
-The brochure captures the 90 % who are not ready to tour, gives you their event type, date and size at the moment they are most willing to share it, and turns the tour into the *second* step, booked from the thank-you page or the follow-up text. Tour bookings typically go **up**, not down, because they come from people who have already seen the floor plans.
+The brochure captures the visitors who are not ready to name a date, gives you their event type and size at the moment they are most willing to share it, and turns the quote and the tour into the *second* and *third* steps, taken from the thank-you page or the follow-up text. Quote requests typically go **up**, not down, because they come from people who have already seen the floor plans and the included-items list.
 
 ---
 
@@ -587,10 +675,10 @@ The brochure captures the 90 % who are not ready to tour, gives you their event 
 
 Use **Crown Prince Event Hall** — nothing else (no "San Jose," no "Banquet Hall" appended). Keyword-stuffed names violate GBP guidelines and get suspended. Make the site, Yelp, The Knot, WeddingWire and Eventective match this exactly.
 
-### 6.2 Business description (742 characters, limit 750)
+### 6.2 Business description (731 characters, limit 750)
 
 ```
-Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA, built for weddings, quinceañeras, corporate events, birthdays, anniversaries, graduations and debuts for up to 300 guests. Every booking includes a large stage, open dance floor, gold Chiavari chairs and banquet tables, sound system with microphone, DJ lights and uplighting, big-screen TVs, a bridal/VIP prep room and a red-carpet entrance. Guests park in our private gated lot with 100+ spaces, with valet available for formal arrivals. Our full bar offers structured bar packages, and we welcome outside caterers. Located in East San Jose near Tully Rd, minutes from Highways 101 and 680. Book a free tour or request the 2026 floor plan brochure today.
+Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA for weddings, quinceañeras, debuts, corporate events, birthdays, anniversaries, graduations and concerts for up to 300 guests. Weekend packages arrive event-ready: a 6-hour event window plus 2 setup hours, event attendants, an on-site AV engineer, a large stage, open dance floor, Chiavari chairs, banquet tables, linens, big-screen TVs, sound system, DJ and uplighting, and a refrigerator and freezer for your caterer. Outside catering is welcome with approval; our full bar serves structured bar packages. Guests park in a private gated lot with 100+ spaces, valet available. Weekday hourly bookings Monday to Thursday. Book a free tour today.
 ```
 
 ### 6.3 Categories
@@ -624,7 +712,10 @@ Add "More hours → Tours by appointment" if the profile supports it. Event hour
 - Corporate event and holiday party venue
 - Birthday party venue
 - Anniversary and vow renewal venue
-- Graduation and debut venue
+- Graduation venue
+- Debut and Sweet 16 venue
+- Concert and stage production venue
+- Weekday hourly event space rental (Monday to Thursday)
 - Baby shower and gender reveal venue
 - Cultural and community event venue
 - Product launch and town-hall venue
@@ -643,13 +734,20 @@ Add "More hours → Tours by appointment" if the profile supports it. Event hour
 - Stage
 - Dance floor
 - Full bar
-- Bridal / VIP prep room
+- Bridal / VIP prep room (add-on)
+- On-site AV engineer and event attendants
+- Refrigerator and deep freezer for caterers
+- Black or white tablecloths included
 - Sound system and microphones
 - DJ lighting, uplighting and colored house lighting
 - Big-screen TVs / presentation screens
 - Gold Chiavari chairs and banquet tables included
 - Red-carpet entrance
-- Outside catering allowed (VERIFY)
+- Outside catering allowed with approval
+- No outside alcohol; bar packages through the venue
+- All ages welcome
+- No smoking indoors
+- Security cameras on premises
 - Wheelchair-accessible entrance and restrooms (VERIFY)
 - Wi-Fi (VERIFY)
 - Onsite manager during events (VERIFY)
@@ -658,7 +756,7 @@ Add "More hours → Tours by appointment" if the profile supports it. Event hour
 ### 6.7 GBP hygiene checklist
 
 - [ ] Claim or request removal of **"The Nobel Venue"** at 1654 Burdette Dr if it is a former name or defunct tenant. If Crown Prince replaced it, use "Mark as permanently closed" on that listing or request a merge through GBP support so its reviews transfer.
-- [ ] Upload 30+ photos in the first month: exterior with signage, entrance, empty hall in 3 layouts, stage, bar, bridal room, parking lot, and at least 10 real-event photos. Name files `crown-prince-event-hall-san-jose-[subject].jpg` before upload.
+- [ ] Upload 30+ photos in the first month: exterior with signage, red-carpet entrance, empty hall in 3 layouts, stage, bar, prep room, parking lot, and at least 10 real-event photos. Name files `crown-prince-event-hall-san-jose-[subject].jpg` before upload.
 - [ ] Post weekly (GBP Posts): one event recap, one "dates open this month," one offer or FAQ.
 - [ ] Turn on messaging; respond within one business hour (the site already promises this).
 - [ ] Reviews: send a review link by SMS within 48 hours of every event; reply to every review within 48 hours using the event type and "San Jose" naturally in the reply.
@@ -679,7 +777,8 @@ The audit environment could not load crownprincehall.com. Run these once; each t
 | Canonical + redirects | View source; try `http://`, `www.` | One canonical URL; all variants 301 to it. |
 | Existing schema | https://validator.schema.org | Zero errors after pasting §3 and §4.5. |
 | Image alt text | View source on gallery | Every `<img>` has descriptive alt: "Wedding reception banquet setup at Crown Prince Event Hall, San Jose." |
-| Phone number | Call it | 408-408-1654 rings the sales line; the same number is on the site footer, GBP, Yelp. |
+| Phone number | Verified on the site header, footer and form | Confirm GBP and Yelp show 408-408-1654 in the same format. |
+| Square footage | Site copy | Change "4,000+" and "Over 4,000" in the hero and venue section to "4,100" so every mention, schema and GBP agree. |
 | Tracking | GA4 DebugView | `generate_lead` fires on brochure submit; `phone_call` fires on tap-to-call. |
 | NAP audit | Search "Crown Prince Event Hall" on Google, Yelp, Bing, Apple Maps, The Knot, WeddingWire, Eventective, Tagvenue, Peerspace | Identical name, address and phone on every listing. |
 
