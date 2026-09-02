@@ -693,7 +693,7 @@ Fields marked **VERIFY** are values taken from third-party listings or left as p
 | H1 / hero | "A grand stage for life's celebrations" | Beautiful, but keyword-free. Google reads the H1 as the page topic. Keep the line as the sub-headline; put the keyword in the H1 (§20.1). |
 | Section headings | "Celebrations We Host," "The Venue," "Event-Ready, Built In," "Packages," "Word of Mouth," "Good to Know," "Check Your Date" | Every H2 is a label, not a query. None contains "San Jose," "banquet hall," "venue" or an event type. §20.1 maps each one to a keyword-bearing replacement that keeps the voice. |
 | Square footage | Hero says "4,000+" and "Over 4,000"; the reviews section says "4,100" | Pick one figure (4,100) and use it everywhere, including schema and GBP. Inconsistent facts weaken entity confidence. |
-| FAQ | Eight questions already on the page (catering, alcohol, vendors, setup time, parking, family-friendly, smoking, exact price) | Good content with **no FAQPage schema**, so it earns no rich result. §22.5 supplies schema for the existing eight questions. |
+| FAQ | Eight questions already on the page (catering, alcohol, vendors, setup time, parking, family-friendly, smoking, exact price) | Good content with **no FAQPage schema**. Since August 2023 Google shows FAQ rich results almost only for government and health sites, so do not expect dropdowns in the listing; the schema still helps Google and AI Overviews read the answers as facts about the venue. §22.5 supplies it for the existing eight questions. |
 | Reviews on site | "Be among the first to celebrate here" with an empty five-star block | An empty star row can read as a rating of zero to a skimming visitor. Replace with the review program in §24.7 and remove the stars until real ones exist. |
 | Structured data | None visible in search features (no FAQ rich result, no sitelinks, no business rich data) | No JSON-LD detected in the index snapshot. section 21 supplies it. |
 | Brand name | "Crown Prince Event Hall" (site, Yelp) vs "Crown Prince Hall" (domain, in-copy) | Pick one legal/display name and use it identically on the site, GBP, Yelp, and every directory. Recommendation: **Crown Prince Event Hall** (matches Yelp and the indexed title). |
@@ -715,7 +715,7 @@ Fields marked **VERIFY** are values taken from third-party listings or left as p
 | **HIGH** | Launch a review program: ask every completed event within 48 hours, target 5+ Google reviews per month, reply to all | Newest venue on the block with few reviews cannot win the map pack on proximity alone. | §24 |
 | **MEDIUM** | Add the three AI Overview answer blocks under H2 headers (cost, what's included, capacity) | Captures zero-click and AI-answer traffic for the questions people actually ask. | §22 |
 | **MEDIUM** | Build the brochure landing section with a 6-field form, tap-to-call, and GA4 `generate_lead` event | Current CTA choice is split between tour and contact; a single "get the brochure" micro-conversion converts colder traffic. | §23 |
-| **MEDIUM** | Add FAQPage JSON-LD to the eight FAQ questions already on the page | The content exists; the schema is what earns the rich result and AI Overview eligibility. | §22 |
+| **MEDIUM** | Add FAQPage JSON-LD to the eight FAQ questions already on the page | The content exists; the schema makes the answers machine-readable for AI Overviews and entity understanding (a visible rich result is unlikely for a venue). | §22 |
 | **MEDIUM** | Quick win before any rebuild: rename the existing section headings and the H1 on the one-page site | Zero design work, same voice, and every H2 starts carrying a query. | §20.1 |
 | **MEDIUM** | Rename the five CTA labels that all lead to the same quote form; make "Book a Tour" actually book a tour | The most visible button on the site promises something it does not do. | §23.1 |
 | **MEDIUM** | Publish an XML sitemap, submit it in Google Search Console, and confirm each new page has a self-referencing canonical | Only one URL is indexed today; new pages need a clean path in. | §25 |
@@ -789,7 +789,7 @@ H1  San Jose Banquet Hall & Event Venue for Up to 300 Guests
 San Jose Wedding Venue for 300 Guests | Crown Prince Hall
 ```
 
-**Meta description (156 chars)**
+**Meta description (159 chars)**
 ```
 Ceremony and reception under one roof in San Jose. Stage, dance floor, full bar, AV engineer, VIP grand entrance, 100+ gated parking. Get the wedding brochure.
 ```
@@ -931,6 +931,18 @@ Answers to the questions San Jose couples and planners ask most: guest capacity,
 - `<html lang="en">` and, if the quinceañera page carries Spanish sections, add `hreflang` only if you build a full `/es/` version. Otherwise leave it.
 - Every page ends with the same brochure block (§23) and the same NAP footer (name, address, phone as `tel:` link, hours).
 - Internal links: the homepage H3 cards link to the four event pages; each event page links to the other three and to the brochure page.
+- Tap-to-call links use the international form `<a href="tel:+14084081654">` so the number matches the schema and dials from any phone.
+- Social preview tags on every page (quinceañera and debut planning spreads through WhatsApp, Facebook and iMessage, and these tags decide what the shared link looks like). Homepage example:
+
+```html
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crown Prince Event Hall">
+<meta property="og:title" content="Banquet Hall in San Jose, CA | Crown Prince Event Hall">
+<meta property="og:description" content="4,100 sq ft event hall for up to 300 guests with stage, dance floor, full bar, AV engineer and 100+ gated parking spaces in San Jose.">
+<meta property="og:url" content="https://crownprincehall.com/">
+<meta property="og:image" content="https://crownprincehall.com/images/crown-prince-event-hall-san-jose-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+```
 
 ---
 
@@ -1204,7 +1216,7 @@ Send your date, guest count, event type and bar or catering preference through t
 </script>
 ```
 
-Rule: the JSON-LD answers must match the visible on-page text, or Google drops the rich result. The script above omits the VERIFY asides; once you settle those details on the page, add the same words to the script.
+Rule: the JSON-LD answers must match the visible on-page text, or Google ignores the markup. The script above omits the VERIFY asides; once you settle those details on the page, add the same words to the script.
 
 ---
 
@@ -1437,6 +1449,7 @@ The audit environment could not load crownprincehall.com. Run these once; each t
 | Check | Tool | Pass criteria |
 |---|---|---|
 | Mobile Core Web Vitals | https://pagespeed.web.dev/ (mobile) | LCP < 2.5 s, CLS < 0.1, INP < 200 ms. Venue hero images are the usual culprit: serve WebP, ≤ 200 KB, `width`/`height` set. |
+| 360° virtual tour embed | View source; PageSpeed "Reduce unused JavaScript" | The tour iframe loads only after a click on a poster image (a facade), not on page load. An embedded 3D tour is usually the heaviest asset on a venue homepage and drags LCP and INP for every visitor, including the majority who never open it. |
 | Indexing | Google Search Console → Pages | Every event page "Indexed." If only `/` is indexed, the event sections are anchors, not pages: build the four pages in §20. |
 | Sitemap | `https://crownprincehall.com/sitemap.xml` | Exists, lists every page, submitted in Search Console. |
 | Robots | `https://crownprincehall.com/robots.txt` | No `Disallow: /`; sitemap line present. |
