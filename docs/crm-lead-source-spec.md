@@ -244,58 +244,28 @@ With the field in place the CRM can produce, per source and per venue: leads · 
 
 ## 6. Step-by-step implementation
 
-Nineteen steps in six phases. Each step has an owner, an output, and a check that says when it is done. Steps inside a phase can run in parallel; phases run in order. Effort figures are planning estimates for one developer, to be replaced by the vendor's quote.
+Phases run in order. Steps within a phase can run in parallel. Effort is a planning estimate for one developer; replace with the vendor's quote.
 
-### Phase A — Decide and prepare (Owner + CRM Admin, ~2 days elapsed)
-
-| # | Step | Owner | Output | Done when |
+| # | Phase | Step | Owner | Done when |
 |---|---|---|---|---|
-| 1 | Answer the four decisions in §5 | Owner | Signed-off source list, Website rule, role matrix, mailbox and phone ownership | Decisions written at the top of this document |
-| 2 | Collect access | CRM Admin | Admin access to the CRM, both web app codebases, the SMS/phone provider, the inquiries mailbox, Meta Business (if used) | Developer can log in to each without asking again |
-| 3 | Take the baseline | Accountant | Export of today's Leads list: total count, count per venue, count per status | File saved; totals will be reconciled in step 17 |
+| 1 | Prepare | Answer the four decisions in §5 | Owner | Decisions recorded at the top of this doc |
+| 2 | Prepare | Collect access: CRM, both web apps, SMS/phone provider, inquiries mailbox | Admin | Developer can log in to each |
+| 3 | Prepare | Export today's Leads list as the baseline count | Accountant | Total, per venue and per status saved |
+| 4 | Database · 1 day | Create `lead_sources` (9 rows) and `lead_source_rules` (4 email-domain rules) | Developer | `unknown` cannot be deleted; rules visible |
+| 5 | Database | Add the six source columns to `leads`, default Unknown / auto | Developer | All views load unchanged; count = step 3 |
+| 6 | Intake · 3 days | Build the intake resolver: channel + evidence → source, then existing assignment | Developer | Tests pass per channel and for Unknown fallback |
+| 7 | Intake | Add overwrite guard, audit-log entry, **Reset to detected** | Developer | Manual value survives a duplicate webhook |
+| 8 | Connect · 3 days | Website forms on both venue apps send `web_form` + UTM | Developer | Test submission shows **Website** |
+| 9 | Connect | SMS and phone webhooks send their channel | Developer + Admin | Test text → **SMS**, test call → **Phone Call** |
+| 10 | Connect | Inquiries mailbox forwards to parser; domain rules classify Yelp, Tagvenue, Zola, Facebook; else Email | Developer + Admin | Forwarded notifications land as the right source |
+| 11 | Screens · 3 days | Leads list: **Source** column, **All sources** filter, Source + origin in Export | Developer | Values match the test leads |
+| 12 | Screens | Lead detail editor with detected/changed note; New Lead and import default to Unknown | Developer | Advisor edits own lead; read-only sees text |
+| 13 | Screens | Settings › Lead Sources: add, rename, deactivate sources; manage rules | Developer | Adding "Instagram" needs no deploy |
+| 14 | Go live · 2 days | Backfill from recorded intake evidence only; all else stays Unknown | Developer, checked by Accountant | Total = step 3; per-source counts sum to total |
+| 15 | Go live | Gate test: one lead per entry point against the §4 criteria | Accountant + Admin | All eight pass; test leads deleted |
+| 16 | Go live | First weekly leads-by-source report; work Unknown filter to zero | Owner + Accountant | Report comes straight from Export |
 
-### Phase B — Database (Developer, ~1 day)
+**Two controls for the reviewer**
 
-| # | Step | Owner | Output | Done when |
-|---|---|---|---|---|
-| 4 | Create `lead_sources` and seed nine rows | Developer | Table with website, facebook, yelp, phone_call, sms, email, tagvenue, zola, unknown | `unknown` flagged `is_system`; delete attempt on it is refused |
-| 5 | Create `lead_source_rules` and seed four rules | Developer | Rules for yelp.com, tagvenue.com, zola.com, facebookmail.com on channel `email_inbox` | Rules visible in the table with priorities 10, 20, 30, 40 |
-| 6 | Add six columns to `leads` | Developer | `lead_source_id` default unknown, `lead_source_origin` default auto, detected id, evidence, set_by, set_at | Leads list, Pipeline and Health views load unchanged; lead count equals step 3 |
-
-### Phase C — Intake service (Developer, ~3 days)
-
-| # | Step | Owner | Output | Done when |
-|---|---|---|---|---|
-| 7 | Build the intake resolver | Developer | `POST /api/leads/intake` accepts `channel`, optional `source_key`, `evidence`; resolves the source through the rules; writes the six fields; then calls the existing assignment step | Automated tests pass for each channel and for the Unknown fallback (missing channel, malformed payload) |
-| 8 | Add overwrite protection and audit | Developer | The §3.3 guard; an activity-log entry on every source change; **Reset to detected** action for Admin/Manager | Test: manual correction survives a duplicate webhook; log shows "skipped: manual value" |
-
-### Phase D — Connect the entry points (Developer + CRM Admin, ~3 days)
-
-| # | Step | Owner | Output | Done when |
-|---|---|---|---|---|
-| 9 | Website forms (both venue apps) | Developer | Each form posts `channel: web_form`, venue, form id, UTM and referrer | A test submission on each site appears as **Website** with UTM in evidence |
-| 10 | SMS and phone | Developer + Admin | Provider webhooks post `channel: sms_inbound` / `voice_inbound`; new number creates a lead | A test text appears as **SMS**; a test call appears as **Phone Call** |
-| 11 | Inquiries mailbox | Developer + Admin | Mailbox forwards to the inbound parser; parser posts `channel: email_inbox` with sender domain | Forwarded Yelp, Tagvenue and Zola notifications land as those sources; a personal Gmail lands as **Email** |
-| 12 | Facebook (if lead ads or Messenger are in use) | Developer + Admin | Meta webhook posts `channel: meta_leads`, `source_key: facebook` | A test Meta lead appears as **Facebook** |
-
-### Phase E — Screens (Developer, ~3 days)
-
-| # | Step | Owner | Output | Done when |
-|---|---|---|---|---|
-| 13 | Leads list | Developer | **Source** column after Captured, sortable; **All sources** filter incl. Unknown; **Source** and **Source origin** in Export | Column, filter and export verified against the record for the step 9–12 test leads |
-| 14 | Lead detail | Developer | Editable Source select; "Detected as X, changed to Y by Z" note; **Reset to detected** for Admin/Manager | Advisor can edit own lead; read-only role sees text only |
-| 15 | + New Lead and CSV import | Developer | Source defaults to Unknown / Not Set, not mandatory; import maps a Source column by key or label, else Unknown with origin `import` | New lead saved without a source shows in the Unknown filter |
-| 16 | Settings › Lead Sources | Developer | Add, rename, reorder, deactivate sources; manage rules; "test against last 50 inbound emails" preview | Adding "Instagram" appears in pickers and filter with no deploy |
-
-### Phase F — Backfill, verify, go live (Developer + Accountant, ~2 days)
-
-| # | Step | Owner | Output | Done when |
-|---|---|---|---|---|
-| 17 | Backfill from evidence only | Developer, checked by Accountant | Existing leads set from recorded intake channel where it exists; all others stay Unknown | Reconciliation: total leads = step 3 total; sum of per-source counts = total; share of Unknown recorded |
-| 18 | Gate test | Accountant + Admin | One test lead through every entry point; the §4 table ticked row by row | All eight acceptance criteria pass; test leads deleted afterwards |
-| 19 | Go live and first report | Owner + Accountant | First weekly **leads by source and venue** report; advisors work the Unknown filter to zero | Report produced from Export with no manual re-keying; Unknown share trending down week over week |
-
-**Two checks an accountant should insist on**
-
-1. **Control total.** The number of leads never changes because of this project. Before (step 3), after the schema change (step 6) and after the backfill (step 17) must agree.
-2. **Completeness.** Every lead has exactly one source, and Unknown is a real value that is counted, not a blank. If the per-source counts do not sum to the total, something is being dropped.
+- **Control total:** lead count is identical at steps 3, 5 and 14.
+- **Completeness:** every lead has exactly one source; Unknown is counted, not blank; per-source counts sum to the total.
