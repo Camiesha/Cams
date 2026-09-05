@@ -1,4 +1,4 @@
-<title>Follow-Up Status Enhancement</title>
+<title>Follow-Up Enhancement</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
   :root{
@@ -251,10 +251,44 @@
 
   @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
   @media print{.topbar{position:static}section.ch{break-inside:avoid;padding:44px 0}.hero{padding:40px 0}}
+
+  /* date / task model */
+  .due{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .due .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .d-over{background:var(--danger-bg);color:var(--danger)} .d-today{background:var(--warn-bg);color:var(--warn)} .d-soon{background:var(--info-bg);color:var(--info)} .d-done{background:var(--ok-bg);color:var(--ok)} .d-none{background:var(--neutral-bg);color:var(--neutral)}
+  .task{display:grid;gap:5px;justify-items:start;min-width:270px}
+  .task .line{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 10px 5px 8px;box-shadow:var(--shadow-sm);font-size:.9rem;font-weight:600}
+  .task .line .act{color:var(--ink-2);font-weight:500}
+  .task .line .car{color:var(--faint);font-size:.7rem}
+  .task .line.open{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .task .note{font-size:.8rem;color:var(--ink-2);font-style:italic}
+  .pop{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow-lg);padding:12px;width:270px;display:grid;gap:10px;font-size:.88rem;margin-top:2px}
+  .pop .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:4px;display:block}
+  .pop .seg{display:flex;gap:4px}
+  .pop .seg span{flex:1;text-align:center;border:1px solid var(--line);border-radius:6px;padding:5px 0;color:var(--ink-2);font-size:.82rem}
+  .pop .seg span.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
+  .pop .inp{border:1px solid var(--line);border-radius:6px;padding:6px 10px;color:var(--ink);font-variant-numeric:tabular-nums;display:flex;justify-content:space-between}
+  .pop .inp span{color:var(--faint)}
+  .pop .quick{display:flex;gap:4px;flex-wrap:wrap}
+  .pop .quick span{border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:.76rem;color:var(--ink-2)}
+  .pop .done{border-top:1px solid var(--line-2);padding-top:10px;display:grid;gap:6px}
+  .pop .done .outs{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .pop .done .outs span{border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:.8rem;color:var(--ink-2);text-align:center}
+  .pop .acts{display:flex;justify-content:flex-end;gap:6px}
+  .pop .acts span{border-radius:6px;padding:6px 12px;font-size:.84rem;font-weight:600;border:1px solid var(--line);color:var(--ink-2)}
+  .pop .acts .save{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .map{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:22px;box-shadow:var(--shadow-sm)}
+  .map th{text-align:left;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:11px 16px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  .map td{padding:11px 16px;border-bottom:1px solid var(--line-2);vertical-align:middle;color:var(--ink-2)}
+  .map tr:last-child td{border-bottom:0}
+  .map td:first-child{color:var(--ink);font-weight:500}
+  .mapwrap{overflow-x:auto}
+  .urg{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .urg div{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:.86rem;color:var(--ink-2)}
 </style>
 
 <div class="topbar"><div class="wrap">
-  <div class="brand"><span class="mark">C</span><span class="crumb"><b>CRM</b> › Leads › Follow-Up Status</span></div>
+  <div class="brand"><span class="mark">C</span><span class="crumb"><b>CRM</b> › Leads › Follow-Up</span></div>
   <nav class="toc" aria-label="Sections">
     <a href="#s01">01</a><a href="#s02">02</a><a href="#s03">03</a><a href="#s04">04</a><a href="#s05">05</a><a href="#s06">06</a><a href="#s07">07</a><a href="#s08">08</a><a href="#s09">09</a>
   </nav>
@@ -264,12 +298,12 @@
 <section class="ch hero" id="s01"><div class="wrap">
   <div class="ch-num" style="margin-bottom:22px">01 — Overview</div>
   <span class="kicker"><span class="dot"></span>Improvement proposal</span>
-  <h1>CRM Follow-Up Status Enhancement</h1>
-  <p class="sub">Automatic intelligence. Human control when needed.</p>
-  <p class="intro">The Follow-Up column in the Leads list is updated automatically from recorded activity. That automation is valuable, but it does not always reflect what actually happened with the client. This proposal keeps the automation and adds one thing: authorized users can correct the Follow-Up status directly from the Leads list, and that correction is protected from being silently overwritten.</p>
+  <h1>CRM Follow-Up Enhancement</h1>
+  <p class="sub">Every lead has a next step and a date. Automatic by default, editable when needed.</p>
+  <p class="intro">Today the Follow-Up column shows an automated status label. Labels are a judgment call, and the system's judgment does not always match what happened with the client. This proposal turns the column into a scheduled next step: what to do, when, and who owns it. The CRM still sets it automatically after every recorded interaction. When the system gets it wrong, an authorized user changes the date or marks the step done directly from the Leads list, and that edit is protected from being silently overwritten.</p>
   <div class="facts">
     <div><div class="k">Scope</div><div class="v">Follow-Up column only</div></div>
-    <div><div class="k">Approach</div><div class="v">Automatic by default + manual override</div></div>
+    <div><div class="k">Approach</div><div class="v">Next step + due date, automatic by default</div></div>
     <div><div class="k">Who can edit</div><div class="v">Authorized users</div></div>
     <div><div class="k">Everything else</div><div class="v">Unchanged</div></div>
   </div>
@@ -279,7 +313,7 @@
 <section class="ch" id="s02"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">02 — Challenge</div>
-    <div><h2>The current challenge</h2><p class="lede">The automated status can lag behind, or miss, the real conversation with the client. When that happens, the team has to verify each row by hand.</p></div>
+    <div><h2>The current challenge</h2><p class="lede">The automated status can lag behind, or miss, the real conversation with the client. A label also does not say when the next step is due, so the team has to verify each row by hand.</p></div>
   </div>
   <div class="chain">
     <div class="box"><div class="k">Today</div><div class="v">Automated status</div></div>
@@ -292,7 +326,7 @@
     <div class="card"><span class="ix">Scenario 1</span><h3>Already contacted</h3><p>An advisor has already spoken with the client, but the column still shows that a follow-up is needed.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Followed Up</b></span></div></div>
     <div class="card"><span class="ix">Scenario 2</span><h3>Reached on another channel</h3><p>The client was contacted by phone, walk-in or personal text. The CRM never saw the interaction.</p><div class="shows"><span>CRM shows <b>No Response</b></span><span>Reality: <b>Contacted</b></span></div></div>
     <div class="card"><span class="ix">Scenario 3</span><h3>Status lags behind</h3><p>The latest interaction happened, but the automated status has not caught up yet and shows an older state.</p><div class="shows"><span>CRM shows <b>Contacted</b></span><span>Reality: <b>Waiting for Client</b></span></div></div>
-    <div class="card"><span class="ix">Scenario 4</span><h3>No way to correct it</h3><p>The advisor can see the status is wrong, but has limited ability to fix it. The wrong value stays on the list.</p><div class="shows"><span>CRM shows <b>Incorrect status</b></span><span>Reality: <b>Known, but not fixable</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 4</span><h3>No date, no way to correct it</h3><p>The advisor can see the status is wrong, but cannot fix it, and nothing on the row says when the lead should be contacted next.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Call promised for Tuesday</b></span></div></div>
   </div>
   <div class="risks">Resulting risk:
     <span class="tag">Missed follow-ups</span><span class="tag">Duplicate outreach</span><span class="tag">Extra manual checking</span><span class="tag">Reduced confidence in the Leads list</span>
@@ -303,38 +337,59 @@
 <section class="ch" id="s03"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">03 — Proposal</div>
-    <div><h2>Automatic by default. Manual when needed.</h2><p class="lede">Keep the existing Follow-Up automation. Add a manual override for the cases where the automation gets it wrong.</p></div>
+    <div><h2>A next step and a date, not a label.</h2><p class="lede">Replace the status label with a scheduled follow-up: an action, a due date and an owner. The CRM sets it automatically. Authorized users adjust it when needed.</p></div>
   </div>
   <div class="compare">
     <div class="cmp cur">
       <span class="lbl">Current</span>
-      <h3>Automated only</h3>
+      <h3>Automated status label</h3>
       <ul>
-        <li><span class="i">·</span>Status is set by the system from recorded activity</li>
+        <li><span class="i">·</span>Shows a label such as Needs Follow-Up or Contacted</li>
+        <li><span class="i">·</span>Says nothing about when the next contact is due</li>
         <li><span class="i">·</span>Interactions outside the CRM are not reflected</li>
-        <li><span class="i">·</span>Incorrect values cannot easily be corrected</li>
-        <li><span class="i">·</span>Team verifies rows manually</li>
+        <li><span class="i">·</span>Cannot be corrected, so the team verifies rows by hand</li>
       </ul>
     </div>
     <div class="cmp pro">
       <span class="rec">Recommended</span>
       <span class="lbl">Proposed</span>
-      <h3>Automatic + Manual Override</h3>
+      <h3>Scheduled next follow-up</h3>
       <ul>
-        <li><span class="i">✓</span>Automation continues exactly as today when it detects activity correctly</li>
-        <li><span class="i">✓</span>Authorized users correct an inaccurate status directly from the Leads list</li>
-        <li><span class="i">✓</span>Each value shows whether it is Automatic or a Manual Override, with who and when</li>
-        <li><span class="i">✓</span>Manual corrections are protected from being overwritten by the next automatic update</li>
+        <li><span class="i">✓</span>Each lead shows its next step: <b>Call · Tue Sep 8 · Leon</b></li>
+        <li><span class="i">✓</span>The CRM schedules it automatically after every recorded interaction, using the agreed timing rule</li>
+        <li><span class="i">✓</span>Urgency is derived from the date: Overdue, Due today, Upcoming, Done</li>
+        <li><span class="i">✓</span>Authorized users change the date or action, or mark the step done with an outcome, from the Leads list</li>
+        <li><span class="i">✓</span>Each value shows whether it was set automatically or by a person, with who and when</li>
       </ul>
     </div>
   </div>
+  <div class="urg" aria-label="Urgency derived from the due date">
+    <div><span class="due d-over"><span class="dot"></span>Overdue 2 days</span>Due date has passed</div>
+    <div><span class="due d-today"><span class="dot"></span>Due today</span>Due before end of day</div>
+    <div><span class="due d-soon"><span class="dot"></span>Sep 12</span>Upcoming</div>
+    <div><span class="due d-done"><span class="dot"></span>Done</span>Completed, next step scheduled</div>
+    <div><span class="due d-none"><span class="dot"></span>None</span>No further follow-up</div>
+  </div>
   <div class="rule">
     <span class="k">The key rule</span>
-    <p><b>A manual correction is not immediately overwritten by the next automated update.</b> A manually corrected status remains protected until one of two things happens:</p>
+    <p><b>A date or step set by a person is not overwritten by the next automated update.</b> It remains protected until one of two things happens:</p>
     <ol>
-      <li>The authorized user changes it again, or</li>
-      <li>A clearly new client interaction occurs, according to the agreed CRM logic.</li>
+      <li>The authorized user changes it again or marks it done, or</li>
+      <li>A clearly new client interaction is recorded, according to the agreed CRM logic.</li>
     </ol>
+  </div>
+  <div class="mapwrap">
+  <table class="map">
+    <thead><tr><th>Today's status label</th><th>In the proposed model</th></tr></thead>
+    <tbody>
+      <tr><td>Needs Follow-Up</td><td>A follow-up that is due today or overdue</td></tr>
+      <tr><td>Followed Up</td><td>The step was marked done, and the next one is scheduled</td></tr>
+      <tr><td>Contacted</td><td>Outcome <em>Reached</em> recorded when marking done</td></tr>
+      <tr><td>No Response</td><td>Outcome <em>No response</em>; the CRM schedules a retry automatically</td></tr>
+      <tr><td>Waiting for Client</td><td>Outcome <em>Waiting for client</em>; next step scheduled further out</td></tr>
+      <tr><td>Completed</td><td>Outcome <em>Booked / closed</em>; no further follow-up</td></tr>
+    </tbody>
+  </table>
   </div>
 </div></section>
 
@@ -342,32 +397,32 @@
 <section class="ch" id="s04"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">04 — How it works</div>
-    <div><h2>One extra step, only when the status is wrong</h2><p class="lede">For most leads nothing changes. The override is a short detour that only the person reviewing the row decides to take.</p></div>
+    <div><h2>One extra step, only when the schedule is wrong</h2><p class="lede">For most leads nothing changes. The edit is a short detour that only the person reviewing the row decides to take.</p></div>
   </div>
   <div class="flow" role="img" aria-label="Flow: client interaction, CRM detects activity, Follow-Up status updates automatically, is the status accurate? Yes: keep status. No: authorized user edits status. Correct status retained.">
     <div class="fn">Client interaction</div>
     <div class="fa"></div>
     <div class="fn sys">Detects activity</div>
     <div class="fa"></div>
-    <div class="fn sys">Follow-Up status updates automatically</div>
+    <div class="fn sys">Next follow-up scheduled automatically</div>
     <div class="fa"></div>
-    <div class="fq">Is the status accurate?</div>
+    <div class="fq">Is the next step right?</div>
     <div class="fa"></div>
     <div class="fbr">
-      <div class="b yes"><span class="l">YES</span><div class="fn">Keep status</div></div>
-      <div class="b no"><span class="l">NO</span><div class="fn">Authorized user edits status</div></div>
+      <div class="b yes"><span class="l">YES</span><div class="fn">Keep it</div></div>
+      <div class="b no"><span class="l">NO</span><div class="fn">Authorized user changes date or marks done</div></div>
     </div>
     <div class="fj"><span class="tip"></span></div>
-    <div class="fn end">Correct status retained</div>
+    <div class="fn end">Correct next step retained</div>
   </div>
-  <p class="flow-cap">Review → Identify incorrect status → Edit → Save</p>
+  <p class="flow-cap">Review → Spot a wrong date or step → Adjust or mark done → Save</p>
 </div></section>
 
 <!-- 05 -->
 <section class="ch" id="s05"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">05 — Leads list</div>
-    <div><h2>Leads list experience</h2><p class="lede">The Follow-Up column keeps its place in the list. Each value carries a quiet second line saying where it came from. Sample data only.</p></div>
+    <div><h2>Leads list experience</h2><p class="lede">The Follow-Up column keeps its place in the list and becomes sortable by date. Each value carries a quiet second line saying who set it. Sample data only.</p></div>
   </div>
   <div class="app">
     <div class="bar">
@@ -376,26 +431,43 @@
     </div>
     <div class="tw">
     <table class="leads">
-      <thead><tr><th>Lead</th><th>Event</th><th>Status</th><th>Assigned</th><th>Follow-Up</th></tr></thead>
+      <thead><tr><th>Lead</th><th>Event</th><th>Status</th><th>Assigned</th><th>Follow-Up ↑</th></tr></thead>
       <tbody>
+        <tr>
+          <td class="lead"><b>D. Patel</b><span class="code mono">LD-26-0909</span></td>
+          <td class="ev"><b>Birthday</b><span>Nov 8, 2026 · 45 guests</span></td>
+          <td><span class="badge b-info"><span class="dot"></span>New</span></td>
+          <td class="as"><span class="av">C</span>Cams</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-over"><span class="dot"></span>Overdue 2 days</span><span class="act">Call · Sep 3</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>set after lead captured</span>
+          </div></td>
+        </tr>
         <tr>
           <td class="lead"><b>M. Okafor</b><span class="code mono">LD-26-0912</span></td>
           <td class="ev"><b>Wedding</b><span>Oct 3, 2027 · 80 guests</span></td>
           <td><span class="badge b-info"><span class="dot"></span>New</span></td>
           <td class="as"><span class="av">C</span>Cams</td>
-          <td><div class="fu">
-            <span class="sel"><span class="badge b-warn">Needs Follow-Up</span><span class="car">▾</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>Updated 12 min ago</span>
+          <td><div class="task">
+            <span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call · 3:00 PM</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>1h response target</span>
           </div></td>
         </tr>
-        <tr>
+        <tr class="active">
           <td class="lead"><b>L. Tran</b><span class="code mono">LD-26-0911</span></td>
           <td class="ev"><b>Corporate Dinner</b><span>Jun 14, 2027 · 120 guests</span></td>
           <td><span class="badge b-info"><span class="dot"></span>Contacted</span></td>
           <td class="as"><span class="av">L</span>Leon</td>
-          <td><div class="fu">
-            <span class="sel"><span class="badge b-ok">Followed Up ✓</span><span class="car">▾</span></span>
-            <span class="src man"><span class="ic">M</span>Manual Override<span class="sep">·</span>Leon<span class="sep">·</span>Today, 11:20 AM</span>
+          <td><div class="task">
+            <span class="line open"><span class="due d-soon"><span class="dot"></span>Wed Sep 9</span><span class="act">Text · quote follow-up</span><span class="car">▴</span></span>
+            <span class="src man"><span class="ic">M</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM</span>
+            <div class="pop" aria-label="Edit next follow-up">
+              <div><span class="k">Action</span><div class="seg"><span>Call</span><span class="on">Text</span><span>Email</span><span>Meet</span></div></div>
+              <div><span class="k">Due</span><div class="inp">Wed, Sep 9, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span>+3 days</span><span>Next week</span></div></div>
+              <div><span class="k">Note</span><div class="inp" style="color:var(--ink-2)">Client asked for revised quote by Wed</div></div>
+              <div class="done"><span class="k">Or mark this step done</span><div class="outs"><span>Reached</span><span>No response</span><span>Waiting for client</span><span>Booked / closed</span></div></div>
+              <div class="acts"><span>Cancel</span><span class="save">Save</span></div>
+            </div>
           </div></td>
         </tr>
         <tr>
@@ -403,29 +475,19 @@
           <td class="ev"><b>Quinceañera</b><span>Mar 21, 2027 · 150 guests</span></td>
           <td><span class="badge b-info"><span class="dot"></span>Qualified</span></td>
           <td class="as"><span class="av">V</span>Vince</td>
-          <td><div class="fu">
-            <span class="sel"><span class="badge b-info">Waiting for Client</span><span class="car">▾</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>Updated 2 h ago</span>
+          <td><div class="task">
+            <span class="line"><span class="due d-soon"><span class="dot"></span>Sat Sep 12</span><span class="act">Email · check in</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>after outcome <em>Waiting for client</em></span>
           </div></td>
         </tr>
-        <tr class="active">
-          <td class="lead"><b>D. Patel</b><span class="code mono">LD-26-0909</span></td>
-          <td class="ev"><b>Birthday</b><span>Nov 8, 2026 · 45 guests</span></td>
-          <td><span class="badge b-info"><span class="dot"></span>New</span></td>
-          <td class="as"><span class="av">C</span>Cams</td>
-          <td><div class="fu">
-            <span class="sel open"><span class="badge b-neutral">No Response</span><span class="car">▴</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>Updated yesterday</span>
-            <div class="dd" aria-label="Follow-Up status options">
-              <div class="h">Set Follow-Up status</div>
-              <div class="o"><span>Needs Follow-Up</span><span class="dot" style="background:var(--warn)"></span></div>
-              <div class="o hov"><span>Followed Up</span><span class="dot" style="background:var(--ok)"></span></div>
-              <div class="o"><span>Contacted</span><span class="dot" style="background:var(--info)"></span></div>
-              <div class="o on"><span>No Response ✓</span><span class="dot" style="background:var(--neutral)"></span></div>
-              <div class="o"><span>Waiting for Client</span><span class="dot" style="background:var(--info)"></span></div>
-              <div class="o"><span>Completed</span><span class="dot" style="background:var(--ok)"></span></div>
-              <div class="ft">Saved as a Manual Override with your name and time.</div>
-            </div>
+        <tr>
+          <td class="lead"><b>J. Whitfield</b><span class="code mono">LD-26-0904</span></td>
+          <td class="ev"><b>Anniversary</b><span>Feb 14, 2027 · 60 guests</span></td>
+          <td><span class="badge b-ok"><span class="dot"></span>Booked</span></td>
+          <td class="as"><span class="av">V</span>Vince</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-none"><span class="dot"></span>None</span><span class="act">No further follow-up</span><span class="car">▾</span></span>
+            <span class="src man"><span class="ic">M</span>Set by Vince<span class="sep">·</span>Sep 2 · outcome <em>Booked</em></span>
           </div></td>
         </tr>
       </tbody>
@@ -433,63 +495,55 @@
     </div>
   </div>
   <div class="legend">
-    <span><span class="ic a">A</span>Automatic: set by the system from recorded activity</span>
-    <span><span class="ic m">M</span>Manual Override: corrected by an authorized user, protected from automatic overwrite</span>
-    <span>▾ Editable by authorized users only</span>
+    <span><span class="ic a">A</span>Automatic: scheduled by the CRM from recorded activity and the agreed timing rule</span>
+    <span><span class="ic m">M</span>Set by a person: adjusted or completed by an authorized user, protected from automatic overwrite</span>
+    <span>▾ Editable by authorized users only · column sorts by due date</span>
   </div>
 </div></section>
 
 <!-- 06 -->
 <section class="ch" id="s06"><div class="wrap">
   <div class="ch-head">
-    <div class="ch-num">06 — Override</div>
-    <div><h2>Manual override experience</h2><p class="lede">Four actions, all inside the Leads list. No separate screen, no form to fill.</p></div>
+    <div class="ch-num">06 — Editing</div>
+    <div><h2>Editing a follow-up</h2><p class="lede">Four actions, all inside the Leads list. No separate screen, no form to fill.</p></div>
   </div>
   <div class="steps4">
-    <div><span>Step 1</span>Review</div>
-    <div><span>Step 2</span>Identify incorrect status</div>
-    <div><span>Step 3</span>Edit</div>
+    <div><span>Step 1</span>Review the list</div>
+    <div><span>Step 2</span>Spot a wrong date or step</div>
+    <div><span>Step 3</span>Adjust, or mark done</div>
     <div><span>Step 4</span>Save</div>
   </div>
   <div class="ov">
     <div class="ovtext">
       <h3>What the user sees</h3>
-      <p>The advisor opens the Follow-Up value on the row, picks the status that matches the real interaction, and saves. The column immediately shows the new value with a small <em>Manual Override</em> line: who changed it and when.</p>
+      <p>The advisor opens the Follow-Up value on the row. They can move the date, change the action, add a short note, or mark the step done and record what happened. The column immediately shows the new step with a small <em>Set by</em> line: who changed it and when.</p>
       <ul>
-        <li>The dropdown offers the six agreed statuses and nothing else.</li>
+        <li>Marking a step done asks for one outcome: Reached, No response, Waiting for client, or Booked / closed.</li>
+        <li>The CRM then schedules the next step automatically by the agreed rule, unless the outcome is Booked / closed.</li>
         <li>Only authorized users see the edit control. Everyone else sees the same read-only value.</li>
-        <li>Every override is visible on the row itself, so managers can tell at a glance which values were corrected by a person.</li>
-        <li>The override is only needed when the automated status does not represent the actual client interaction.</li>
+        <li>Every manual change is visible on the row, so managers can tell at a glance which schedules a person adjusted.</li>
       </ul>
       <div class="after">
-        <span class="k" style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600">Result on the row after saving</span>
-        <div class="fu">
-          <span class="sel"><span class="badge b-ok">Followed Up ✓</span><span class="car">▾</span></span>
-          <span class="src man"><span class="ic">M</span>Manual Override<span class="sep">·</span>Leon<span class="sep">·</span>Today, 11:20 AM</span>
+        <span class="k" style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600">Result on the row after marking done with outcome Reached</span>
+        <div class="task">
+          <span class="line"><span class="due d-soon"><span class="dot"></span>Thu Sep 10</span><span class="act">Call · confirm date</span><span class="car">▾</span></span>
+          <span class="src man"><span class="ic">M</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM<span class="sep">·</span>last outcome <em>Reached</em></span>
         </div>
       </div>
     </div>
-    <div class="panel" aria-label="Edit Follow-Up status">
+    <div class="panel" aria-label="Edit next follow-up">
       <div class="ph">
         <div class="who">L. Tran<span>Corporate Dinner · Jun 14, 2027</span></div>
-        <span class="badge b-accent">Edit Follow-Up</span>
+        <span class="badge b-accent">Edit follow-up</span>
       </div>
       <div class="row">
-        <span class="k">Current value</span>
-        <div class="fu"><span class="sel"><span class="badge b-warn">Needs Follow-Up</span><span class="car">▾</span></span><span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>Updated 40 min ago</span></div>
+        <span class="k">Current</span>
+        <div class="task"><span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call</span></span><span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>set 40 min ago</span></div>
       </div>
-      <div class="row">
-        <span class="k">Set to</span>
-        <div class="dd" style="width:100%">
-          <div class="o"><span>Needs Follow-Up</span><span class="dot" style="background:var(--warn)"></span></div>
-          <div class="o on"><span>Followed Up ✓</span><span class="dot" style="background:var(--ok)"></span></div>
-          <div class="o"><span>Contacted</span><span class="dot" style="background:var(--info)"></span></div>
-          <div class="o"><span>No Response</span><span class="dot" style="background:var(--neutral)"></span></div>
-          <div class="o"><span>Waiting for Client</span><span class="dot" style="background:var(--info)"></span></div>
-          <div class="o"><span>Completed</span><span class="dot" style="background:var(--ok)"></span></div>
-        </div>
-      </div>
-      <div class="helper"><span class="i">i</span><span>Manual corrections remain protected from automatic overwrite unless a new client interaction triggers the agreed automation rule.</span></div>
+      <div class="row"><span class="k">Action</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="seg"><span class="on">Call</span><span>Text</span><span>Email</span><span>Meet</span></div></div></div>
+      <div class="row"><span class="k">Due</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="inp">Thu, Sep 10, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span class="on" style="border-color:var(--accent);color:var(--accent-text)">+3 days</span><span>Next week</span></div></div></div>
+      <div class="row"><span class="k">Mark the current step done</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="done" style="border:0;padding:0"><div class="outs"><span style="background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600">Reached ✓</span><span>No response</span><span>Waiting for client</span><span>Booked / closed</span></div></div></div></div>
+      <div class="helper"><span class="i">i</span><span>Dates and steps set by a person stay protected from automatic rescheduling unless a new client interaction triggers the agreed automation rule.</span></div>
       <div class="acts"><span>Cancel</span><span class="save">Save</span></div>
     </div>
   </div>
@@ -499,13 +553,13 @@
 <section class="ch" id="s07"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">07 — Impact</div>
-    <div><h2>Why this matters</h2><p class="lede">The Follow-Up column is where the team decides who to call next. When it is right, everything downstream is faster.</p></div>
+    <div><h2>Why this matters</h2><p class="lede">The Follow-Up column is where the team decides who to contact next. A date makes that decision for them.</p></div>
   </div>
   <div class="impact">
-    <div class="card"><div class="ico">01</div><h3>Fewer missed follow-ups</h3><p>A lead marked as handled is actually handled. Leads that still need attention stay visible until someone acts.</p></div>
-    <div class="card"><div class="ico">02</div><h3>Less duplicate outreach</h3><p>Clients already reached by phone or in person are not contacted a second time because the system did not know.</p></div>
-    <div class="card"><div class="ico">03</div><h3>Faster lead review</h3><p>Managers and advisors can trust the list at a glance instead of opening each record to confirm the real state.</p></div>
-    <div class="card"><div class="ico">04</div><h3>More reliable CRM data</h3><p>Corrections are recorded with who and when, so reports built on Follow-Up status reflect what happened.</p></div>
+    <div class="card"><div class="ico">01</div><h3>Fewer missed follow-ups</h3><p>Every open lead has a due date. Anything past it turns Overdue on its own and rises to the top of the list.</p></div>
+    <div class="card"><div class="ico">02</div><h3>Less duplicate outreach</h3><p>Clients already reached by phone or in person are marked done with an outcome, so nobody contacts them again by mistake.</p></div>
+    <div class="card"><div class="ico">03</div><h3>Faster lead review</h3><p>Sort by due date and work top down. Managers see overdue and due-today counts without opening a single record.</p></div>
+    <div class="card"><div class="ico">04</div><h3>More reliable CRM data</h3><p>Outcomes, dates and who set them are recorded, so reports on follow-up activity reflect what happened.</p></div>
   </div>
 </div></section>
 
@@ -519,7 +573,7 @@
     <div class="scope">
       <span class="k">Only this changes</span>
       <b>Follow-Up column behavior</b>
-      <p>Automatic status remains. A manual override is added for authorized users, with a visible source indicator and protection from automatic overwrite.</p>
+      <p>The column shows a scheduled next step instead of a status label. Automation still sets it. Authorized users can adjust it, with a visible source indicator and protection from automatic overwrite.</p>
     </div>
     <ul>
       <li><span class="lk">=</span>Lead assignment</li>
@@ -537,14 +591,14 @@
 <!-- 09 -->
 <section class="ch final" id="s09"><div class="wrap">
   <div class="k">09 — EXPECTED OUTCOME</div>
-  <h2>A Follow-Up column the team can trust.</h2>
+  <h2>Every lead has a next step and a date.</h2>
   <div class="pair">
-    <div class="a"><span>AUTOMATIC</span>when it works.</div>
-    <div class="m"><span>MANUAL CORRECTION</span>when it doesn't.</div>
+    <div class="a"><span>SCHEDULED AUTOMATICALLY</span>when the CRM knows.</div>
+    <div class="m"><span>ADJUSTED BY A PERSON</span>when it doesn't.</div>
   </div>
 </div></section>
 
 <footer class="wrap">
-  <span>CRM › Leads › Follow-Up Status · Improvement proposal</span>
+  <span>CRM › Leads › Follow-Up · Improvement proposal</span>
   <span>Prepared for the CRM / IT / Operations leadership team · Sample data only</span>
 </footer>
