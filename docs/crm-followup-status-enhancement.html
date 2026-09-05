@@ -266,7 +266,7 @@
   <span class="kicker"><span class="dot"></span>Improvement proposal</span>
   <h1>CRM Follow-Up Status Enhancement</h1>
   <p class="sub">Automatic intelligence. Human control when needed.</p>
-  <p class="intro">The Follow-Up column in the Leads list is updated automatically from recorded activity. That automation is valuable, but it does not always reflect what actually happened with the customer. This proposal keeps the automation and adds one thing: authorized users can correct the Follow-Up status directly from the Leads list, and that correction is protected from being silently overwritten.</p>
+  <p class="intro">The Follow-Up column in the Leads list is updated automatically from recorded activity. That automation is valuable, but it does not always reflect what actually happened with the client. This proposal keeps the automation and adds one thing: authorized users can correct the Follow-Up status directly from the Leads list, and that correction is protected from being silently overwritten.</p>
   <div class="facts">
     <div><div class="k">Scope</div><div class="v">Follow-Up column only</div></div>
     <div><div class="k">Approach</div><div class="v">Automatic by default + manual override</div></div>
@@ -279,7 +279,7 @@
 <section class="ch" id="s02"><div class="wrap">
   <div class="ch-head">
     <div class="ch-num">02 — Challenge</div>
-    <div><h2>The current challenge</h2><p class="lede">The automated status can lag behind, or miss, the real conversation with the customer. When that happens, the team has to verify each row by hand.</p></div>
+    <div><h2>The current challenge</h2><p class="lede">The automated status can lag behind, or miss, the real conversation with the client. When that happens, the team has to verify each row by hand.</p></div>
   </div>
   <div class="chain">
     <div class="box"><div class="k">Today</div><div class="v">Automated status</div></div>
@@ -289,9 +289,9 @@
     <div class="box"><div class="k">Consequence</div><div class="v">User must manually verify</div></div>
   </div>
   <div class="scen">
-    <div class="card"><span class="ix">Scenario 1</span><h3>Already contacted</h3><p>An advisor has already spoken with the customer, but the column still shows that a follow-up is needed.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Followed Up</b></span></div></div>
-    <div class="card"><span class="ix">Scenario 2</span><h3>Reached on another channel</h3><p>The customer was contacted by phone, walk-in or personal text. The CRM never saw the interaction.</p><div class="shows"><span>CRM shows <b>No Response</b></span><span>Reality: <b>Contacted</b></span></div></div>
-    <div class="card"><span class="ix">Scenario 3</span><h3>Status lags behind</h3><p>The latest interaction happened, but the automated status has not caught up yet and shows an older state.</p><div class="shows"><span>CRM shows <b>Contacted</b></span><span>Reality: <b>Waiting for Customer</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 1</span><h3>Already contacted</h3><p>An advisor has already spoken with the client, but the column still shows that a follow-up is needed.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Followed Up</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 2</span><h3>Reached on another channel</h3><p>The client was contacted by phone, walk-in or personal text. The CRM never saw the interaction.</p><div class="shows"><span>CRM shows <b>No Response</b></span><span>Reality: <b>Contacted</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 3</span><h3>Status lags behind</h3><p>The latest interaction happened, but the automated status has not caught up yet and shows an older state.</p><div class="shows"><span>CRM shows <b>Contacted</b></span><span>Reality: <b>Waiting for Client</b></span></div></div>
     <div class="card"><span class="ix">Scenario 4</span><h3>No way to correct it</h3><p>The advisor can see the status is wrong, but has limited ability to fix it. The wrong value stays on the list.</p><div class="shows"><span>CRM shows <b>Incorrect status</b></span><span>Reality: <b>Known, but not fixable</b></span></div></div>
   </div>
   <div class="risks">Resulting risk:
@@ -333,7 +333,7 @@
     <p><b>A manual correction is not immediately overwritten by the next automated update.</b> A manually corrected status remains protected until one of two things happens:</p>
     <ol>
       <li>The authorized user changes it again, or</li>
-      <li>A clearly new customer interaction occurs, according to the agreed CRM logic.</li>
+      <li>A clearly new client interaction occurs, according to the agreed CRM logic.</li>
     </ol>
   </div>
 </div></section>
@@ -344,8 +344,8 @@
     <div class="ch-num">04 — How it works</div>
     <div><h2>One extra step, only when the status is wrong</h2><p class="lede">For most leads nothing changes. The override is a short detour that only the person reviewing the row decides to take.</p></div>
   </div>
-  <div class="flow" role="img" aria-label="Flow: customer interaction, CRM detects activity, Follow-Up status updates automatically, is the status accurate? Yes: keep status. No: authorized user edits status. Correct status retained.">
-    <div class="fn">Customer interaction</div>
+  <div class="flow" role="img" aria-label="Flow: client interaction, CRM detects activity, Follow-Up status updates automatically, is the status accurate? Yes: keep status. No: authorized user edits status. Correct status retained.">
+    <div class="fn">Client interaction</div>
     <div class="fa"></div>
     <div class="fn sys">Detects activity</div>
     <div class="fa"></div>
@@ -404,7 +404,7 @@
           <td><span class="badge b-info"><span class="dot"></span>Qualified</span></td>
           <td class="as"><span class="av">V</span>Vince</td>
           <td><div class="fu">
-            <span class="sel"><span class="badge b-info">Waiting for Customer</span><span class="car">▾</span></span>
+            <span class="sel"><span class="badge b-info">Waiting for Client</span><span class="car">▾</span></span>
             <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>Updated 2 h ago</span>
           </div></td>
         </tr>
@@ -422,7 +422,7 @@
               <div class="o hov"><span>Followed Up</span><span class="dot" style="background:var(--ok)"></span></div>
               <div class="o"><span>Contacted</span><span class="dot" style="background:var(--info)"></span></div>
               <div class="o on"><span>No Response ✓</span><span class="dot" style="background:var(--neutral)"></span></div>
-              <div class="o"><span>Waiting for Customer</span><span class="dot" style="background:var(--info)"></span></div>
+              <div class="o"><span>Waiting for Client</span><span class="dot" style="background:var(--info)"></span></div>
               <div class="o"><span>Completed</span><span class="dot" style="background:var(--ok)"></span></div>
               <div class="ft">Saved as a Manual Override with your name and time.</div>
             </div>
@@ -459,7 +459,7 @@
         <li>The dropdown offers the six agreed statuses and nothing else.</li>
         <li>Only authorized users see the edit control. Everyone else sees the same read-only value.</li>
         <li>Every override is visible on the row itself, so managers can tell at a glance which values were corrected by a person.</li>
-        <li>The override is only needed when the automated status does not represent the actual customer interaction.</li>
+        <li>The override is only needed when the automated status does not represent the actual client interaction.</li>
       </ul>
       <div class="after">
         <span class="k" style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600">Result on the row after saving</span>
@@ -485,11 +485,11 @@
           <div class="o on"><span>Followed Up ✓</span><span class="dot" style="background:var(--ok)"></span></div>
           <div class="o"><span>Contacted</span><span class="dot" style="background:var(--info)"></span></div>
           <div class="o"><span>No Response</span><span class="dot" style="background:var(--neutral)"></span></div>
-          <div class="o"><span>Waiting for Customer</span><span class="dot" style="background:var(--info)"></span></div>
+          <div class="o"><span>Waiting for Client</span><span class="dot" style="background:var(--info)"></span></div>
           <div class="o"><span>Completed</span><span class="dot" style="background:var(--ok)"></span></div>
         </div>
       </div>
-      <div class="helper"><span class="i">i</span><span>Manual corrections remain protected from automatic overwrite unless a new customer interaction triggers the agreed automation rule.</span></div>
+      <div class="helper"><span class="i">i</span><span>Manual corrections remain protected from automatic overwrite unless a new client interaction triggers the agreed automation rule.</span></div>
       <div class="acts"><span>Cancel</span><span class="save">Save</span></div>
     </div>
   </div>
@@ -503,7 +503,7 @@
   </div>
   <div class="impact">
     <div class="card"><div class="ico">01</div><h3>Fewer missed follow-ups</h3><p>A lead marked as handled is actually handled. Leads that still need attention stay visible until someone acts.</p></div>
-    <div class="card"><div class="ico">02</div><h3>Less duplicate outreach</h3><p>Customers already reached by phone or in person are not contacted a second time because the system did not know.</p></div>
+    <div class="card"><div class="ico">02</div><h3>Less duplicate outreach</h3><p>Clients already reached by phone or in person are not contacted a second time because the system did not know.</p></div>
     <div class="card"><div class="ico">03</div><h3>Faster lead review</h3><p>Managers and advisors can trust the list at a glance instead of opening each record to confirm the real state.</p></div>
     <div class="card"><div class="ico">04</div><h3>More reliable CRM data</h3><p>Corrections are recorded with who and when, so reports built on Follow-Up status reflect what happened.</p></div>
   </div>
@@ -526,7 +526,7 @@
       <li><span class="lk">=</span>SLA / response timing</li>
       <li><span class="lk">=</span>Lead status</li>
       <li><span class="lk">=</span>Pipeline</li>
-      <li><span class="lk">=</span>Customer records</li>
+      <li><span class="lk">=</span>Client records</li>
       <li><span class="lk">=</span>Communication history</li>
       <li><span class="lk">=</span>Existing follow-up automation</li>
       <li><span class="lk">=</span>Warm / Cold scoring</li>
