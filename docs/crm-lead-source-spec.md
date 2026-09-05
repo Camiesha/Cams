@@ -2,7 +2,7 @@
 
 **CRM › Leads › Lead Source** · Status: For review · Date: 5 Sep 2026 · Applies to: Crown Prince Event Hall, Alvin Studio
 **Companion:** `events-venue-marketing-playbook.md` §5 (CRM), §7 (Ads → GA4 → CRM source field), §14 Gate 1
-**Visual version:** published artifact "Lead Source Detection" (same content, information-designed).
+**Proposal version:** published artifact "Lead Source Detection", a problem-first 8-section enhancement proposal for stakeholders. This file is the full technical source of truth; the artifact carries the same requirements in its supporting-detail appendix.
 
 **Read by role**
 
