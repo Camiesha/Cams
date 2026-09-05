@@ -181,7 +181,7 @@
   .fu .sel{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 8px 5px 6px;box-shadow:var(--shadow-sm)}
   .fu .sel .car{color:var(--faint);font-size:.7rem;padding-right:2px}
   .fu .src{font-size:.78rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;line-height:1.4}
-  .fu .src .ic{width:14px;height:14px;border-radius:4px;display:inline-grid;place-items:center;font-size:.6rem;font-weight:800;flex:none}
+  .fu .src .ic{width:15px;height:15px;border-radius:4px;display:inline-grid;place-items:center;font-size:.72rem;font-weight:600;flex:none;margin-right:2px}
   .fu .src.auto .ic{background:var(--neutral-bg);color:var(--neutral)}
   .fu .src.man{color:var(--warn)}
   .fu .src.man .ic{background:var(--warn-bg);color:var(--warn)}
@@ -195,7 +195,7 @@
   .dd .o .dot{width:8px;height:8px;border-radius:50%}
   .dd .ft{margin-top:4px;padding:8px 10px 6px;border-top:1px solid var(--line-2);font-size:.75rem;color:var(--muted);line-height:1.45}
   .legend{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:14px;font-size:.86rem;color:var(--muted);padding:0 4px}
-  .legend>span{display:inline-flex;align-items:center;gap:8px}.legend .ic{width:14px;height:14px;border-radius:4px;display:inline-grid;place-items:center;font-size:.6rem;font-weight:800}.legend .ic.a{background:var(--neutral-bg);color:var(--neutral)}.legend .ic.m{background:var(--warn-bg);color:var(--warn)}
+  .legend>span{display:inline-flex;align-items:center;gap:8px}.legend .ic{width:15px;height:15px;border-radius:4px;display:inline-grid;place-items:center;font-size:.72rem;font-weight:600}.legend .ic.a{background:var(--neutral-bg);color:var(--neutral)}.legend .ic.m{background:var(--warn-bg);color:var(--warn)}
 
   /* 06 override */
   .ov{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
@@ -440,7 +440,7 @@
           <td class="as"><span class="av">C</span>Cams</td>
           <td><div class="task">
             <span class="line"><span class="due d-over"><span class="dot"></span>Overdue 2 days</span><span class="act">Call · Sep 3</span><span class="car">▾</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>set after lead captured</span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>set after lead captured</span>
           </div></td>
         </tr>
         <tr>
@@ -450,7 +450,7 @@
           <td class="as"><span class="av">C</span>Cams</td>
           <td><div class="task">
             <span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call · 3:00 PM</span><span class="car">▾</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>1h response target</span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>1h response target</span>
           </div></td>
         </tr>
         <tr class="active">
@@ -460,7 +460,7 @@
           <td class="as"><span class="av">L</span>Leon</td>
           <td><div class="task">
             <span class="line open"><span class="due d-soon"><span class="dot"></span>Wed Sep 9</span><span class="act">Text · quote follow-up</span><span class="car">▴</span></span>
-            <span class="src man"><span class="ic">M</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM</span>
+            <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM</span>
             <div class="pop" aria-label="Edit next follow-up">
               <div><span class="k">Action</span><div class="seg"><span>Call</span><span class="on">Text</span><span>Email</span><span>Meet</span></div></div>
               <div><span class="k">Due</span><div class="inp">Wed, Sep 9, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span>+3 days</span><span>Next week</span></div></div>
@@ -477,7 +477,7 @@
           <td class="as"><span class="av">V</span>Vince</td>
           <td><div class="task">
             <span class="line"><span class="due d-soon"><span class="dot"></span>Sat Sep 12</span><span class="act">Email · check in</span><span class="car">▾</span></span>
-            <span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>after outcome <em>Waiting for client</em></span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>after outcome <em>Waiting for client</em></span>
           </div></td>
         </tr>
         <tr>
@@ -487,7 +487,7 @@
           <td class="as"><span class="av">V</span>Vince</td>
           <td><div class="task">
             <span class="line"><span class="due d-none"><span class="dot"></span>None</span><span class="act">No further follow-up</span><span class="car">▾</span></span>
-            <span class="src man"><span class="ic">M</span>Set by Vince<span class="sep">·</span>Sep 2 · outcome <em>Booked</em></span>
+            <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Vince<span class="sep">·</span>Sep 2 · outcome <em>Booked</em></span>
           </div></td>
         </tr>
       </tbody>
@@ -495,8 +495,8 @@
     </div>
   </div>
   <div class="legend">
-    <span><span class="ic a">A</span>Automatic: scheduled by the CRM from recorded activity and the agreed timing rule</span>
-    <span><span class="ic m">M</span>Set by a person: adjusted or completed by an authorized user, protected from automatic overwrite</span>
+    <span><span class="ic a" aria-hidden="true">⟳</span>Automatic: scheduled by the CRM from recorded activity and the agreed timing rule</span>
+    <span><span class="ic m" aria-hidden="true">✎</span>Set by a person: adjusted or completed by an authorized user, protected from automatic overwrite</span>
     <span>▾ Editable by authorized users only · column sorts by due date</span>
   </div>
 </div></section>
@@ -527,7 +527,7 @@
         <span class="k" style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600">Result on the row after marking done with outcome Reached</span>
         <div class="task">
           <span class="line"><span class="due d-soon"><span class="dot"></span>Thu Sep 10</span><span class="act">Call · confirm date</span><span class="car">▾</span></span>
-          <span class="src man"><span class="ic">M</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM<span class="sep">·</span>last outcome <em>Reached</em></span>
+          <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM<span class="sep">·</span>last outcome <em>Reached</em></span>
         </div>
       </div>
     </div>
@@ -538,7 +538,7 @@
       </div>
       <div class="row">
         <span class="k">Current</span>
-        <div class="task"><span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call</span></span><span class="src auto"><span class="ic">A</span>Automatic<span class="sep">·</span>set 40 min ago</span></div>
+        <div class="task"><span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call</span></span><span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>set 40 min ago</span></div>
       </div>
       <div class="row"><span class="k">Action</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="seg"><span class="on">Call</span><span>Text</span><span>Email</span><span>Meet</span></div></div></div>
       <div class="row"><span class="k">Due</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="inp">Thu, Sep 10, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span class="on" style="border-color:var(--accent);color:var(--accent-text)">+3 days</span><span>Next week</span></div></div></div>
