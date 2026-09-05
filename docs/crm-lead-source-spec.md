@@ -20,11 +20,12 @@
 
 | Problem | Solution | Outcome |
 |---|---|---|
-| Leads arrive from two websites, phone, text, email and marketplaces, but the Leads list records no origin. Cost per lead and per booking by channel cannot be produced. | Each intake channel declares itself. A resolver sets **Lead Source** on arrival, falls back to **Unknown / Not Set** when unsure, and never overwrites a value a person has set. | Every lead carries one source. Leads, tours, bookings and revenue can be reported per channel and joined to ad spend for marketing ROI. |
+| The CRM already knows where a lead came from, but only inside the record: you open the lead or scroll its Communication history to see it. The Leads list, filters and Export do not carry it, so reviewing by channel means opening leads one at a time. | Make **Lead Source** a first-class field: shown in the list, filterable, exportable. Existing values are promoted into it, not re-typed. New leads get it on arrival from the intake channel, fall back to **Unknown / Not Set** when unsure, and a person's value is never overwritten. | Every lead carries one source. Leads, tours, bookings and revenue can be reported per channel and joined to ad spend for marketing ROI. |
 
 | What changes | What does not change |
 |---|---|
 | New **Source** column, filter and export field on the Leads list | Lead assignment, the 1h SLA timer, follow-up sequences |
+| Existing per-lead source values mapped onto one standard list and carried into the column | Communication history still shows the original message and channel |
 | Editable Source on lead detail, with audit trail | Pipeline, List and Health views, statuses, advisors |
 | New Settings page: Lead Sources and detection rules | Existing lead fields and the lead count |
 | Intake endpoint accepts a channel and resolves the source | Advisors can still create a lead on a live call; source is optional |
@@ -33,7 +34,11 @@
 
 ## 02 Current → Proposed
 
-**Current** (Leads list screenshot, 5 Sep 2026). Subtitle: "Leads from 2 web apps + phone/text · 1h response target · new leads are shared out automatically." Actions: + New Lead, Export, Pipeline / List / Health. Filters: Search, All statuses, All advisors, SLA overdue. Columns: Name · Venue · Contact · Event Date · Captured (default sort) · Guests · Status · Assigned · Follow-up. **No source column, filter or export field.**
+**Current** (Leads list screenshot, 5 Sep 2026). Subtitle: "Leads from 2 web apps + phone/text · 1h response target · new leads are shared out automatically." Actions: + New Lead, Export, Pipeline / List / Health. Filters: Search, All statuses, All advisors, SLA overdue. Columns: Name · Venue · Contact · Event Date · Captured (default sort) · Guests · Status · Assigned · Follow-up. **Source exists on each lead but only inside the record (detail / Communication). It is not in the list, filters or Export, so you must click into each lead to see it.**
+
+| To see a source today | To see a source after |
+|---|---|
+| Leads list → click lead → Communication → read channel → back → next lead. Five steps per lead; no filter, sort or export. | Leads list → Source column. Zero clicks. Filter, sort and Export include it. Detail and Communication unchanged. |
 
 ![Existing Leads list](images/leads-list-existing.png)
 
@@ -214,15 +219,15 @@ SOURCE → LEAD → TOUR → BOOKING → REVENUE
 
 | # | Phase | Work | Owner | Exit check |
 |---|---|---|---|---|
-| 1 | Prepare | Answer decisions (14). Collect access to CRM, both web apps, SMS/phone provider, inquiries mailbox. Export baseline lead counts. | Owner · Admin · Finance | Baseline totals saved |
+| 1 | Prepare | Answer decisions (14). Collect access to CRM, both web apps, SMS/phone provider, inquiries mailbox. Export baseline lead counts. **Inventory the distinct source values held on leads today** and map each to a key in 03. | Owner · Admin · Finance | Baseline totals saved; mapping table signed off |
 | 2 | Database | Create `lead_sources` (9 rows), `lead_source_rules` (4 rules). Add 6 columns to `leads`, default unknown/auto. | Developer | All views load unchanged; count = baseline |
 | 3 | Intake | Resolver in intake endpoint; overwrite guard; audit rows; Reset to detected. | Developer | Unit tests per channel + Unknown fallback pass |
 | 4 | Connect | Web forms send channel + UTM. SMS and phone webhooks. Mailbox → parser with domain rules. Meta webhook if used. | Developer · Admin | One test lead per channel lands with correct source |
 | 5 | Screens | List column, filter, export. Detail editor. New Lead and import defaults. Settings › Lead Sources. | Developer | Values match records; adding a source needs no deploy |
-| 6 | Backfill | Set source only where intake logs record the channel. All else stays Unknown. No inference from names or notes. | Developer, checked by Finance | Control total holds; per-source counts sum to total |
+| 6 | Promote existing values | For every lead, map the source value already on the record to a key and write it with origin `auto` and evidence `{legacy_value}`. Where intake logs record the channel, use them. Anything unmapped → Unknown, listed for Admin review. No inference from names or notes. | Developer, checked by Finance | Every legacy value mapped or listed; control total holds; per-source counts sum to total |
 | 7 | Verify & go live | Run test matrix (13). First weekly leads-by-source report. Advisors work the Unknown filter to zero. | QA · Finance · Owner | All acceptance criteria pass; report comes from Export |
 
-> 🔒 **Control total:** lead count before = lead count after. Baseline (phase 1), post-schema (phase 2) and post-backfill (phase 6) counts must be identical. **Completeness:** every lead has exactly one source; Unknown is counted, never blank; per-source counts sum to the total.
+> 🔒 **Control total:** lead count before = lead count after. Baseline (phase 1), post-schema (phase 2) and post-promotion (phase 6) counts must be identical. **Completeness:** every lead has exactly one source; Unknown is counted, never blank; per-source counts sum to the total.
 
 ---
 
@@ -232,7 +237,7 @@ SOURCE → LEAD → TOUR → BOOKING → REVENUE
 |---|---|---|---|
 | ☐ | AC1 | Source identified automatically when reliable information exists | T01–T07 |
 | ☐ | AC2 | Correct Lead Source saved to the record, with detected value and evidence | T01–T07, T09 |
-| ☐ | AC3 | Lead Source appears in the Leads list, filter and export | T15, T16 |
+| ☐ | AC3 | Lead Source appears in the Leads list, filter and export without opening the lead | T15, T16, T23 |
 | ☐ | AC4 | Authorized users can edit the Lead Source | T10, T11 |
 | ☐ | AC5 | Manual corrections are preserved against automation | T12, T13 |
 | ☐ | AC6 | Undetectable sources become Unknown / Not Set, never a wrong source | T08, T09, T14 |
@@ -264,9 +269,10 @@ SOURCE → LEAD → TOUR → BOOKING → REVENUE
 | T17 | Add a source | Settings › add "Instagram" | In pickers and filter immediately; no deploy | 7 |
 | T18 | Deactivate a source | Deactivate Zola while in use; try to deactivate Unknown | Zola hidden from new picks, kept on lead; Unknown refused | 7 |
 | T19 | Assignment and SLA unchanged | Create leads via each channel | Same rotation and 1h timer, including Unknown leads | 8 |
-| T20 | Control total | Compare counts at baseline, post-schema, post-backfill; sum per source | All equal; sum = total; Unknown share reported | 8 |
+| T20 | Control total | Compare counts at baseline, post-schema, post-promotion; sum per source | All equal; sum = total; Unknown share reported | 8 |
 | T21 | Merge | Merge Unknown into Yelp; then Yelp into Website | First: Yelp kept. Second: surviving Website kept | 5 |
 | T22 | Reset to detected | Manager resets T12's lead; Advisor attempts same | Manager: back to detected, origin auto, logged. Advisor: action absent | 4, 5 |
+| T23 | Legacy value promoted | Pick 20 leads with a source visible in Communication today; compare to the new column. Pick one with an unmapped value | All 20 match. Unmapped one shows Unknown, on the Admin review list; origin auto; evidence holds legacy value | 2, 3, 6 |
 
 ---
 
@@ -278,6 +284,7 @@ SOURCE → LEAD → TOUR → BOOKING → REVENUE
 | D2 | Do ad-driven website leads stay **Website**, with campaign attribution in GA4/Ads? | Yes. Lead Source = channel of arrival; campaign lives in evidence and GA4 | Owner · Finance | Phase 3 |
 | D3 | May Advisors edit sources on leads not assigned to them? | No. Own leads only; Managers correct the rest | Owner | Phase 5 |
 | D4 | Who owns the inquiries mailbox and phone/SMS provider accounts? | Name one person; the business holds the login, not the vendor | Owner · Admin | Phase 4 |
+| D5 | Where does the source live on a lead today: structured field, channel label in Communication, or free text? Is it authoritative enough to promote? | Admin confirms in phase 1. Structured field → map by value. Channel label → map by channel. Free text → mapping table; unmapped → Unknown | Admin · Finance | Phase 6 |
 
 ---
 
