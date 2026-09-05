@@ -1,137 +1,102 @@
-# CRM Lead Source — Automatic Detection with Manual Override
+# Lead Source — Automatic Detection + Manual Override
 
-**Applies to:** CRM › Leads (Crown Prince Event Hall, Alvin Studio)
-**Status:** Specification for review · 2026-09-05
+**CRM › Leads › Lead Source** · Status: For review · Date: 5 Sep 2026 · Applies to: Crown Prince Event Hall, Alvin Studio
 **Companion:** `events-venue-marketing-playbook.md` §5 (CRM), §7 (Ads → GA4 → CRM source field), §14 Gate 1
+**Visual version:** published artifact "Lead Source Detection" (same content, information-designed).
 
-> **Why this matters to the numbers.** The Lead Source field is the join key between spend and revenue. Every cost-per-lead, cost-per-booking and channel ROI figure in the playbook depends on each lead carrying the channel it came from. Today the Leads list has no such column, so none of those figures can be produced.
+**Read by role**
+
+| Audience | Sections |
+|---|---|
+| Business Owner | 01 · 10 |
+| CRM Admin | 03 · 05 · 06 · 08 |
+| Product Manager | 01 · 02 · 11 · 14 |
+| Developer | 04 → 09 · 11 |
+| QA | 12 · 13 |
 
 ---
 
-## 1. Existing state
+## 01 Executive summary
 
-Recorded from the Leads list screenshot supplied 2026-09-05. If the PNG is added to the repo at `docs/images/leads-list-existing.png` it will render here.
+| Problem | Solution | Outcome |
+|---|---|---|
+| Leads arrive from two websites, phone, text, email and marketplaces, but the Leads list records no origin. Cost per lead and per booking by channel cannot be produced. | Each intake channel declares itself. A resolver sets **Lead Source** on arrival, falls back to **Unknown / Not Set** when unsure, and never overwrites a value a person has set. | Every lead carries one source. Leads, tours, bookings and revenue can be reported per channel and joined to ad spend for marketing ROI. |
+
+| What changes | What does not change |
+|---|---|
+| New **Source** column, filter and export field on the Leads list | Lead assignment, the 1h SLA timer, follow-up sequences |
+| Editable Source on lead detail, with audit trail | Pipeline, List and Health views, statuses, advisors |
+| New Settings page: Lead Sources and detection rules | Existing lead fields and the lead count |
+| Intake endpoint accepts a channel and resolves the source | Advisors can still create a lead on a live call; source is optional |
+
+---
+
+## 02 Current → Proposed
+
+**Current** (Leads list screenshot, 5 Sep 2026). Subtitle: "Leads from 2 web apps + phone/text · 1h response target · new leads are shared out automatically." Actions: + New Lead, Export, Pipeline / List / Health. Filters: Search, All statuses, All advisors, SLA overdue. Columns: Name · Venue · Contact · Event Date · Captured (default sort) · Guests · Status · Assigned · Follow-up. **No source column, filter or export field.**
 
 ![Existing Leads list](images/leads-list-existing.png)
 
-**What the screen shows today**
-
-| Element | Current state |
-|---|---|
-| Location | CRM › Leads |
-| Subtitle | "Leads from 2 web apps + phone/text · 1h response target · new leads are shared out automatically" |
-| Actions | **+ New Lead**, **Export ▾**, view toggle **Pipeline / List / Health** |
-| Filters | Search (code, name, contact, event type) · All statuses · All advisors · SLA overdue |
-| Columns | Name · Venue · Contact · Event Date · **Captured** (default sort, descending) · Guests · Status · Assigned · Follow-up |
-| Lead Source | **Not present** — no column, no filter, no export field |
-
-**What this tells us about intake**
-
-- Leads already arrive through at least four entry points: two website apps (one per venue), phone, and text. Manual creation exists via **+ New Lead**.
-- "Shared out automatically" means an assignment routine already runs on new leads. Source detection should run in that same intake step, before assignment, so the source is present from the first second.
-- "Captured" is already a system-set timestamp. Lead Source should behave the same way: set by the system on arrival, visible in the list, and editable when the system could not tell.
+**Proposed.** Same screen plus: **Source** column after Captured (sortable), **All sources** filter (includes Unknown), Source and Source origin in Export. Indicator: dot = detected automatically; ring = set by a person (tooltip: who, when); "Not set" shown muted.
 
 ---
 
-## 2. Required behaviour
+## 03 Source model
 
-**Preferred flow**
+| Key | Label | Entry point | Detection | Notes |
+|---|---|---|---|---|
+| `website` | Website | Inquiry form on either venue web app | Auto | UTM stored as evidence; does not change source |
+| `facebook` | Facebook | Meta lead form, Messenger, Facebook notification email | Auto | Webhook or sender domain `facebookmail.com` |
+| `yelp` | Yelp | Yelp inquiry notification email | Auto | Sender domain `yelp.com` |
+| `phone_call` | Phone Call | Inbound call: phone-system webhook or click-to-log | Auto | Advisor may also pick it on + New Lead |
+| `sms` | SMS | Inbound text to a venue number | Auto | New number = new lead |
+| `email` | Email | Inquiries mailbox, no other rule matched | Auto | Catch-all for the mailbox channel only |
+| `tagvenue` | Tagvenue | Tagvenue inquiry notification email | Auto | Sender domain `tagvenue.com` |
+| `zola` | Zola | Zola inquiry notification email | Auto | Sender domain `zola.com` |
+| `unknown` | Unknown / Not Set | Manual entry, import without source, unrecognised payload | Fallback | System row; cannot be deleted or deactivated |
 
-```
-Inquiry received → CRM identifies entry point → Lead Source set automatically → shown in Leads list
-```
-
-**Fallback flow**
-
-```
-Inquiry received → entry point cannot be identified → Lead Source = Unknown / Not Set → user selects the correct source
-```
-
-**Rules**
-
-1. Set the Lead Source automatically whenever the entry point is known with certainty.
-2. When it is not known with certainty, store **Unknown / Not Set**. Never guess.
-3. Authorized users can edit the Lead Source at any time.
-4. A manually set or corrected Lead Source is never overwritten by automation.
-5. New Lead Source options are added as data, not as schema changes.
-6. Detection runs inside the existing intake path and does not alter assignment, SLA timers, or follow-up automation.
-
-**Initial source list**
-
-| Key | Display label | Typical entry point |
-|---|---|---|
-| `website` | Website | Inquiry form on either venue web app |
-| `facebook` | Facebook | Meta lead form, Messenger, or Facebook notification email |
-| `yelp` | Yelp | Yelp inquiry (delivered by Yelp notification email) |
-| `phone_call` | Phone Call | Inbound call logged by the phone system or by an advisor |
-| `sms` | SMS | Inbound text to the venue number |
-| `email` | Email | Direct email to the inquiries mailbox that matches no other rule |
-| `tagvenue` | Tagvenue | Tagvenue inquiry (delivered by Tagvenue notification email) |
-| `zola` | Zola | Zola inquiry (delivered by Zola notification email) |
-| `unknown` | Unknown / Not Set | System default. Cannot be deleted or deactivated. |
+Adding a source (Instagram, Google Business Profile, Referral, Walk-in) is one new row in Settings › Lead Sources. No schema change, no deploy.
 
 ---
 
-## 3. Recommended technical approach
+## 04 Detection flow
 
-### 3.1 Data model
+```
+INQUIRY  (form · text · call · email · webhook)
+   ↓
+CHANNEL  web_form · sms_inbound · voice_inbound · email_inbox · meta_leads · manual · import
+   ↓  POST /api/leads/intake
+SOURCE RESOLVER
+   1. source_key given by a certain integration → use it
+   2. else first matching lead_source_rules row by priority
+   ↓ match                         ↓ no match / bad payload
+LEAD SOURCE                     UNKNOWN / NOT SET (origin = auto, editable later)
+   ↓  writes lead_source_id, lead_source_detected_id, lead_source_evidence, lead_source_origin = auto
+ASSIGNMENT (existing, unchanged; SLA timer starts here as today)
+   ↓
+LEADS LIST · Source column
+```
 
-Store sources as a reference table and point each lead at a row. Adding "Instagram" or "Google Business Profile" later is one inserted row, not a migration of the Leads table (acceptance criterion 7).
+---
 
-**Table `lead_sources`**
+## 05 Detection rules
 
-| Column | Type | Notes |
-|---|---|---|
-| `id` | integer, PK | |
-| `key` | text, unique | Stable machine name, e.g. `yelp`. Used by integrations and rules. Never renamed once in use. |
-| `label` | text | Display label. Safe to rename. |
-| `is_active` | boolean | Inactive sources are hidden from pickers but kept on historic leads. |
-| `is_system` | boolean | `true` only for `unknown`. Blocks delete/deactivate. |
-| `sort_order` | integer | Picker order. |
-| `created_at`, `updated_at` | timestamp | |
+| Pri | Channel | Signal | Rule | Result |
+|---|---|---|---|---|
+| — | `web_form` | Form on venue web app | Channel is sufficient; UTM/referrer to evidence only | Website |
+| — | `meta_leads` | Meta webhook | Integration sends `source_key: facebook` | Facebook |
+| — | `sms_inbound` | SMS provider webhook | Channel is sufficient | SMS |
+| — | `voice_inbound` | Phone-system webhook | Channel is sufficient | Phone Call |
+| 10 | `email_inbox` | sender_domain | `*.yelp.com` | Yelp |
+| 20 | `email_inbox` | sender_domain | `tagvenue.com` | Tagvenue |
+| 30 | `email_inbox` | sender_domain | `zola.com` | Zola |
+| 40 | `email_inbox` | sender_domain | `facebookmail.com` | Facebook |
+| 99 | `email_inbox` | — | No rule matched | Email |
+| — | `manual` | + New Lead | Pre-selected; advisor may change before saving | Unknown |
+| — | `import` | CSV Source column | Map by key or label; unrecognised value falls back | Mapped or Unknown |
+| — | any | Missing or malformed | Evidence records the failure reason | Unknown |
 
-**New columns on `leads`**
-
-| Column | Type | Notes |
-|---|---|---|
-| `lead_source_id` | FK → `lead_sources.id`, not null, default = `unknown` | The value shown everywhere. |
-| `lead_source_origin` | enum `auto` · `manual` · `import` | How the current value was set. This is the lock: `manual` blocks automation. |
-| `lead_source_detected_id` | FK → `lead_sources.id`, nullable | What detection concluded on arrival. Kept even after a manual correction so detection accuracy can be audited. |
-| `lead_source_evidence` | JSON, nullable | Raw signals used: intake channel, form id, sender address, inbound number, UTM parameters, referrer. Diagnostics only, not shown in the list. |
-| `lead_source_set_by` | FK → `users.id`, nullable | Null when set by automation. |
-| `lead_source_set_at` | timestamp, nullable | |
-
-Every change to `lead_source_id` also writes a row to the existing lead activity/audit log ("Source changed from Unknown to Yelp by A. Advisor").
-
-### 3.2 Detection: channel declaration first, then rules
-
-Detection is **not** text-mining the inquiry. Each entry point knows what it is and declares it. A single intake service then applies an ordered rule set to resolve the final source. The rules live in a table so a new marketplace can be recognised without a code release.
-
-**Table `lead_source_rules`**
-
-| Column | Notes |
-|---|---|
-| `channel` | Which intake path the rule applies to: `web_form`, `email_inbox`, `sms_inbound`, `voice_inbound`, `meta_leads`, `manual`, `import` |
-| `match_field` | e.g. `sender_domain`, `form_id`, `utm_source`, `subject_contains` |
-| `pattern` | Exact value or glob, e.g. `*.yelp.com`, `tagvenue.com`, `zola.com`, `facebookmail.com` |
-| `lead_source_id` | Source to assign when the rule matches |
-| `priority` | Lower number wins; first match stops evaluation |
-| `is_active` | |
-
-**Resolution order per channel**
-
-| Channel | How it reaches the CRM | Resolution |
-|---|---|---|
-| Web form (2 venue apps) | App POSTs to `POST /api/leads/intake` with `channel: web_form`, venue, form id, UTM and referrer | → **Website**. UTM values are stored in evidence for campaign reporting; they do not change the Lead Source (a Facebook ad that lands on our site and converts on our form is still a Website lead; the ad is credited in GA4/Ads reporting). |
-| Meta Lead Ads / Messenger | Meta webhook | → **Facebook** |
-| Inbound SMS | SMS provider webhook; new number = new lead | → **SMS** |
-| Inbound call | Phone system webhook or click-to-log from the call screen | → **Phone Call** |
-| Inquiries mailbox | Inbound email parse | Match `sender_domain` against rules: `yelp.com` → **Yelp**, `tagvenue.com` → **Tagvenue**, `zola.com` → **Zola**, `facebookmail.com` → **Facebook**. No match → **Email**. |
-| + New Lead (manual) | Advisor types it in | → **Unknown / Not Set** pre-selected; advisor may change it before saving. Origin = `manual` if they change it, otherwise stays `auto`/`unknown` so a later detection could still fill it. |
-| CSV import | Import wizard | Map a "Source" column to `lead_sources.key` or `label`. Unmapped or unrecognised value → **Unknown / Not Set**. Origin = `import`. |
-| Anything else / integration error | Payload missing or malformed | → **Unknown / Not Set**, evidence records the failure reason. |
-
-The email rule is the one that matters most: Yelp, Tagvenue and Zola all notify by email, so without sender-domain rules every marketplace lead would be misfiled as "Email".
+**Why the email rules matter.** Yelp, Tagvenue and Zola all notify by email. Without sender-domain rules, three paid channels would report zero leads and "Email" would be overstated.
 
 **Intake contract**
 
@@ -143,129 +108,177 @@ POST /api/leads/intake
   "source_key": null,
   "evidence": {
     "form_id": "brochure-request",
-    "utm_source": "google", "utm_medium": "cpc", "utm_campaign": "sj-corporate",
+    "utm_source": "google", "utm_medium": "cpc",
     "referrer": "https://www.google.com/"
   },
   "lead": { "...existing fields unchanged..." }
 }
 ```
 
-`source_key` is optional. When an integration is certain (Meta webhook), it sends the key. When omitted, the rules decide. Either way the service writes `lead_source_id`, `lead_source_detected_id`, `lead_source_evidence`, and `lead_source_origin = auto`, then hands off to the existing assignment step.
+---
 
-### 3.3 Overwrite protection
+## 06 Override logic
 
 ```
-on automatic detection result D for lead L:
-  if L.lead_source_origin == 'manual'            → do nothing (log "skipped: manual value")
-  if L.lead_source_origin == 'import'            → do nothing
-  if L.lead_source_id != unknown and != D        → do nothing (log conflict for review)
-  else                                           → set lead_source_id = D, detected_id = D, origin = auto
+AUTO  (resolver sets source or Unknown)
+  → EDIT  (authorized user picks a source)
+  → MANUAL  (origin flips; set_by / set_at recorded; audit row written)
+  → 🔒 PROTECTED  (automation can never replace it; only "Reset to detected" by Admin/Manager can)
 ```
 
-- Later activity on the same lead through a different channel (a website lead who then texts) never changes the Lead Source. Source records the **first** inquiry; later channels appear in the activity timeline.
-- The only way an automatic value replaces a manual one is the explicit **Reset to detected** action on the lead, available to Admin/Manager, which is itself logged.
-- On lead merge, keep the surviving lead's source unless it is Unknown, in which case take the other lead's source and origin.
+**Guard, on every automatic result D for lead L**
 
-### 3.4 Permissions
+```
+origin == manual        → skip; log "manual kept"
+origin == import        → skip
+source ∉ {unknown, D}   → skip; log conflict for review
+else                    → source = D, detected = D, origin = auto
+```
 
-| Role | View | Edit Lead Source | Reset to detected | Manage source list & rules |
-|---|---|---|---|---|
-| Admin | ✓ | ✓ any lead | ✓ | ✓ |
-| Manager | ✓ | ✓ any lead | ✓ | — |
-| Advisor | ✓ | ✓ own assigned leads | — | — |
-| Read-only / Finance | ✓ | — | — | — |
+**Edge rules**
 
-### 3.5 User interface
-
-**Leads list**
-
-- Add a **Source** column immediately after **Captured** (both are "how and when this lead arrived"). Sortable.
-- Add an **All sources** filter beside **All advisors**. Include "Unknown / Not Set" so unassigned sources can be worked as a queue.
-- Unknown renders muted ("Not set") so it reads as a gap, not a value.
-- A small indicator on the value: detected automatically vs. set by a person (tooltip shows who and when).
-- **Export** gains two fields: `Source` and `Source origin`.
-
-Proposed header row:
-
-`Name · Venue · Contact · Event Date · Captured ↓ · Source · Guests · Status · Assigned · Follow-up`
-
-**Lead detail**
-
-- Lead Source is a select, ordered by `sort_order`, showing active sources plus the lead's current value if it has since been deactivated.
-- When the current value differs from the detected value, show "Detected as Yelp on 05 Sep, changed to Email by A. Advisor" with **Reset to detected** for Admin/Manager.
-
-**+ New Lead**
-
-- Source select defaults to **Unknown / Not Set**. Not mandatory; an advisor on a live call should not be blocked. The Unknown queue in the list filter catches these later.
-
-**Settings › Lead Sources** (Admin)
-
-- Add, rename, reorder, deactivate sources. Deactivate is blocked for `unknown`, and blocked for any source still referenced by an active detection rule until the rule is retired.
-- Manage detection rules (channel, field, pattern, source, priority) with a "Test against last 50 inbound emails" preview before saving.
-
-### 3.6 Reporting
-
-With the field in place the CRM can produce, per source and per venue: leads · qualified · tours · bookings · booking revenue. Joined with Google Ads spend this yields cost per lead and cost per booking, the two numbers Gate 1 in the playbook depends on. Export `Source origin` too, so a finance reviewer can see what share of the attribution was system-set versus hand-entered.
-
-### 3.7 Migration and rollout
-
-1. Create `lead_sources`, seed the nine rows above, create `lead_source_rules` and seed the four email-domain rules.
-2. Add the `leads` columns with default `unknown` / `auto`. No existing behaviour changes.
-3. **Backfill only from evidence.** Where the intake log records the channel (web app endpoint, SMS webhook, phone webhook), set the source from it with origin `auto`. Everything else stays Unknown. Do not infer from names or notes.
-4. Update the two web apps and the SMS/phone/email integrations to call the intake contract with `channel`.
-5. Ship the list column, filter and export field; ship the detail editor; ship Settings › Lead Sources.
-6. Run the Gate 1 test from the playbook: submit one test lead through each entry point and confirm it appears in the list with the right source.
+- Later contact never changes source. A Website lead who then texts stays Website; the text goes to the timeline.
+- Merge: keep the surviving lead's source unless it is Unknown, then take the other lead's source and origin.
+- A deactivated source stays on historic leads and in their picker; hidden from new selections.
+- Every change is logged: "Source changed Unknown → Yelp by A. Advisor, 05 Sep 11:02".
 
 ---
 
-## 4. Acceptance criteria and test cases
+## 07 Data model
 
-| # | Criterion | Test |
+```
+leads ──lead_source_id──────────▶ lead_sources ◀──lead_source_id── lead_source_rules
+      ──lead_source_detected_id──▶
+      ──lead_source_set_by──────▶ users
+```
+
+| Table | Column | Type | Purpose |
+|---|---|---|---|
+| `lead_sources` | `id` | PK | |
+| `lead_sources` | `key` | text, unique | Stable machine name; never renamed once in use |
+| `lead_sources` | `label` | text | Display label; renameable |
+| `lead_sources` | `is_active` | boolean | Inactive hidden from pickers, kept on historic leads |
+| `lead_sources` | `is_system` | boolean | `true` only for `unknown`; blocks delete and deactivate |
+| `lead_sources` | `sort_order` | integer | Picker order |
+| `leads` | `lead_source_id` | FK, not null, default `unknown` | The shown value |
+| `leads` | `lead_source_origin` | enum auto · manual · import | The lock; manual and import block automation |
+| `leads` | `lead_source_detected_id` | FK, nullable | Kept after correction for accuracy audits |
+| `leads` | `lead_source_evidence` | JSON, nullable | channel, form_id, sender, inbound number, UTM, referrer, failure reason |
+| `leads` | `lead_source_set_by` | FK users, nullable | Null when set by automation |
+| `leads` | `lead_source_set_at` | timestamp, nullable | |
+| `lead_source_rules` | `channel`, `match_field`, `pattern`, `lead_source_id`, `priority`, `is_active` | | Lower priority wins; first match stops |
+| `activity_log` (existing) | | | One row per source change: from, to, who, when, reason |
+
+---
+
+## 08 CRM UI
+
+| List | Detail | Settings › Lead Sources |
 |---|---|---|
-| 1 | Source identified automatically when reliable information exists | Submit a form on each web app → Website. Send an SMS to the venue number → SMS. Forward a Yelp notification into the inbox → Yelp. Same for Tagvenue, Zola, Facebook. |
-| 2 | Correct Lead Source saved to the record | Open each test lead; `lead_source_id`, `detected_id` and evidence are populated; origin = `auto`. |
-| 3 | Lead Source appears in the Leads list | Column visible, sortable, filter works, value matches record. Export contains Source and Source origin. |
-| 4 | Users can manually edit | Advisor edits own lead; Manager edits any lead; read-only role sees no editor. |
-| 5 | Manual corrections preserved | Correct a lead from Email to Yelp, then re-run detection (or receive a duplicate webhook). Value stays Yelp; audit log shows the skip. |
-| 6 | Undetectable sources → Unknown / Not Set | Send an email from a personal Gmail with no rule match → Email. POST to intake with no `channel` → Unknown, evidence records the reason. Create via + New Lead without choosing → Unknown. |
-| 7 | New options without restructuring | Add "Instagram" in Settings; it appears in pickers and filter immediately; no schema change, no deploy. |
-| 8 | No interference with existing CRM functions | Assignment routing, 1h SLA timer, follow-up sequence, Pipeline and Health views behave identically for leads with any source, including Unknown. Intake latency unchanged within tolerance. |
+| Source column after Captured, sortable | Source select ordered by `sort_order`; active sources plus current value | Add, rename, reorder, deactivate sources |
+| All sources filter, includes Unknown | If changed: "Detected as Yelp on 05 Sep · changed to Email by A. Advisor" | Cannot deactivate `unknown` or a source used by an active rule |
+| Dot = detected; ring = set by a person | Reset to detected (Admin/Manager) | Rules: channel, field, pattern, source, priority |
+| "Not set" shown muted | + New Lead: Unknown pre-selected, not mandatory | "Test against last 50 inbound emails" preview |
+| Export adds Source and Source origin | Import wizard maps a Source column | |
 
 ---
 
-## 5. Decisions needed
+## 09 Permissions
 
-1. Confirm the source list above is the full starting set, and whether **Google Business Profile**, **Instagram**, **Referral** and **Walk-in** should be seeded now (the playbook already reports on referral and walk-in).
-2. Confirm that ad-driven website leads stay **Website** in this field, with campaign attribution kept in GA4/Ads rather than in Lead Source.
-3. Confirm the role matrix in §3.4, in particular whether Advisors may edit sources on leads not assigned to them.
-4. Confirm who owns the inquiries mailbox and the phone/SMS provider so the inbound integrations can be wired.
+| Role | View | Edit source | Reset to detected | Manage sources & rules | Export |
+|---|---|---|---|---|---|
+| Admin | ✓ | ✓ any lead | ✓ | ✓ | ✓ |
+| Manager | ✓ | ✓ any lead | ✓ | — | ✓ |
+| Advisor | ✓ | ✓ own assigned leads | — | — | ✓ |
+| Read-only / Finance | ✓ | — | — | — | ✓ |
+| Integration (API key) | — | Set on create only, origin `auto` | — | — | — |
 
 ---
 
-## 6. Step-by-step implementation
+## 10 Reporting
 
-Phases run in order. Steps within a phase can run in parallel. Effort is a planning estimate for one developer; replace with the vendor's quote.
+```
+SOURCE → LEAD → TOUR → BOOKING → REVENUE
+   └──── Google Ads spend per source ────┘ → MARKETING ROI
+```
 
-| # | Phase | Step | Owner | Done when |
+| Report | Grouped by | Measures | Needs |
+|---|---|---|---|
+| Leads by source | Source × Venue × Week | Leads, Unknown share, % detected vs manual | Source, Source origin |
+| Funnel by source | Source × Venue | Leads → Qualified → Tours → Bookings | Source, status history |
+| Cost per booking | Source | Ad spend ÷ bookings; revenue ÷ spend | Source + Ads spend export |
+
+---
+
+## 11 Migration
+
+| # | Phase | Work | Owner | Exit check |
 |---|---|---|---|---|
-| 1 | Prepare | Answer the four decisions in §5 | Owner | Decisions recorded at the top of this doc |
-| 2 | Prepare | Collect access: CRM, both web apps, SMS/phone provider, inquiries mailbox | Admin | Developer can log in to each |
-| 3 | Prepare | Export today's Leads list as the baseline count | Accountant | Total, per venue and per status saved |
-| 4 | Database · 1 day | Create `lead_sources` (9 rows) and `lead_source_rules` (4 email-domain rules) | Developer | `unknown` cannot be deleted; rules visible |
-| 5 | Database | Add the six source columns to `leads`, default Unknown / auto | Developer | All views load unchanged; count = step 3 |
-| 6 | Intake · 3 days | Build the intake resolver: channel + evidence → source, then existing assignment | Developer | Tests pass per channel and for Unknown fallback |
-| 7 | Intake | Add overwrite guard, audit-log entry, **Reset to detected** | Developer | Manual value survives a duplicate webhook |
-| 8 | Connect · 3 days | Website forms on both venue apps send `web_form` + UTM | Developer | Test submission shows **Website** |
-| 9 | Connect | SMS and phone webhooks send their channel | Developer + Admin | Test text → **SMS**, test call → **Phone Call** |
-| 10 | Connect | Inquiries mailbox forwards to parser; domain rules classify Yelp, Tagvenue, Zola, Facebook; else Email | Developer + Admin | Forwarded notifications land as the right source |
-| 11 | Screens · 3 days | Leads list: **Source** column, **All sources** filter, Source + origin in Export | Developer | Values match the test leads |
-| 12 | Screens | Lead detail editor with detected/changed note; New Lead and import default to Unknown | Developer | Advisor edits own lead; read-only sees text |
-| 13 | Screens | Settings › Lead Sources: add, rename, deactivate sources; manage rules | Developer | Adding "Instagram" needs no deploy |
-| 14 | Go live · 2 days | Backfill from recorded intake evidence only; all else stays Unknown | Developer, checked by Accountant | Total = step 3; per-source counts sum to total |
-| 15 | Go live | Gate test: one lead per entry point against the §4 criteria | Accountant + Admin | All eight pass; test leads deleted |
-| 16 | Go live | First weekly leads-by-source report; work Unknown filter to zero | Owner + Accountant | Report comes straight from Export |
+| 1 | Prepare | Answer decisions (14). Collect access to CRM, both web apps, SMS/phone provider, inquiries mailbox. Export baseline lead counts. | Owner · Admin · Finance | Baseline totals saved |
+| 2 | Database | Create `lead_sources` (9 rows), `lead_source_rules` (4 rules). Add 6 columns to `leads`, default unknown/auto. | Developer | All views load unchanged; count = baseline |
+| 3 | Intake | Resolver in intake endpoint; overwrite guard; audit rows; Reset to detected. | Developer | Unit tests per channel + Unknown fallback pass |
+| 4 | Connect | Web forms send channel + UTM. SMS and phone webhooks. Mailbox → parser with domain rules. Meta webhook if used. | Developer · Admin | One test lead per channel lands with correct source |
+| 5 | Screens | List column, filter, export. Detail editor. New Lead and import defaults. Settings › Lead Sources. | Developer | Values match records; adding a source needs no deploy |
+| 6 | Backfill | Set source only where intake logs record the channel. All else stays Unknown. No inference from names or notes. | Developer, checked by Finance | Control total holds; per-source counts sum to total |
+| 7 | Verify & go live | Run test matrix (13). First weekly leads-by-source report. Advisors work the Unknown filter to zero. | QA · Finance · Owner | All acceptance criteria pass; report comes from Export |
 
-**Two controls for the reviewer**
+> 🔒 **Control total:** lead count before = lead count after. Baseline (phase 1), post-schema (phase 2) and post-backfill (phase 6) counts must be identical. **Completeness:** every lead has exactly one source; Unknown is counted, never blank; per-source counts sum to the total.
 
-- **Control total:** lead count is identical at steps 3, 5 and 14.
-- **Completeness:** every lead has exactly one source; Unknown is counted, not blank; per-source counts sum to the total.
+---
+
+## 12 Acceptance criteria
+
+| | # | Criterion | Verified by |
+|---|---|---|---|
+| ☐ | AC1 | Source identified automatically when reliable information exists | T01–T07 |
+| ☐ | AC2 | Correct Lead Source saved to the record, with detected value and evidence | T01–T07, T09 |
+| ☐ | AC3 | Lead Source appears in the Leads list, filter and export | T15, T16 |
+| ☐ | AC4 | Authorized users can edit the Lead Source | T10, T11 |
+| ☐ | AC5 | Manual corrections are preserved against automation | T12, T13 |
+| ☐ | AC6 | Undetectable sources become Unknown / Not Set, never a wrong source | T08, T09, T14 |
+| ☐ | AC7 | New sources added without restructuring the Leads table | T17, T18 |
+| ☐ | AC8 | No interference with assignment, SLA, follow-up, views | T19, T20 |
+
+---
+
+## 13 Test matrix
+
+| ID | Scenario | Steps | Expected | AC |
+|---|---|---|---|---|
+| T01 | Website form, each venue | Submit brochure form on both sites with UTM params | Source = Website, venue correct, UTM in evidence, origin auto | 1, 2 |
+| T02 | Inbound SMS | Text the venue number from a new phone | New lead, Source = SMS | 1, 2 |
+| T03 | Inbound call | Call the venue number; phone system logs it | New lead, Source = Phone Call | 1, 2 |
+| T04 | Yelp notification | Forward a real Yelp inquiry email to the mailbox | Source = Yelp, sender domain in evidence | 1, 2 |
+| T05 | Tagvenue notification | Same with a Tagvenue email | Source = Tagvenue | 1, 2 |
+| T06 | Zola notification | Same with a Zola email | Source = Zola | 1, 2 |
+| T07 | Facebook notification email | Same with a facebookmail.com email | Source = Facebook | 1, 2 |
+| T08 | Direct personal email | Send from a Gmail address to the mailbox | Source = Email, not Unknown | 6 |
+| T09 | Malformed intake | POST to intake with no `channel` | Lead created, Source = Unknown, evidence records reason, assignment runs | 2, 6 |
+| T10 | Advisor edits own lead | As Advisor, change Unknown → Phone Call on assigned lead | Saved; origin manual; set_by/set_at filled; audit row | 4 |
+| T11 | Role limits | Advisor opens another's lead; Read-only opens any lead | Advisor: no editor. Read-only: text only. Manager: edits any | 4 |
+| T12 | Manual value vs duplicate webhook | Correct Email → Yelp, then replay original inbound webhook | Stays Yelp; log "manual kept" | 5 |
+| T13 | Later contact on other channel | Website lead texts the venue number | Stays Website; SMS in timeline; no new lead | 5 |
+| T14 | Manual create without source | + New Lead, leave Source, save | Source = Unknown, origin auto, in Unknown filter | 6 |
+| T15 | List, sort, filter | Sort by Source; filter = Yelp; filter = Unknown | Rows match record values; indicators correct | 3 |
+| T16 | Export | Export the filtered list | Columns Source and Source origin present and correct | 3 |
+| T17 | Add a source | Settings › add "Instagram" | In pickers and filter immediately; no deploy | 7 |
+| T18 | Deactivate a source | Deactivate Zola while in use; try to deactivate Unknown | Zola hidden from new picks, kept on lead; Unknown refused | 7 |
+| T19 | Assignment and SLA unchanged | Create leads via each channel | Same rotation and 1h timer, including Unknown leads | 8 |
+| T20 | Control total | Compare counts at baseline, post-schema, post-backfill; sum per source | All equal; sum = total; Unknown share reported | 8 |
+| T21 | Merge | Merge Unknown into Yelp; then Yelp into Website | First: Yelp kept. Second: surviving Website kept | 5 |
+| T22 | Reset to detected | Manager resets T12's lead; Advisor attempts same | Manager: back to detected, origin auto, logged. Advisor: action absent | 4, 5 |
+
+---
+
+## 14 Decisions required
+
+| # | Decision | Recommendation | Owner | Blocks |
+|---|---|---|---|---|
+| D1 | Seed extra sources now: Google Business Profile, Instagram, Referral, Walk-in? | Yes for Referral and Walk-in (playbook already reports them); others when the channel goes live | Owner | Phase 2 |
+| D2 | Do ad-driven website leads stay **Website**, with campaign attribution in GA4/Ads? | Yes. Lead Source = channel of arrival; campaign lives in evidence and GA4 | Owner · Finance | Phase 3 |
+| D3 | May Advisors edit sources on leads not assigned to them? | No. Own leads only; Managers correct the rest | Owner | Phase 5 |
+| D4 | Who owns the inquiries mailbox and phone/SMS provider accounts? | Name one person; the business holds the login, not the vendor | Owner · Admin | Phase 4 |
+
+---
+
+**Implementation summary:** INQUIRY → DETECTION → SOURCE → CRM → REPORTING. Each channel declares itself · rules resolve the source · Unknown when unsure · people can correct, automation cannot undo · the list, export and reports carry it.
