@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crown Prince Event Hall — Internal Sales Rate Card</title>
+<style>
+  :root{
+    --navy:#22314d;
+    --navy-deep:#1d2a44;
+    --gold:#b8912f;
+    --gold-soft:#c9a24b;
+    --cream:#f3efe4;
+    --cream-box:#f7f1df;
+    --ink:#20242b;
+    --muted:#6b7280;
+    --line:#d9d9d9;
+    --row-alt:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:Arial, "Helvetica Neue", Helvetica, sans-serif;
+    color:var(--ink);
+    font-size:11px;
+    line-height:1.35;
+    background:#ffffff;
+  }
+  .page{
+    width:816px;            /* 8.5in @96dpi */
+    min-height:1056px;      /* 11in @96dpi */
+    margin:0 auto;
+    padding:0 34px 26px;
+    background:#ffffff;
+  }
+
+  /* ---------- Header ---------- */
+  header.masthead{
+    background:var(--cream);
+    margin:0 -34px 0;
+    padding:20px 34px 16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+  }
+  .brand h1{
+    margin:0;
+    font-size:30px;
+    letter-spacing:.5px;
+    line-height:1;
+    color:var(--navy);
+    font-weight:800;
+  }
+  .brand h1 .eh{
+    color:var(--gold);
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.5px;
+    margin-left:6px;
+  }
+  .brand .sub{
+    margin-top:6px;
+    font-size:10.5px;
+    color:var(--muted);
+  }
+  .masthead .meta{
+    text-align:right;
+  }
+  .masthead .meta .cap{
+    font-size:13px;
+    font-weight:800;
+    color:var(--navy);
+    letter-spacing:.3px;
+  }
+  .masthead .meta .upd{
+    font-size:10px;
+    color:var(--muted);
+    margin-top:3px;
+  }
+  .gold-rule{
+    height:3px;
+    background:var(--gold);
+    margin:0 -34px 16px;
+  }
+
+  /* ---------- Layout ---------- */
+  .cols{
+    display:flex;
+    gap:22px;
+  }
+  .col{flex:1;min-width:0;}
+
+  /* ---------- Section header bars ---------- */
+  .bar{
+    background:var(--navy);
+    color:#fff;
+    padding:7px 11px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.4px;
+    margin:0 0 9px;
+  }
+  .bar .lite{
+    font-weight:400;
+    font-size:10px;
+    color:#c7cedd;
+    margin-left:6px;
+    letter-spacing:.2px;
+  }
+  .block{margin-bottom:16px;}
+
+  /* ---------- Tables ---------- */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:10.5px;
+  }
+  table.data th{
+    background:var(--navy);
+    color:#fff;
+    font-weight:700;
+    text-align:center;
+    padding:6px 9px;
+    border:1px solid var(--navy);
+    letter-spacing:.3px;
+  }
+  table.data td{
+    border:1px solid var(--line);
+    padding:6px 9px;
+    vertical-align:middle;
+  }
+  td.label{font-weight:700;}
+  td.right{text-align:right;}
+  td.center{text-align:center;}
+  .two-line{line-height:1.25;}
+
+  .note-gold{
+    color:var(--gold);
+    font-size:10px;
+    font-weight:700;
+    margin:8px 0 10px;
+  }
+  .hours-box{
+    border:1.5px solid var(--gold-soft);
+    background:var(--cream-box);
+    text-align:center;
+    padding:7px 8px;
+    font-size:10px;
+    font-weight:700;
+    color:var(--navy);
+    letter-spacing:.2px;
+    margin-bottom:6px;
+  }
+  .hours-box .hdr{color:var(--navy);}
+
+  /* Quick package guide (gray header) */
+  table.guide th{
+    background:var(--navy);
+    color:#fff;
+    font-weight:700;
+    text-align:center;
+    padding:5px 6px;
+    border:1px solid var(--navy);
+  }
+  table.guide td{
+    border:1px solid var(--line);
+    padding:5px 6px;
+    text-align:center;
+  }
+
+  /* Essentials includes list */
+  ul.includes{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  ul.includes li{
+    position:relative;
+    padding:6px 4px 6px 16px;
+    border-bottom:1px solid #ececec;
+    font-size:10.5px;
+  }
+  ul.includes li:last-child{border-bottom:none;}
+  ul.includes li::before{
+    content:"";
+    position:absolute;
+    left:3px;top:11px;
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--gold);
+  }
+
+  /* ---------- Info row ---------- */
+  .inforow{
+    display:flex;
+    border:1.5px solid var(--gold-soft);
+    background:var(--cream-box);
+    margin:14px 0 0;
+  }
+  .inforow .cell{
+    flex:1;
+    text-align:center;
+    padding:8px 6px;
+    border-right:1px solid var(--gold-soft);
+  }
+  .inforow .cell:last-child{border-right:none;}
+  .inforow .k{
+    color:var(--gold);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.3px;
+  }
+  .inforow .v{
+    color:var(--navy);
+    font-size:10px;
+    font-weight:700;
+    margin-top:3px;
+  }
+
+  /* ---------- Footer ---------- */
+  .formula{
+    background:var(--navy);
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 12px;
+    font-size:10.5px;
+    font-weight:700;
+    margin-top:12px;
+  }
+  .formula .appr{font-weight:700;color:#e6e9f0;}
+  .disclaimer{
+    text-align:center;
+    font-style:italic;
+    color:var(--muted);
+    font-size:9px;
+    margin-top:9px;
+  }
+
+  @page{size:Letter;margin:0;}
+  @media print{
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .page{margin:0;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div class="brand">
+      <h1>CROWN PRINCE <span class="eh">EVENT HALL</span></h1>
+      <div class="sub">Internal Sales Rate Card | 1654 Burdette Dr, San Jose, CA</div>
+    </div>
+    <div class="meta">
+      <div class="cap">UP TO 300 GUESTS</div>
+      <div class="upd">Updated October 7, 2026</div>
+    </div>
+  </header>
+  <div class="gold-rule"></div>
+
+  <div class="cols">
+    <!-- ===================== LEFT COLUMN ===================== -->
+    <div class="col">
+
+      <div class="block">
+        <div class="bar">VENUE RENTAL <span class="lite">Package pricing</span></div>
+        <table class="data">
+          <thead>
+            <tr><th style="text-align:left;">RATE</th><th>PRICE</th><th>TERMS</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">Weekday (Mon–Thu)</td>
+              <td class="right">$3,000 + tables</td>
+              <td class="center">6-hour minimum</td>
+            </tr>
+            <tr>
+              <td class="label">Weekend / Holiday</td>
+              <td class="right">$4,000 + tables</td>
+              <td class="center">6-hour minimum</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note-gold">WEEKEND / HOLIDAY applies to Friday, Saturday, Sunday + Holidays.</div>
+        <div class="note-gold" style="color:var(--gold);">TABLES: $100 each | Seats 10 guests | Round up to the next table.</div>
+        <div class="hours-box"><span class="hdr">STANDARD WEEKEND HOURS</span>&nbsp; Setup 3–5 PM | Event 5–11 PM</div>
+      </div>
+
+      <div class="block">
+        <div class="bar">QUICK PACKAGE GUIDE <span class="lite">Venue + tables only</span></div>
+        <table class="guide">
+          <thead>
+            <tr>
+              <th>Guests</th><th>Tables</th><th>Weekday</th><th>Weekend / Holiday</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>50</td><td>5</td><td>$3,500</td><td>$4,500</td></tr>
+            <tr><td>100</td><td>10</td><td>$4,000</td><td>$5,000</td></tr>
+            <tr><td>150</td><td>15</td><td>$4,500</td><td>$5,500</td></tr>
+            <tr><td>200</td><td>20</td><td>$5,000</td><td>$6,000</td></tr>
+            <tr><td>250</td><td>25</td><td>$5,500</td><td>$6,500</td></tr>
+            <tr><td>300</td><td>30</td><td>$6,000</td><td>$7,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block">
+        <div class="bar">REQUIRED FEES</div>
+        <table class="data">
+          <thead>
+            <tr><th style="text-align:left;">ITEM</th><th>RATE</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="label">Cleaning Fee</td><td class="right">$480</td></tr>
+            <tr><td class="label">Insurance</td><td class="right">$125</td></tr>
+            <tr><td class="label">Security</td><td class="right">$240</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block">
+        <div class="bar">BASE EVENT TOTAL <span class="lite">Venue + required fees</span></div>
+        <table class="data">
+          <thead>
+            <tr><th style="text-align:left;">DAY TYPE</th><th>BASE</th><th>FEES</th><th>TOTAL</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="label">Weekday (Mon–Thu)</td>
+              <td class="right">$3,000</td>
+              <td class="right">$845</td>
+              <td class="right"><strong>$3,845</strong></td>
+            </tr>
+            <tr>
+              <td class="label">Weekend / Holiday</td>
+              <td class="right">$4,000</td>
+              <td class="right">$845</td>
+              <td class="right"><strong>$4,845</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note-gold" style="color:var(--gold);">FEES = Cleaning $480 + Insurance $125 + Security $240. Tables, Bar &amp; Add-Ons added on top per quote formula.</div>
+      </div>
+
+    </div>
+
+    <!-- ===================== RIGHT COLUMN ===================== -->
+    <div class="col">
+
+      <div class="block">
+        <div class="bar">BAR PACKAGES <span class="lite">Per guest</span></div>
+        <table class="data">
+          <thead>
+            <tr><th>PKG</th><th style="text-align:left;">SERVICE</th><th>RATE</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="center label">A</td><td>Non-Alcoholic Bar</td><td class="right">$10</td></tr>
+            <tr><td class="center label">B</td><td>Beer &amp; Wine</td><td class="right">$20</td></tr>
+            <tr><td class="center label">C</td><td>3 Specialty Cocktails + Beer/Wine</td><td class="right">$35</td></tr>
+            <tr><td class="center label">D</td><td>Full Bar</td><td class="right">$50</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block">
+        <div class="bar">ESSENTIALS PACKAGE INCLUDES</div>
+        <ul class="includes">
+          <li>6-hour event time + 2 complimentary setup hours</li>
+          <li>8 hours of event attendants</li>
+          <li>Big-screen TVs and sound system</li>
+          <li>DJ lights, uplights and microphone</li>
+          <li>Black or white tablecloths</li>
+          <li>Refrigerator and deep freezer</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="bar">OPTIONAL ADD-ONS</div>
+        <table class="data">
+          <thead>
+            <tr><th style="text-align:left;">ADD-ON</th><th>RATE</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Photobooth - Digital Only</td><td class="right">$250</td></tr>
+            <tr><td>Bridal / VIP Prep Room</td><td class="right">$450</td></tr>
+            <tr><td>DJ</td><td class="right">$600</td></tr>
+            <tr><td>VIP Grand Entrance</td><td class="right">$250</td></tr>
+            <tr><td>Food Chafers</td><td class="right">$10 each</td></tr>
+            <tr><td>Table Runners</td><td class="right">$10/table</td></tr>
+            <tr><td>Marquee Numbers</td><td class="right">$50 each</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="inforow">
+    <div class="cell"><div class="k">CAPACITY</div><div class="v">Up to 300 guests</div></div>
+    <div class="cell"><div class="k">PARKING</div><div class="v">100+ gated spaces</div></div>
+    <div class="cell"><div class="k">CATERING</div><div class="v">Outside catering allowed</div></div>
+    <div class="cell"><div class="k">ALCOHOL</div><div class="v">Venue bar only; no outside alcohol</div></div>
+  </div>
+
+  <div class="formula">
+    <div>QUICK QUOTE FORMULA: Package + Tables + Cleaning + Insurance + Security + Bar + Add-Ons</div>
+    <div class="appr">Management approval required</div>
+  </div>
+
+  <div class="disclaimer">
+    Internal reference only. Final pricing may vary by date, guest count, event type, staffing, alcohol service and approved discounts.
+  </div>
+
+</div>
+</body>
+</html>
