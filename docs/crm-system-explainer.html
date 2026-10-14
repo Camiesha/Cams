@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Web CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   Your Web CRM — animated explainer
+   Layout: a "video player" stage (16:9) with cross-fading scenes,
+   a subtitle/caption bar, transport controls, and a chapter list.
+   ============================================================ */
+:root{
+  /* palette — regal plum + stage gold on warm ivory (light) */
+  --bg:#f6f2ec;            /* warm ivory ground */
+  --surface:#ffffff;       /* stage / cards */
+  --surface-2:#efe8dd;     /* quiet fill */
+  --ink:#2a1b2b;           /* deep aubergine near-black text */
+  --ink-soft:#6d5a6a;      /* muted text */
+  --line:#e2d6c6;          /* hairlines */
+  --plum:#7a2e63;          /* primary brand */
+  --plum-deep:#531e45;
+  --gold:#c08a2d;          /* accent / stage light */
+  --gold-soft:#f0dcae;
+  --good:#2f7d5b;          /* booked / followed up */
+  --good-soft:#cfe9dc;
+  --warn:#b9772a;          /* needs follow-up / sla */
+  --warn-soft:#f4dfc2;
+  --stage:#2a1b2b;         /* dark stage backdrop inside player */
+  --stage-ink:#fbf4e9;     /* text on stage */
+  --stage-soft:#b9a7b4;    /* muted on stage */
+  --stage-line:#4a3447;    /* hairline on stage */
+  --shadow:0 18px 50px -24px rgba(42,27,43,.55);
+  --font-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --font-body:"Figtree",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1019;
+    --surface:#241528;
+    --surface-2:#2e1c31;
+    --ink:#f3e8ef;
+    --ink-soft:#bda7b8;
+    --line:#3a2740;
+    --plum:#c57cab;
+    --plum-deep:#9a5384;
+    --gold:#e3b25b;
+    --gold-soft:#5a4420;
+    --good:#6fc79b;
+    --good-soft:#1f4536;
+    --warn:#e3a862;
+    --warn-soft:#4a3418;
+    --stage:#120a12;
+    --stage-ink:#fbf4e9;
+    --stage-soft:#9a8795;
+    --stage-line:#3a2740;
+    --shadow:0 18px 50px -24px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1a1019;
+  --surface:#241528;
+  --surface-2:#2e1c31;
+  --ink:#f3e8ef;
+  --ink-soft:#bda7b8;
+  --line:#3a2740;
+  --plum:#c57cab;
+  --plum-deep:#9a5384;
+  --gold:#e3b25b;
+  --gold-soft:#5a4420;
+  --good:#6fc79b;
+  --good-soft:#1f4536;
+  --warn:#e3a862;
+  --warn-soft:#4a3418;
+  --stage:#120a12;
+  --stage-ink:#fbf4e9;
+  --stage-soft:#9a8795;
+  --stage-line:#3a2740;
+  --shadow:0 18px 50px -24px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding:clamp(16px,3vw,34px) 0 48px;
+}
+img{max-width:100%}
+.wrap{
+  max-width:860px;
+  margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+
+/* ---- masthead ---- */
+.mast{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:14px}
+.mast .eyebrow{
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--plum);font-weight:700;
+}
+.mast h1{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.05;margin:0;
+  text-wrap:balance;letter-spacing:-.01em;
+}
+.mast .sub{color:var(--ink-soft);font-size:.9rem;width:100%}
+
+/* ---- player ---- */
+.player{
+  position:relative;
+  background:var(--stage);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  border:1px solid var(--stage-line);
+}
+.stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  min-height:300px;
+  color:var(--stage-ink);
+  /* soft stage glow */
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(192,138,45,.20), transparent 55%),
+    radial-gradient(90% 80% at 50% 120%, rgba(122,46,99,.28), transparent 60%),
+    var(--stage);
+}
+@media (max-width:560px){ .stage{aspect-ratio:4/3;min-height:0} }
+
+.scene{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px,2.4vh,20px);
+  padding:clamp(16px,4%,34px);
+  text-align:center;
+  opacity:0;visibility:hidden;
+  transition:opacity .5s ease;
+}
+.scene.active{opacity:1;visibility:visible}
+.scene .kicker{
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);font-weight:700;
+}
+.scene h2{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(1.3rem,3.6vw,2rem);line-height:1.1;margin:0;
+  text-wrap:balance;max-width:16ch;letter-spacing:-.01em;
+}
+.scene p.lead{max-width:30ch;color:var(--stage-soft);margin:0;font-size:clamp(.85rem,2.4vw,1.02rem)}
+
+/* entrance animation for scene contents */
+.scene .rise{opacity:0;transform:translateY(14px)}
+.scene.active .rise{animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
+.scene.active .rise.d1{animation-delay:.12s}
+.scene.active .rise.d2{animation-delay:.26s}
+.scene.active .rise.d3{animation-delay:.42s}
+.scene.active .rise.d4{animation-delay:.58s}
+.scene.active .rise.d5{animation-delay:.74s}
+@keyframes rise{to{opacity:1;transform:none}}
+.scene .pop{opacity:0;transform:scale(.85)}
+.scene.active .pop{animation:pop .5s cubic-bezier(.2,.9,.3,1.2) forwards}
+@keyframes pop{to{opacity:1;transform:none}}
+
+/* channel chips (scene 2 & 3) */
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:30rem}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--stage-line);
+  color:var(--stage-ink);
+  padding:7px 12px;border-radius:999px;font-weight:600;font-size:.82rem;white-space:nowrap;
+}
+.chip svg{width:15px;height:15px;flex:none;color:var(--gold)}
+
+/* funnel / hub */
+.hub{
+  display:inline-flex;flex-direction:column;align-items:center;gap:8px;
+  background:linear-gradient(180deg,var(--plum),var(--plum-deep));
+  color:#fff;border-radius:16px;padding:16px 26px;
+  box-shadow:0 14px 30px -14px rgba(122,46,99,.8);
+}
+.hub .big{font-family:var(--font-display);font-weight:700;font-size:1.5rem;line-height:1}
+.hub .small{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.converge{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.arrow-down{color:var(--gold);width:26px;height:26px}
+
+/* flow steps (scene 4) */
+.flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;justify-content:center;max-width:100%}
+.step{
+  flex:1 1 auto;min-width:72px;max-width:112px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--stage-line);
+  border-radius:12px;padding:10px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.step svg{width:22px;height:22px;color:var(--gold)}
+.step .lbl{font-weight:700;font-size:.74rem;line-height:1.15}
+.step .meta{font-size:.62rem;color:var(--stage-soft)}
+.flow .sep{display:flex;align-items:center;color:var(--stage-soft)}
+.flow .sep svg{width:16px;height:16px}
+@media (max-width:560px){
+  .flow{gap:5px}
+  .step{min-width:0;flex:1 1 20%;padding:7px 4px}
+  .step .meta{display:none}
+  .flow .sep{display:none}
+}
+
+/* lead card (scene 5) */
+.leadcard{
+  width:min(420px,100%);text-align:left;
+  background:var(--surface);color:var(--ink);
+  border-radius:14px;border:1px solid var(--line);
+  box-shadow:0 16px 36px -18px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+.leadcard .top{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.avatar{
+  width:40px;height:40px;border-radius:50%;flex:none;
+  background:linear-gradient(135deg,var(--plum),var(--gold));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:var(--font-display)
+}
+.leadcard .name{font-weight:700;font-size:1rem}
+.leadcard .det{font-size:.78rem;color:var(--ink-soft)}
+.leadcard .rows{padding:12px 16px 14px;display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:.82rem}
+.leadcard .rows dt{color:var(--ink-soft);font-weight:600}
+.leadcard .rows dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:.72rem;font-weight:700}
+.pill.src{background:var(--gold-soft);color:var(--warn)}
+.pill.own{background:var(--surface-2);color:var(--plum)}
+
+/* stage pipeline (scene 5) */
+.pipe{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:34rem}
+.stagechip{
+  padding:5px 11px;border-radius:999px;font-size:.74rem;font-weight:700;
+  background:rgba(255,255,255,.06);border:1px solid var(--stage-line);color:var(--stage-soft);
+  transition:all .4s ease;
+}
+.stagechip.on{background:var(--gold);color:#2a1b2b;border-color:var(--gold);transform:translateY(-2px)}
+.stagechip.done{background:rgba(192,138,45,.22);color:var(--gold);border-color:transparent}
+.stagechip.booked.on{background:var(--good);color:#fff;border-color:var(--good)}
+
+/* your-part lanes (scene 6) */
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:36rem}
+@media (max-width:560px){ .lanes{grid-template-columns:1fr;gap:7px} }
+.lane{
+  background:rgba(255,255,255,.06);border:1px solid var(--stage-line);
+  border-radius:12px;padding:13px 12px;display:flex;flex-direction:column;gap:7px;align-items:center;text-align:center;
+}
+.lane .ic{width:34px;height:34px;border-radius:9px;background:rgba(192,138,45,.16);display:flex;align-items:center;justify-content:center}
+.lane .ic svg{width:19px;height:19px;color:var(--gold)}
+.lane b{font-size:.86rem}
+.lane span{font-size:.72rem;color:var(--stage-soft);line-height:1.35}
+@media (max-width:560px){
+  .lane{flex-direction:row;text-align:left;gap:10px}
+  .lane .txt{display:flex;flex-direction:column;gap:2px}
+}
+
+/* mini funnel bars (scene 7) */
+.funnel{display:flex;flex-direction:column;gap:7px;width:min(380px,100%)}
+.frow{display:grid;grid-template-columns:5.2rem 1fr auto;align-items:center;gap:10px;font-size:.76rem}
+.frow .fl{text-align:right;color:var(--stage-soft);font-weight:600}
+.frow .bar{height:18px;border-radius:6px;background:linear-gradient(90deg,var(--plum),var(--gold));transform-origin:left;transform:scaleX(0)}
+.scene.active .frow .bar{animation:grow .8s cubic-bezier(.2,.7,.3,1) forwards}
+.scene.active .frow:nth-child(1) .bar{animation-delay:.2s}
+.scene.active .frow:nth-child(2) .bar{animation-delay:.42s}
+.scene.active .frow:nth-child(3) .bar{animation-delay:.64s}
+.scene.active .frow:nth-child(4) .bar{animation-delay:.86s}
+@keyframes grow{to{transform:scaleX(var(--w,1))}}
+.frow .fv{font-weight:700;font-variant-numeric:tabular-nums}
+
+/* takeaways (scene 8) */
+.rules{display:flex;flex-direction:column;gap:9px;width:min(400px,100%)}
+.rule{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.06);border:1px solid var(--stage-line);border-radius:11px;padding:11px 14px;text-align:left}
+.rule .n{width:26px;height:26px;flex:none;border-radius:50%;background:var(--gold);color:#2a1b2b;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.82rem}
+.rule b{font-size:.9rem}
+
+/* ---- play overlay ---- */
+.overlay{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  background:radial-gradient(70% 60% at 50% 40%,rgba(42,27,43,.55),rgba(18,10,18,.86));
+  backdrop-filter:blur(2px);cursor:pointer;color:var(--stage-ink);text-align:center;padding:20px;
+}
+.overlay.hide{display:none}
+.playbtn{
+  width:76px;height:76px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--gold);color:#2a1b2b;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 30px -8px rgba(192,138,45,.8);transition:transform .2s ease;
+}
+.playbtn:hover{transform:scale(1.06)}
+.playbtn svg{width:30px;height:30px;margin-left:4px}
+.overlay .cta-t{font-family:var(--font-display);font-weight:600;font-size:1.15rem}
+.overlay .cta-s{font-size:.8rem;color:var(--stage-soft);max-width:28ch}
+
+/* ---- caption bar ---- */
+.caption{
+  min-height:3.6em;
+  background:var(--surface);border-top:1px solid var(--line);
+  padding:12px 16px;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-size:clamp(.88rem,2.5vw,1rem);line-height:1.4;color:var(--ink);
+}
+.caption span{max-width:58ch}
+
+/* ---- controls ---- */
+.controls{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface);border-top:1px solid var(--line);
+  padding:10px 14px;flex-wrap:wrap;
+}
+.ctrl{
+  background:var(--surface-2);border:1px solid var(--line);color:var(--ink);
+  width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex:none;transition:background .15s ease,border-color .15s ease;
+}
+.ctrl:hover{border-color:var(--plum)}
+.ctrl svg{width:17px;height:17px}
+.ctrl.primary{background:var(--plum);border-color:var(--plum);color:#fff;width:42px;height:42px}
+.ctrl.primary svg{width:19px;height:19px}
+.ctrl[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#2a1b2b}
+.progress{flex:1 1 120px;min-width:90px;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden;position:relative}
+.progress .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--plum),var(--gold));border-radius:999px;transition:width .25s linear}
+.counter{font-size:.76rem;color:var(--ink-soft);font-variant-numeric:tabular-nums;font-weight:600;flex:none;min-width:3.2em;text-align:right}
+.btn-txt{font-size:.74rem;font-weight:700;letter-spacing:.02em}
+
+/* ---- chapters ---- */
+.chapters{margin-top:18px}
+.chapters .ch-h{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:8px}
+.chlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;list-style:none;margin:0;padding:0}
+.chlist button{
+  width:100%;text-align:left;cursor:pointer;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  padding:9px 11px;display:flex;gap:9px;align-items:baseline;color:var(--ink);font-family:inherit;
+  transition:border-color .15s ease,background .15s ease;
+}
+.chlist button:hover{border-color:var(--plum)}
+.chlist button.current{border-color:var(--gold);background:var(--surface-2)}
+.chlist .cn{font-family:var(--font-display);font-weight:700;color:var(--plum);font-size:.86rem;flex:none}
+.chlist .ct{font-size:.8rem;font-weight:600;line-height:1.25}
+
+.foot{margin-top:18px;font-size:.78rem;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.foot .dot{width:4px;height:4px;border-radius:50%;background:var(--line)}
+
+:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+
+@media (prefers-reduced-motion:reduce){
+  .scene .rise,.scene .pop,.frow .bar{animation:none!important;opacity:1!important;transform:none!important}
+  .scene{transition:none}
+  .frow .bar{transform:scaleX(var(--w,1))!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div style="width:100%"><span class="eyebrow">Team explainer · under 3 min</span></div>
+    <h1>Your Web CRM</h1>
+    <p class="sub">One home for every lead — how an inquiry becomes a booking, and your part in it. &nbsp;Crown Prince Event Hall · Alvin Studio.</p>
+  </header>
+
+  <div class="player" id="player">
+    <div class="stage" id="stage" aria-live="polite">
+
+      <!-- Scene 1 -->
+      <section class="scene" data-i="0">
+        <span class="kicker rise">Crown Prince Event Hall · Alvin Studio</span>
+        <h2 class="rise d1">Meet your Web&nbsp;CRM</h2>
+        <p class="lead rise d2">The one place where every lead lives — from first hello to signed booking.</p>
+      </section>
+
+      <!-- Scene 2 — the problem -->
+      <section class="scene" data-i="1">
+        <span class="kicker rise">The problem</span>
+        <h2 class="rise d1">Leads come from everywhere</h2>
+        <div class="chips rise d2">
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>Website</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3L22 9.2l-5 4.7 1.3 6.9L12 17.6 5.7 20.8 7 13.9l-5-4.7 7.1-.9z"/></svg>Yelp</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-8h2.7l.4-3H13V9c0-.9.3-1.5 1.6-1.5H16V4.8A21 21 0 0 0 13.9 4.7C11.6 4.7 10 6.1 10 8.6V11H7.3v3H10v8z"/></svg>Facebook</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c0-1 1-2 2-2h2l2 5-2 1c1 2 3 4 5 5l1-2 5 2v2c0 1-1 2-2 2C10 20 4 14 4 5z"/></svg>Phone</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 3z"/></svg>Text</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>Email</span>
+          <span class="chip">Tagvenue</span>
+          <span class="chip">Zola</span>
+        </div>
+        <p class="lead rise d3">In separate inboxes, it's easy for one to slip through.</p>
+      </section>
+
+      <!-- Scene 3 — the fix -->
+      <section class="scene" data-i="2">
+        <span class="kicker rise">The fix</span>
+        <h2 class="rise d1">Everything lands in one place</h2>
+        <div class="converge rise d2">
+          <div class="chips" style="max-width:17rem">
+            <span class="chip">Website</span><span class="chip">Yelp</span><span class="chip">Facebook</span>
+            <span class="chip">Phone</span><span class="chip">Text</span><span class="chip">Email</span>
+          </div>
+          <svg class="arrow-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform:rotate(-90deg)"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <div class="hub pop"><span class="big">CRM</span><span class="small">one home</span></div>
+        </div>
+        <p class="lead rise d3">Nothing gets lost, and anyone on the team can see what's going on.</p>
+      </section>
+
+      <!-- Scene 4 — the journey -->
+      <section class="scene" data-i="3">
+        <span class="kicker rise">The big picture</span>
+        <h2 class="rise d1">One journey, start to finish</h2>
+        <div class="flow rise d2">
+          <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 3z"/></svg><span class="lbl">Inquiry</span><span class="meta">comes in</span></div>
+          <div class="sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10l-8-7-8 7v10h16z"/><path d="M9 20v-6h6v6"/></svg><span class="lbl">Source</span><span class="meta">tagged</span></div>
+          <div class="sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1-4 4-5 7-5s6 1 7 5"/></svg><span class="lbl">Assigned</span><span class="meta">within 1 hr</span></div>
+          <div class="sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-4 3V7a4 4 0 0 1 4-4h9a4 4 0 0 1 4 4z"/></svg><span class="lbl">Follow-up</span><span class="meta">& tour</span></div>
+          <div class="sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+          <div class="step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span class="lbl">Booked</span><span class="meta">signed</span></div>
+        </div>
+        <p class="lead rise d3">The CRM carries the lead through every step.</p>
+      </section>
+
+      <!-- Scene 5 — real example -->
+      <section class="scene" data-i="4">
+        <span class="kicker rise">A real example</span>
+        <div class="leadcard rise d1">
+          <div class="top">
+            <div class="avatar">M</div>
+            <div><div class="name">María L.</div><div class="det">Quinceañera · 180 guests · Sat, May 16</div></div>
+          </div>
+          <dl class="rows">
+            <dt>Source</dt><dd><span class="pill src">★ Yelp</span></dd>
+            <dt>Assigned</dt><dd><span class="pill own">Cams</span></dd>
+            <dt>Venue</dt><dd>Crown Prince Hall</dd>
+          </dl>
+        </div>
+        <div class="pipe rise d2" id="pipe5">
+          <span class="stagechip" data-s="0">New</span>
+          <span class="stagechip" data-s="1">Contacted</span>
+          <span class="stagechip" data-s="2">Qualified</span>
+          <span class="stagechip" data-s="3">Tour Booked</span>
+          <span class="stagechip" data-s="4">Toured</span>
+          <span class="stagechip" data-s="5">Quoted</span>
+          <span class="stagechip booked" data-s="6">Booked</span>
+        </div>
+      </section>
+
+      <!-- Scene 6 — your part -->
+      <section class="scene" data-i="5">
+        <span class="kicker rise">Your part — whatever your role</span>
+        <h2 class="rise d1">Three things keep it working</h2>
+        <div class="lanes rise d2">
+          <div class="lane">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <div class="txt"><b>Reply within 1 hour</b><span>When a lead is yours, respond fast — the first venue to answer usually wins.</span></div>
+          </div>
+          <div class="lane">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <div class="txt"><b>Keep follow-up honest</b><span>Mark it "Followed Up" so no one calls the same family twice.</span></div>
+          </div>
+          <div class="lane">
+            <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="txt"><b>Log it in the CRM</b><span>One source, one owner. If it isn't here, it didn't happen.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 7 — why it matters -->
+      <section class="scene" data-i="6">
+        <span class="kicker rise">Why it matters</span>
+        <h2 class="rise d1">We can see the whole picture</h2>
+        <div class="funnel rise d2">
+          <div class="frow"><span class="fl">Leads</span><span class="bar" style="--w:1"></span><span class="fv">50</span></div>
+          <div class="frow"><span class="fl">Qualified</span><span class="bar" style="--w:.6"></span><span class="fv">20</span></div>
+          <div class="frow"><span class="fl">Tours</span><span class="bar" style="--w:.36"></span><span class="fv">10</span></div>
+          <div class="frow"><span class="fl">Booked</span><span class="bar" style="--w:.16"></span><span class="fv">3</span></div>
+        </div>
+        <p class="lead rise d3">Because every lead carries its source, we know which channels bring bookings — and what each one costs.</p>
+      </section>
+
+      <!-- Scene 8 — close -->
+      <section class="scene" data-i="7">
+        <span class="kicker rise">Remember</span>
+        <h2 class="rise d1">Three things</h2>
+        <div class="rules rise d2">
+          <div class="rule"><span class="n">1</span><b>Reply within the hour</b></div>
+          <div class="rule"><span class="n">2</span><b>Keep every lead in the CRM</b></div>
+          <div class="rule"><span class="n">3</span><b>One source, one owner</b></div>
+        </div>
+        <p class="lead rise d3">That's how we turn inquiries into celebrations.</p>
+      </section>
+
+      <!-- play overlay -->
+      <div class="overlay" id="overlay">
+        <button class="playbtn" id="bigplay" aria-label="Play the explainer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>
+        </button>
+        <div class="cta-t">Play the 2½-minute explainer</div>
+        <div class="cta-s">With voice-over. Tap any chapter below to jump around.</div>
+      </div>
+    </div>
+
+    <!-- captions -->
+    <div class="caption"><span id="caption">Press play to begin.</span></div>
+
+    <!-- controls -->
+    <div class="controls">
+      <button class="ctrl" id="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+      <button class="ctrl primary" id="play" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg></button>
+      <button class="ctrl" id="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+      <button class="ctrl" id="restart" aria-label="Restart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4"/></svg></button>
+      <div class="progress"><div class="fill" id="fill"></div></div>
+      <span class="counter" id="counter">1 / 8</span>
+      <button class="ctrl" id="sound" aria-label="Voice-over on" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg></button>
+    </div>
+  </div>
+
+  <!-- chapters -->
+  <nav class="chapters" aria-label="Chapters">
+    <div class="ch-h">Jump to a chapter</div>
+    <ul class="chlist" id="chlist"></ul>
+  </nav>
+
+  <div class="foot">
+    <span>Crown Prince Event Hall</span><span class="dot"></span>
+    <span>Alvin Studio</span><span class="dot"></span>
+    <span>San Jose, CA</span><span class="dot"></span>
+    <span>Voice-over uses your browser's built-in voice; turn it off for captions only.</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var scenes = Array.prototype.slice.call(document.querySelectorAll('.scene'));
+  var N = scenes.length;
+
+  // narration + chapter titles + fallback (muted) durations in ms
+  var DATA = [
+    {t:"Welcome", say:"Meet your Web C R M — the one place where every lead lives, from the first hello to a signed booking.", ms:7000},
+    {t:"The problem", say:"Every day, people ask about our halls. They come from our website, from Yelp, Facebook, a phone call, a text. When those land in different inboxes, it's easy for one to slip through.", ms:15000},
+    {t:"The fix", say:"The C R M fixes that. Every inquiry, from every channel, lands in one place — so nothing gets lost, and anyone on the team can see what's going on.", ms:13000},
+    {t:"The journey", say:"Here's the whole journey. A lead comes in. The C R M tags where it came from, and hands it to one of us within an hour. We follow up, book a tour, and mark it booked.", ms:15000},
+    {t:"A real lead", say:"Here's a real one. María asks about a quinceañera for a hundred and eighty guests. The C R M sees it came from Yelp, assigns it to Cams, and she walks it from New, to a tour, to a signed booking.", ms:17000},
+    {t:"Your part", say:"Your part is simple. When a lead is yours, reply within the hour. Keep the follow-up column honest, so we never call the same family twice. And always log it in the C R M — if it isn't here, it didn't happen.", ms:17000},
+    {t:"Why it matters", say:"And because every lead carries its source, we can finally see the full picture — which channels bring tours, which bring bookings, and what each booking really costs.", ms:14000},
+    {t:"Remember", say:"So remember three things: reply within the hour, keep it in the C R M, and give every lead one source and one owner. That's how we turn inquiries into celebrations.", ms:14000}
+  ];
+  // what the caption bar shows (cleaned of pronunciation hints)
+  var CAPTIONS = [
+    "Meet your Web CRM — the one place where every lead lives, from first hello to signed booking.",
+    "Inquiries arrive from the website, Yelp, Facebook, phone and text. In separate inboxes, one can slip through.",
+    "The CRM fixes that: every inquiry, from every channel, lands in one place.",
+    "The whole journey: a lead comes in, its source is tagged, it's assigned within an hour, then follow-up, tour and booking.",
+    "A real lead: María — a quinceañera for 180 guests, from Yelp, assigned to Cams — moves from New to Booked.",
+    "Your part: reply within the hour · keep follow-up honest · always log it in the CRM.",
+    "Every lead carries its source, so we can see which channels bring bookings — and what each one costs.",
+    "Remember three things: reply within the hour, keep it in the CRM, one source and one owner."
+  ];
+
+  var idx = 0, playing = false, soundOn = true, timer = null, rafId = null, sceneStart = 0, sceneDur = 0;
+  var supportsTTS = ('speechSynthesis' in window) && (typeof SpeechSynthesisUtterance !== 'undefined');
+
+  var elOverlay = document.getElementById('overlay');
+  var elCaption = document.getElementById('caption');
+  var elCounter = document.getElementById('counter');
+  var elFill = document.getElementById('fill');
+  var elPlay = document.getElementById('play');
+  var elSound = document.getElementById('sound');
+  var elChlist = document.getElementById('chlist');
+
+  // build chapter buttons
+  DATA.forEach(function(d,i){
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.innerHTML = '<span class="cn">'+(i+1)+'</span><span class="ct">'+d.t+'</span>';
+    b.addEventListener('click', function(){ goTo(i, true); });
+    li.appendChild(b); elChlist.appendChild(li);
+  });
+  var chButtons = Array.prototype.slice.call(elChlist.querySelectorAll('button'));
+
+  function iconPlay(){ return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg>'; }
+  function iconPause(){ return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>'; }
+  function iconSoundOn(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 0 1 0 6"/></svg>'; }
+  function iconSoundOff(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>'; }
+
+  function clearTimers(){
+    if(timer){ clearTimeout(timer); timer = null; }
+    if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+    if(supportsTTS){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  }
+
+  function setActive(i){
+    scenes.forEach(function(s,k){ s.classList.toggle('active', k===i); });
+    elCounter.textContent = (i+1) + ' / ' + N;
+    elCaption.textContent = CAPTIONS[i];
+    chButtons.forEach(function(b,k){ b.classList.toggle('current', k===i); });
+    if(i===4){ runPipeline(); }
+  }
+
+  // scene 5: light up the pipeline over time
+  var pipeTimers = [];
+  function runPipeline(){
+    pipeTimers.forEach(clearTimeout); pipeTimers = [];
+    var chips = document.querySelectorAll('#pipe5 .stagechip');
+    chips.forEach(function(c){ c.classList.remove('on','done'); });
+    var step = Math.max(900, Math.floor((sceneDur||16000)/ (chips.length+1)));
+    chips.forEach(function(c,k){
+      pipeTimers.push(setTimeout(function(){
+        chips.forEach(function(o,j){ o.classList.toggle('done', j<k); o.classList.toggle('on', j===k); });
+      }, 600 + k*step));
+    });
+  }
+
+  function animateProgress(){
+    sceneStart = performance.now();
+    function frame(now){
+      var p = sceneDur>0 ? Math.min(1,(now-sceneStart)/sceneDur) : 0;
+      elFill.style.width = (p*100).toFixed(1)+'%';
+      if(playing){ rafId = requestAnimationFrame(frame); }
+    }
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function speakAndAdvance(i){
+    var fallback = DATA[i].ms;
+    sceneDur = fallback;
+    animateProgress();
+    if(i===4) runPipeline();
+
+    var advanced = false;
+    function advance(){
+      if(advanced) return; advanced = true;
+      if(i < N-1){ goTo(i+1, false); }
+      else { finish(); }
+    }
+
+    if(soundOn && supportsTTS){
+      try{
+        var u = new SpeechSynthesisUtterance(DATA[i].say);
+        u.rate = 0.98; u.pitch = 1.0;
+        var v = pickVoice();
+        if(v) u.voice = v;
+        u.onend = function(){ if(playing){ timer = setTimeout(advance, 450); } };
+        u.onerror = function(){ if(playing){ timer = setTimeout(advance, fallback); } };
+        window.speechSynthesis.speak(u);
+        // safety net in case onend never fires
+        timer = setTimeout(function(){ if(!advanced && playing){ advance(); } }, fallback + 9000);
+      }catch(e){
+        timer = setTimeout(advance, fallback);
+      }
+    } else {
+      timer = setTimeout(advance, fallback);
+    }
+  }
+
+  var chosenVoice = null;
+  function pickVoice(){
+    if(chosenVoice) return chosenVoice;
+    try{
+      var list = window.speechSynthesis.getVoices() || [];
+      var en = list.filter(function(v){ return /^en(-|_|$)/i.test(v.lang); });
+      // prefer a natural-sounding, local en-US/en-GB voice
+      chosenVoice = en.find(function(v){ return /en-US/i.test(v.lang) && v.localService; })
+                 || en.find(function(v){ return v.localService; })
+                 || en[0] || null;
+    }catch(e){ chosenVoice = null; }
+    return chosenVoice;
+  }
+  if(supportsTTS){
+    try{ window.speechSynthesis.onvoiceschanged = function(){ chosenVoice = null; pickVoice(); }; }catch(e){}
+  }
+
+  function goTo(i, userJump){
+    clearTimers();
+    idx = (i+N)%N;
+    setActive(idx);
+    if(userJump){ // a chapter click / nav starts playing from there
+      elOverlay.classList.add('hide');
+      playing = true; updatePlayBtn();
+      speakAndAdvance(idx);
+    } else if(playing){
+      speakAndAdvance(idx);
+    } else {
+      sceneDur = DATA[idx].ms; elFill.style.width='0%';
+    }
+  }
+
+  function start(){
+    elOverlay.classList.add('hide');
+    playing = true; updatePlayBtn();
+    // tiny silent utterance to unlock TTS on first user gesture
+    speakAndAdvance(idx);
+  }
+
+  function play(){ if(playing) return; playing = true; updatePlayBtn(); elOverlay.classList.add('hide'); speakAndAdvance(idx); }
+  function pause(){ playing = false; updatePlayBtn(); clearTimers();
+    // freeze progress where it is
+    if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+  }
+  function finish(){ playing = false; updatePlayBtn(); elFill.style.width='100%'; }
+
+  function updatePlayBtn(){
+    elPlay.innerHTML = playing ? iconPause() : iconPlay();
+    elPlay.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+  }
+
+  // wire controls
+  document.getElementById('bigplay').addEventListener('click', start);
+  elOverlay.addEventListener('click', function(e){ if(e.target===elOverlay) start(); });
+  elPlay.addEventListener('click', function(){ playing ? pause() : play(); });
+  document.getElementById('next').addEventListener('click', function(){ goTo(idx+1, playing); if(!playing){ setActive(idx);} });
+  document.getElementById('prev').addEventListener('click', function(){ goTo(idx-1, playing); if(!playing){ setActive(idx);} });
+  document.getElementById('restart').addEventListener('click', function(){ goTo(0, true); });
+  elSound.addEventListener('click', function(){
+    soundOn = !soundOn;
+    elSound.setAttribute('aria-pressed', String(soundOn));
+    elSound.setAttribute('aria-label', soundOn ? 'Voice-over on' : 'Voice-over off');
+    elSound.innerHTML = soundOn ? iconSoundOn() : iconSoundOff();
+    if(!soundOn && supportsTTS){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    // if playing, restart current scene's timing under the new mode
+    if(playing){ clearTimers(); speakAndAdvance(idx); }
+  });
+
+  // keyboard: space toggles play/pause, arrows navigate
+  document.addEventListener('keydown', function(e){
+    if(e.target && /^(INPUT|TEXTAREA|BUTTON)$/.test(e.target.tagName)) return;
+    if(e.code==='Space'){ e.preventDefault(); playing?pause():play(); }
+    else if(e.code==='ArrowRight'){ goTo(idx+1, playing); if(!playing) setActive(idx); }
+    else if(e.code==='ArrowLeft'){ goTo(idx-1, playing); if(!playing) setActive(idx); }
+  });
+
+  // initial paint
+  setActive(0);
+  updatePlayBtn();
+  if(!supportsTTS){
+    elSound.setAttribute('aria-pressed','false');
+    elSound.setAttribute('aria-label','Voice-over not available in this browser');
+    elSound.innerHTML = iconSoundOff();
+    soundOn = false;
+  }
+})();
+</script>
+</body>
+</html>
