@@ -126,7 +126,7 @@ h1,h2,h3{font-family:"Bodoni Moda",Didot,serif;font-weight:600;margin:0;line-hei
 <button class="tab" role="tab" aria-selected="false" data-tab="mobile">Mobile</button>
 </div>
 </div>
-<div class="note"><b>Demo</b> &nbsp;All leads and scores are illustrative. Click any card to open its live score breakdown. On the <b>New</b> lead, press <b>“Simulate Calendly tour”</b> to watch the score recompute and the override push it to Warm. Scores are computed by the model in §5 of the report.</div>
+<div class="note"><b>Demo</b> &nbsp;All leads and scores are illustrative. Click any card to open its live score breakdown. On the lead in the <b>Lead</b> column (Daniela R.), press <b>“Simulate Calendly tour”</b> to watch the score recompute and the override push it to Warm. Scores are computed by the model in §5 of the report.</div>
 
 <!-- PIPELINE -->
 <section class="view" id="pipeline" role="tabpanel">
@@ -251,26 +251,26 @@ var CLS={hot:{g:"●",t:"Hot",c:"var(--wine)"},warm:{g:"◐",t:"Warm",c:"var(--g
 
 // ---------- data (illustrative) ----------
 var LEADS=[
- {id:"daniela",name:"Daniela R.",venue:"CPH",type:"Wedding",stage:"New",eventType:"Wedding",eventDate:null,daysOut:null,guests:null,budget:null,contact:true,
+ {id:"daniela",name:"Daniela R.",venue:"CPH",type:"Wedding",stage:"Lead",eventType:"Wedding",eventDate:null,daysOut:null,guests:null,budget:null,contact:true,
   milestone:"inquiry",lastAct:"Inquiry 10 min ago",tour:null,canSimulate:true,
   events:[{w:"today · 15:14",t:"Inquiry received",d:"+6",cls:"up",r:"Event type captured; not yet contacted"}]},
  {id:"maria",name:"Maria L.",venue:"CPH",type:"Quinceañera",stage:"Tour",eventType:"Quinceañera",eventDate:"Jun 6",daysOut:234,guests:180,guestsFit:true,budget:"flexible",contact:true,dateAvailable:true,
   milestone:"tourBooked",calendly:true,activeReply:true,fast:false,daysSinceReply:2,tour:"booked",lastAct:"Replied 2d ago",
   events:[{w:"Sep 28 · 14:02",t:"Inquiry received",d:"+16",cls:"up"},{w:"Sep 28 · 14:09",t:"Tour booked via Calendly",d:"→ Warm",cls:"up",r:"Self-booked 7 min after inquiring"},{w:"Oct 2 · 10:41",t:"Confirmed event details",d:"+10",cls:"up"},{w:"Oct 13 · 09:30",t:"Replied to message",d:"+6",cls:"up"}]},
- {id:"james",name:"James T.",venue:"CPH",type:"Corporate",stage:"Quoted",eventType:"Corporate",eventDate:"Jan 14",daysOut:91,guests:150,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+ {id:"james",name:"James T.",venue:"CPH",type:"Corporate",stage:"Proposal",eventType:"Corporate",eventDate:"Jan 14",daysOut:91,guests:150,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
   milestone:"quoted",inbound:true,activeReply:true,fast:true,daysSinceReply:1,tour:"completed",lastAct:"Requested quote today",
   events:[{w:"Sep 20",t:"Inquiry received",d:"+35",cls:"up"},{w:"Sep 25",t:"Tour completed",d:"+3",cls:"up"},{w:"Oct 10",t:"Actively responding",d:"+10",cls:"up"},{w:"Oct 15",t:"Quotation requested",d:"+6",cls:"up"}]},
- {id:"priya",name:"Priya & Sam",venue:"ACD",type:"Wedding",stage:"Negotiating",eventType:"Wedding",eventDate:"Mar 12",daysOut:148,guests:120,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+ {id:"priya",name:"Priya & Sam",venue:"ACD",type:"Wedding",stage:"Deposit",eventType:"Wedding",eventDate:"Mar 12",daysOut:148,guests:120,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
   milestone:"bookingIntent",negotiation:true,activeReply:true,fast:false,daysSinceReply:1,tour:"completed",lastAct:"Asked about deposit",
   events:[{w:"Aug 30",t:"Inquiry received",d:"+35",cls:"up"},{w:"Sep 12",t:"Tour completed",d:"+3",cls:"up"},{w:"Oct 1",t:"Quotation sent",d:"+6",cls:"up"},{w:"Oct 14",t:"Deposit discussion",d:"→ Hot",cls:"up"}]},
  {id:"robert",name:"Robert K.",venue:"CPH",type:"Birthday",stage:"Tour",eventType:"Birthday",eventDate:"Nov 24",daysOut:40,guests:90,guestsFit:true,budget:null,contact:true,
   milestone:"tourBooked",noShow:true,unanswered:3,daysSinceReply:21,tour:"noshow",lastAct:"No reply 21d",
   events:[{w:"Sep 2",t:"Inquiry received",d:"+24",cls:"up"},{w:"Sep 8",t:"Tour booked",d:"+25",cls:"up"},{w:"Sep 15",t:"Tour no-show",d:"−10",cls:"down",r:"Temporary; restores over 14d or on re-attend"},{w:"Sep 24",t:"3rd unanswered follow-up",d:"−8",cls:"down",r:"Clears on any reply"}]},
- {id:"grace",name:"Grace O.",venue:"ACD",type:"Wedding",stage:"Negotiating",eventType:"Wedding",eventDate:"Dec 6",daysOut:52,guests:140,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+ {id:"grace",name:"Grace O.",venue:"ACD",type:"Wedding",stage:"Deposit",eventType:"Wedding",eventDate:"Dec 6",daysOut:52,guests:140,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
   milestone:"bookingIntent",lifecycle:"won",tour:"completed",lastAct:"Deposit paid — booked",
   events:[{w:"Jul 10",t:"Inquiry received",d:"+35",cls:"up"},{w:"Jul 28",t:"Tour completed",d:"+3",cls:"up"},{w:"Aug 15",t:"Quotation signed",d:"+6",cls:"up"},{w:"Aug 20",t:"Deposit paid → Booked",d:"✓ Won",cls:"up",r:"Conversion — exits prospect scoring"}]}
 ];
-var STAGES=["New","Contacted","Tour","Quoted","Negotiating"];
+var STAGES=["Lead","Contacted","Tour","Proposal","Deposit"];  // mirrors the CRM's Journey
 var filterCls=null;
 
 function tourChip(t){

@@ -240,8 +240,8 @@ sup a{text-decoration:none;font-size:.7em;padding:0 1px}
 <tr><td>Engaged — genuine two-way contact</td><td class="n">10</td><td>Customer replies / a real conversation occurs</td></tr>
 <tr><td>Tour booked (Calendly self-serve <em>or</em> requested by text/email/call)</td><td class="n">25</td><td>A confirmed tour slot exists, however arranged</td></tr>
 <tr><td>Tour completed</td><td class="n">38</td><td>Attendance recorded</td></tr>
-<tr><td>Quotation requested or delivered</td><td class="n">44</td><td>Quote event exists</td></tr>
-<tr><td>Booking-intent — asks to reserve / wants agreement / discusses deposit</td><td class="n">52</td><td>Explicit move toward closing</td></tr>
+<tr><td>Quotation requested or delivered <span class="small">(the CRM's <em>Proposal</em> stage)</span></td><td class="n">44</td><td>Quote event exists</td></tr>
+<tr><td>Booking-intent — asks to reserve / wants agreement / discusses deposit <span class="small">(the CRM's <em>Deposit</em> stage)</span></td><td class="n">52</td><td>Explicit move toward closing</td></tr>
 </tbody></table></div>
 <div class="tablewrap"><table>
 <thead><tr><th>Proactivity bonus (added, block capped at 55)</th><th class="n">Wt</th><th>Type</th></tr></thead>
@@ -300,7 +300,7 @@ sup a{text-decoration:none;font-size:.7em;padding:0 1px}
 </ol>
 
 <h3>Lifecycle states — separate from the score</h3>
-<p>Lifecycle is an operational status that runs alongside (not instead of) the score: <code>New → Working → Tour → Quoted → Negotiating → Won / Lost / Disqualified.</code></p>
+<p>Lifecycle is an operational status that runs alongside (not instead of) the score. It mirrors the CRM's existing <strong>Journey</strong>: <code>Lead → Contacted → Tour → Proposal → Deposit → Won / Lost / Disqualified</code> (confirmed in §8). The score layers <em>on top of</em> the Journey the team already clicks through — it does not replace it.</p>
 <ul>
 <li><strong>Won (Booked):</strong> deposit paid or agreement signed → lead is a <em>completed conversion</em>. Score is frozen and the lead leaves active prospect prioritisation, shown with a "Booked" badge. Deposit and signature are the exit, not ordinary scoring factors applied to an already-converted lead.</li>
 <li><strong>Lost / Disqualified:</strong> archived with a reason, classified Cold, excluded from active queues (still available for backtesting and re-engagement campaigns).</li>
@@ -407,6 +407,20 @@ confidence = known_key_fields / key_fields        // event type, date, guests, b
 </ul>
 </div>
 <p>Plus a nightly job for the only time-based effects — <strong>engagement decay</strong> and <strong>no-show penalty restoration</strong> — so a score can change with the passage of time without a user action.</p>
+
+<div class="key"><p><strong>Grounded in the existing CRM.</strong> A video-tour transcript of the live CRM (captured 15 Oct 2026; <code>web-crm-video-tour-transcript.md</code> in this repo) confirms every record this engine reads already exists — so the model reuses existing data and invents no new capture:</p></div>
+<div class="tablewrap"><table>
+<thead><tr><th>Confirmed CRM feature</th><th>Feeds scoring factor</th></tr></thead>
+<tbody>
+<tr><td><strong>Journey</strong> stages: Lead → Contacted → Tour → Proposal → Deposit → Won</td><td>Intent milestone ladder (§5B) &amp; lifecycle states (§6) — near 1:1</td></tr>
+<tr><td><strong>Communications</strong> — Text/Email thread attached to each lead</td><td>Engagement &amp; responsiveness (§5C); customer-reply = the "Engaged" milestone</td></tr>
+<tr><td><strong>Interaction Recap</strong> after each call/text</td><td>Two-way engagement quality; a logged recap evidences a real exchange</td></tr>
+<tr><td><strong>Quotation</strong> on venue template, with a 72-hour deposit link</td><td>Quotation milestone (+ the date-hold / negotiation proactivity bonus)</td></tr>
+<tr><td><strong>Payments</strong> — deposit received (e.g. Zelle, bank-checked)</td><td>Booking-intent → <strong>Won</strong> conversion exit (§6)</td></tr>
+<tr><td><strong>Rental agreement</strong> e-signature; date confirms on signed file</td><td>Won lifecycle state; freezes/retires the prospect score</td></tr>
+<tr><td><strong>Bookings</strong> &amp; <strong>Accounting</strong> pages</td><td>Conversion-insight aggregates for the dashboard (§12.E) &amp; backtesting (§10)</td></tr>
+</tbody></table></div>
+<p class="small">The one input the transcript doesn't explicitly show is the <strong>tour source</strong> (self-booked Calendly vs. staff-arranged) and <strong>no-show</strong> capture. These drive the Calendly override and the reversible no-show penalty, so the development team should confirm where the CRM records them (likely on the Tour stage / Calendly integration); everything else above is confirmed.</p>
 
 <h3>Missing data — four distinct cases, never conflated</h3>
 <div class="tablewrap"><table>
