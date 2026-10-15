@@ -2,369 +2,170 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Conversion Probability — Final Spec</title>
+<title>Lead Scoring — Build Specification</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;--viz:#2A78D6;--viz-soft:#DCE8F8;--neg:#C23A39;--neg-soft:#F6E0DF;--grid:#E6E3DC;color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--viz-soft:#1C2A3D;--neg:#E66767;--neg-soft:#3A2024;--grid:#2E2935;color-scheme:dark}}
-:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--viz-soft:#1C2A3D;--neg:#E66767;--neg-soft:#3A2024;--grid:#2E2935;color-scheme:dark}
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;--viz:#2A78D6;--neg:#C23A39;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
-.wrap{max-width:1180px;margin:0 auto;padding:0 24px 90px;display:grid;grid-template-columns:234px minmax(0,1fr);gap:46px}
-@media (max-width:940px){.wrap{grid-template-columns:1fr;gap:22px}nav.toc{position:static;max-height:none;padding-top:0}}
-nav.toc{position:sticky;top:20px;align-self:start;font-size:12.5px;max-height:calc(100vh - 40px);overflow:auto;padding-top:38px}
-nav.toc .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:3px 0;border-left:2px solid var(--line);padding-left:12px}
-nav.toc a:hover,nav.toc a:focus-visible,nav.toc a.cur{border-color:var(--wine);color:var(--wine);outline:none}
-main{min-width:0;max-width:862px;padding-top:38px}
-h1,h2,h3{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;text-wrap:balance;line-height:1.1;margin:0}
-h1{font-size:clamp(34px,5.2vw,52px);letter-spacing:-.015em}
-h2{font-size:26px;margin:56px 0 6px;padding-top:22px;border-top:1px solid var(--line)}
-h3{font-size:18px;margin:24px 0 8px}
-h4{font-family:"Source Sans 3",sans-serif;font-size:15px;font-weight:600;margin:16px 0 4px}
+main{max-width:820px;margin:0 auto;padding:52px 24px 80px}
+h1,h2{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.015em}
+h2{font-size:23px;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+h2 .n{font-family:"IBM Plex Mono",monospace;color:var(--wine);font-size:.58em;margin-right:9px;vertical-align:3px}
+h3{font-size:16px;margin:20px 0 6px}
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
-.sec-eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
-p{margin:0 0 13px;max-width:74ch}
-.lede{font-size:20px;line-height:1.5;max-width:60ch}
-.intro{font-size:16.5px;color:var(--muted);max-width:70ch;font-style:italic;border-left:3px solid var(--gold);padding-left:16px;margin:10px 0 18px}
-ul,ol{padding-left:20px;margin:0 0 13px;max-width:74ch}li{margin-bottom:5px}
+.meta{color:var(--muted);font-size:14px;margin-top:14px;font-family:"IBM Plex Mono",monospace}
+p{margin:0 0 13px;max-width:72ch}ul,ol{padding-left:20px;margin:0 0 13px;max-width:72ch}li{margin-bottom:5px}
+.lede{font-size:18.5px;color:var(--muted);max-width:60ch;border-left:3px solid var(--gold);padding-left:16px;font-style:italic;margin:16px 0 0}
 a{color:var(--wine)}
 code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--code);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
-sup a{text-decoration:none;font-size:.68em;padding:0 1px;font-family:"IBM Plex Mono",monospace}
-header.cover{padding:56px 0 12px;border-bottom:1px solid var(--line)}
-.meta{color:var(--muted);font-size:14px;margin-top:16px;font-family:"IBM Plex Mono",monospace}
-.call{border-left:3px solid var(--gold);background:var(--gold-soft);padding:14px 18px;margin:18px 0;border-radius:0 6px 6px 0}
-.call.key{border-color:var(--good);background:var(--good-soft)}.call.warn{border-color:var(--wine);background:var(--wine-soft)}
-.call p:last-child{margin:0}.call .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:5px;color:var(--muted)}
-.tablewrap{overflow-x:auto;margin:14px 0 8px}
-table{width:100%;border-collapse:collapse;font-size:13.5px}table.tight{font-size:12px}
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
 caption{caption-side:top;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding-bottom:7px}
-th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 9px;border-bottom:1.5px solid var(--line);vertical-align:bottom}
-td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1.5px solid var(--line);vertical-align:bottom}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 td.n,th.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
 tbody tr:hover{background:var(--code)}
-.mono{font-family:"IBM Plex Mono",monospace}
-.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
-.tag.ess{background:var(--wine-soft);color:var(--wine)}.tag.ben{background:var(--gold-soft);color:var(--gold)}.tag.opt{background:var(--slate-soft);color:var(--slate)}
-.tag.keep{background:var(--good-soft);color:var(--good)}.tag.rev{background:var(--gold-soft);color:var(--gold)}.tag.new{background:var(--viz-soft);color:var(--viz)}
-figure{margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
-figcaption{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.03em;color:var(--muted);margin-top:12px;line-height:1.45}
-figcaption b{color:var(--ink);font-weight:500;text-transform:uppercase;letter-spacing:.07em;font-size:10px}
-.fig-h{font-size:15px;font-weight:600;margin-bottom:4px}
-.illus{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--neg);border:1px solid var(--neg);border-radius:3px;padding:1px 6px;vertical-align:2px;margin-left:8px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media (max-width:700px){.two{grid-template-columns:1fr}}
-.out{border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--panel)}
-.out h4{margin-top:0}.out .tagline{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.ladder{display:flex;gap:0;overflow-x:auto;padding:6px 0 2px}
-.lstep{flex:1;min-width:140px;position:relative;padding:0 8px}
-.lstep:not(:last-child)::after{content:"→";position:absolute;top:4px;right:-6px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
-.lstep .n{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--viz)}
-.lstep h4{margin:2px 0 4px}.lstep p{font-size:12.5px;color:var(--muted);margin:0}
-@media (max-width:680px){.ladder{flex-direction:column;gap:12px}.lstep{min-width:0}.lstep:not(:last-child)::after{content:"↓";top:auto;bottom:-10px;right:auto;left:4px}}
-.flow{display:flex;gap:0;overflow-x:auto;padding:6px 0 2px}
-.fstep{flex:1;min-width:110px;position:relative;padding:0 8px}
-.fstep:not(:last-child)::after{content:"";position:absolute;top:15px;right:-2px;width:14px;height:2px;background:var(--grid)}
-.fdot{width:30px;height:30px;border-radius:50%;background:var(--panel);border:2px solid var(--slate);display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:12px;margin-bottom:8px}
-.fstep.sig .fdot{border-color:var(--viz);color:var(--viz)}.fstep.conv .fdot{border-color:var(--good);color:var(--good)}
-.fname{font-size:12.5px;font-weight:600;line-height:1.2}.fsub{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.35}
-@media (max-width:680px){.flow{flex-direction:column}.fstep{min-width:0;padding:0 0 14px 0;display:grid;grid-template-columns:34px 1fr;gap:10px}.fstep:not(:last-child)::after{top:30px;left:14px;right:auto;width:2px;height:calc(100% - 30px)}.fdot{margin-bottom:0}}
-.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:3px;font-size:12.5px;max-width:470px;margin:12px 0}
-.cm div{padding:10px;border-radius:5px;background:var(--code)}
-.cm .hd{background:transparent;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center}
-.cm .tp,.cm .tn{background:var(--good-soft)}.cm .fp{background:var(--gold-soft)}.cm .fn{background:var(--wine-soft)}
-.cm b{display:block;font-size:11px;font-family:"IBM Plex Mono",monospace}
-.phase{display:grid;grid-template-columns:30px 1fr;gap:14px}
-.pnum{width:28px;height:28px;border-radius:50%;background:var(--wine);color:#fff;display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:12px}
-.pbody{border-left:2px solid var(--line);padding:0 0 18px 16px;margin-left:-15px}
-.pbody .m{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.chk{list-style:none;padding-left:0}.chk li{padding:5px 0 5px 26px;position:relative;border-bottom:1px solid var(--line);font-size:14px}
-.chk li::before{content:"✓";position:absolute;left:4px;color:var(--good);font-family:"IBM Plex Mono",monospace}
-.foot{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
-.srcs{font-size:13.5px}.srcs li{margin-bottom:8px}
-.small{font-size:13px;color:var(--muted)}
-svg .ax{stroke:var(--line);stroke-width:1}
-svg .gl{stroke:var(--grid);stroke-width:1}
-svg .perf{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 3;fill:none}
-svg .curve{fill:none;stroke-width:2}
-svg .c1{stroke:var(--viz)}svg .c2{stroke:var(--neg)}
-svg text{fill:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9px}
-svg .dot{fill:var(--viz)}
+tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
+.pos{color:var(--good)}.negc{color:var(--neg)}
+.grp td{background:var(--code);font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cls{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;text-transform:uppercase}
+.hot{color:var(--wine)}.warm{color:var(--gold)}.cold{color:var(--slate)}.won{color:var(--good)}.ns{color:var(--muted)}
+.rangebar{display:flex;height:32px;border-radius:6px;overflow:hidden;margin:12px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.rangebar div{display:flex;align-items:center;justify-content:center;color:#fff;gap:5px}
+.rangebar .c-cold{background:var(--slate);flex:0 0 40%}.rangebar .c-warm{background:var(--gold);flex:0 0 30%}.rangebar .c-hot{background:var(--wine);flex:0 0 30%}
+.scale{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
+.note{background:var(--gold-soft);border-left:3px solid var(--gold);padding:13px 16px;border-radius:0 6px 6px 0;margin:16px 0}
+.note.key{background:var(--good-soft);border-color:var(--good)}.note.warn{background:var(--wine-soft);border-color:var(--wine)}
+.note p:last-child{margin:0}.note .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px}
+.tag.p1{background:var(--wine-soft);color:var(--wine)}.tag.p2{background:var(--gold-soft);color:var(--gold)}.tag.p3{background:var(--slate-soft);color:var(--slate)}
 </style>
 <body>
-<div class="wrap">
-<nav class="toc" aria-label="Contents"><div class="eyebrow">Probability spec</div>
-<a href="#exec">01 · Executive summary</a>
-<a href="#audit">02 · Audit of prior spec</a>
-<a href="#research">03 · Research &amp; sources</a>
-<a href="#outputs">04 · Two separate outputs</a>
-<a href="#probdef">05 · Probability: outcome &amp; window</a>
-<a href="#model">06 · Model &amp; required data</a>
-<a href="#features">07 · Feature framework</a>
-<a href="#automation">08 · CRM automation</a>
-<a href="#validation">09 · Validation &amp; calibration</a>
-<a href="#examples">10 · Worked examples</a>
-<a href="#tests">11 · Acceptance tests</a>
-<a href="#roadmap">12 · Roadmap &amp; decisions</a>
-<a href="#sources">13 · References</a>
-</nav>
 <main>
+<span class="eyebrow">Lead-scoring build spec · October 2026</span>
+<h1 style="margin-top:12px">Lead Scoring — Build Specification</h1>
+<div class="meta">Crown Prince Event Hall (CPH, ≤300) &amp; Alvin Studio &amp; Courtyard (ACD, ≤100)</div>
+<p class="lede">A practical scoring system sales leadership can approve and a developer can build — one table, clear rules, automatic updates. Buying behaviour drives the classification, not profile completeness.</p>
 
-<header class="cover">
-<span class="eyebrow">Conversion-probability specification · October 2026</span>
-<h1 style="margin-top:14px">From Priority Score to Booking Probability</h1>
-<p class="lede" style="margin-top:18px">A data-driven system that estimates each lead's actual likelihood of becoming a confirmed booking — kept strictly separate from the rules-based priority score, and shown only when it is statistically earned.</p>
-<div class="meta">CPH (≤300) &amp; ACD (≤100) · extends the final rules spec · no probability is asserted without a validated, calibrated model</div>
-</header>
+<div class="note warn"><span class="k">What the number is</span><p>The 0–100 score is a <strong>priority score</strong> that ranks which leads to work first. The percentage <strong>bands below are provisional scoring bands, not measured booking probabilities.</strong> Real conversion probabilities come later, from booking history (see §6). All weights are proposed and should be tuned once outcomes accrue.</p></div>
 
-<div class="call warn"><span class="k">The one rule that governs this document</span><p>A <strong>priority score of 70 is not a 70% chance of booking.</strong> The rules-based score (0–100) ranks who to work first; the <strong>conversion probability</strong> is a statistically estimated %, produced only by a model trained and <em>calibrated</em> on CPH/ACD's own booking outcomes. Until that model exists and passes validation, the CRM shows the priority score and <strong>no percentage</strong>. No probability, conversion rate, or accuracy figure is invented anywhere in this spec.</p></div>
-
-<!-- 01 -->
-<h2 id="exec"><span class="sec-eyebrow">01</span>Executive summary</h2>
-<ul>
-<li><strong>Two outputs, never merged.</strong> (A) Priority score + Hot/Warm/Cold — rules-based, available now, from the existing final spec; (B) Conversion probability — model-based, phased in as data accrues.</li>
-<li><strong>Define the target before any model.</strong> Outcome = a confirmed booking (paid reservation deposit <em>or</em> signed agreement); prediction window = a <strong>data-derived</strong> horizon from historical inquiry-to-deposit times, not a guessed number (§05).</li>
-<li><strong>A maturity ladder, honest at each rung</strong>: (0) reference-class <em>base rates</em> → (1) calibrated logistic regression → (2) gradient-boosted trees — each wrapped in probability <strong>calibration</strong> and gated by data volume.<sup><a href="#s-sklearn">1</a></sup></li>
-<li><strong>Validate without leakage</strong>: out-of-time (train-past / test-future) splits, preprocessing fit per fold, features restricted to what is known at scoring time; judge by <em>calibration</em> (reliability, Brier) as well as discrimination (AUC).<sup><a href="#s-leak">3</a></sup></li>
-<li><strong>Sample size is context-dependent</strong>, not a universal threshold — the classic ~10-events-per-predictor rule is a starting heuristic, challenged by later work; use few features and penalised regression when data is thin.<sup><a href="#s-epv">2</a></sup></li>
-<li><strong>Insufficient data → no fabricated %.</strong> Fall back to the priority score, or at most a clearly-labelled reference-class rate marked "indicative, small sample."</li>
-<li><strong>Business rule preserved</strong>: a confirmed self-booked tour is Warm immediately (classification), independent of whatever probability the model later assigns; missing data stays neutral.</li>
-</ul>
-
-<!-- 02 -->
-<h2 id="audit"><span class="sec-eyebrow">02</span>Audit of the prior specification</h2>
+<!-- 1 -->
+<h2><span class="n">1</span>Classification bands</h2>
+<div class="rangebar"><div class="c-cold">○ Cold</div><div class="c-warm">◐ Warm</div><div class="c-hot">● Hot</div></div>
+<div class="scale"><span>0</span><span>40</span><span>70</span><span>100</span></div>
 <div class="tablewrap"><table>
-<thead><tr><th>Prior decision</th><th>Action</th><th>Resolution</th></tr></thead>
+<thead><tr><th>Band</th><th class="n">Score</th><th>Meaning</th><th>Enters when</th></tr></thead>
 <tbody>
-<tr><td>Rules model (Fit 35 / Intent 55 / Engagement 10 / −25), bands, overrides, lifecycle</td><td><span class="tag keep">Keep</span></td><td>Sound as <strong>Output A</strong> (priority). Unchanged; this doc does not re-open it.</td></tr>
-<tr><td>"Priority ≠ probability" asserted; probability deferred to "Phase 6"</td><td><span class="tag new">Build</span></td><td>Now fully specified as <strong>Output B</strong> — outcome, window, model, calibration, validation, fallback (§05–09).</td></tr>
-<tr><td>Prediction window named as "~180 days (set from data)"</td><td><span class="tag rev">Revise</span></td><td>Made a <strong>derived parameter</strong>: the Nth-percentile of historical inquiry→deposit lead time, with a survival-model option for long event horizons (§05).</td></tr>
-<tr><td>Salesforce ~1,000/120 used as the readiness yardstick</td><td><span class="tag rev">Revise</span></td><td>Replaced with a <strong>context-dependent</strong> sample-size approach (EPV heuristic + penalised models); the vendor figure is a reference only, not a gate.<sup><a href="#s-epv">2</a></sup></td></tr>
-<tr><td>Classification bands shown as 0–39 / 40–69 / 70–100</td><td><span class="tag keep">Keep, relabel</span></td><td>Retained strictly as <strong>priority</strong> ranges; never printed with a "%" or called a probability.</td></tr>
+<tr><td><span class="cls hot">● Hot</span></td><td class="n">70–100</td><td>Strong buying intent — act today</td><td>Toured + quoting, or asked about a deposit</td></tr>
+<tr><td><span class="cls warm">◐ Warm</span></td><td class="n">40–69</td><td>Promising — keep engaging</td><td>Confirmed tour, or good fit + replying</td></tr>
+<tr><td><span class="cls cold">○ Cold</span></td><td class="n">0–39</td><td>Low current priority</td><td>Worked but low intent</td></tr>
+<tr><td><span class="cls ns">◇ Not scored yet</span></td><td class="n">—</td><td>Too little info for a score</td><td>New / barely-contacted lead</td></tr>
+<tr><td><span class="cls won">✓ Won</span></td><td class="n">—</td><td>Converted — leaves the queue</td><td>Deposit paid or agreement signed</td></tr>
+<tr><td><span class="cls cold">✕ Lost</span></td><td class="n">—</td><td>Disqualified / not interested</td><td>Explicit no, or unfit for both venues</td></tr>
 </tbody></table></div>
+<p><strong>A new lead is never Cold by default.</strong> With too little information it is <em>Not scored yet</em> (shown with the missing fields), not a low score.</p>
 
-<!-- 03 -->
-<h2 id="research"><span class="sec-eyebrow">03</span>Research &amp; sources</h2>
-<p class="intro">Evidence tagged by type; vendor figures are not treated as universal. Verified facts vs. recommendations are distinguished throughout.</p>
-<ul>
-<li><strong>Probability calibration</strong> — map raw model outputs to true frequencies: Platt (sigmoid) for small data; isotonic only with ample data (scikit-learn warns isotonic overfits with &lt;&lt;1000 samples); calibrate on data <em>not</em> used to fit the model.<sup><a href="#s-sklearn">1</a></sup> <span class="small">(official docs)</span></li>
-<li><strong>Sample size</strong> — the ~10 events-per-variable rule (Peduzzi 1996) is a heuristic; later work (van Smeden 2016, Ogundimu 2016, Riley 2019) shows it is context-dependent and often favours penalised methods.<sup><a href="#s-epv">2</a></sup> <span class="small">(peer-reviewed)</span></li>
-<li><strong>Leakage-free validation</strong> — train on earlier data, test on later; rolling/expanding windows; fit scalers/imputers/encoders per fold; use only features available at prediction time; compare random vs. time splits to detect leakage.<sup><a href="#s-leak">3</a></sup> <span class="small">(practitioner + docs)</span></li>
-<li><strong>Behaviour &gt; completeness; decay old activity</strong>.<sup><a href="#s-mautic">6</a></sup> Fit and engagement on two axes.<sup><a href="#s-chaffey">7</a></sup> <span class="small">(vendor/industry)</span></li>
-<li><strong>Speed-to-lead</strong> — HBR 2011 ≈7× qualifying odds within an hour; the 2007 InsideSales/MIT "21×" is a vendor-linked presentation, not peer-reviewed; both are relative odds, not conversion rates.<sup><a href="#s-hbr">8</a></sup></li>
-<li><strong>Predictive-readiness vendor yardstick</strong> — Salesforce Einstein's ≈1,000 leads/120 conversions is vendor-reported, window varies, not found on official help; reference only.<sup><a href="#s-einstein">5</a></sup></li>
-</ul>
-
-<!-- 04 -->
-<h2 id="outputs"><span class="sec-eyebrow">04</span>Two separate outputs</h2>
-<div class="two">
-<div class="out"><div class="tagline">Output A — available now</div><h4>Priority score &amp; classification</h4><p class="small" style="color:var(--ink)">Rules-based 0–100 (Fit 35 + Intent 55 + Engagement 10 − Negatives ≤25) → Hot 70–100 · Warm 40–69 · Cold 0–39, with overrides (confirmed tour → Warm; deposit → Hot; Won/Lost exits).</p><p class="small"><strong>Is:</strong> a priority ranking. <strong>Is not:</strong> a probability. Never printed with "%". Specified in <code>final-specification.html</code>.</p></div>
-<div class="out" style="border-color:var(--good)"><div class="tagline" style="color:var(--good)">Output B — phased in</div><h4>Conversion probability</h4><p class="small" style="color:var(--ink)">A model-estimated P(confirmed booking within the window), 0–100%, from CPH/ACD outcomes, calibrated and validated.</p><p class="small"><strong>Shown only</strong> when the model passes calibration + out-of-time validation for the relevant venue/segment. Otherwise hidden; the priority score stands in.</p></div>
-</div>
-<p>The two can disagree and that is expected: a lead can be high <em>priority</em> (worth a call now) yet modest <em>probability</em> (early in a long sales cycle), or vice-versa. They answer different questions — <em>"who first?"</em> vs. <em>"how likely?"</em> — and are displayed as distinct fields. Follow-up urgency remains a third, separate signal.</p>
-
-<!-- 05 -->
-<h2 id="probdef"><span class="sec-eyebrow">05</span>Conversion probability — outcome &amp; prediction window</h2>
-<h3>Outcome label</h3>
-<p><code>y = 1</code> if the lead reaches <strong>Won</strong> — a <em>paid reservation deposit</em> or a <em>signed agreement</em>, whichever the business treats as the commitment point — within the prediction window of the inquiry date; <code>y = 0</code> otherwise. Lost/disqualified leads are <code>y = 0</code>. Leads whose window has not yet fully elapsed are <strong>right-censored</strong>: excluded from the binary training set, or modelled with survival methods (below). Define one commitment point and apply it consistently so labels are unambiguous.</p>
-<h3>Prediction window — derive it, don't guess</h3>
-<p>Event-venue lead times are long and vary by event type (a wedding booked 9–14 months out differs from a birthday booked in weeks). So the window is a <strong>parameter computed from history</strong>, not a fixed number:</p>
-<ul>
-<li>Compute the distribution of <em>inquiry → deposit</em> intervals from past bookings, <strong>per event type and venue</strong>.</li>
-<li>Set the window at a high percentile (e.g. the point by which the large majority of eventual deposits have historically landed). State it explicitly, e.g. <code>W = ⟨p90 of inquiry→deposit, from data⟩</code>.</li>
-<li>Because horizons are long and censoring is heavy, the more rigorous option is a <strong>discrete-time hazard / survival model</strong> (probability of booking by horizon <em>t</em>), which uses censored leads correctly instead of discarding them. Recommended once volume allows; the binary-within-W model is the simpler start.</li>
-</ul>
-<div class="call"><span class="k">Why this matters</span><p>A fixed 180-day window would mislabel a still-live 10-month wedding lead as a non-booking. Deriving W from real lead times (or using survival framing) is what makes the probability defensible rather than arbitrary.</p></div>
-
-<!-- 06 -->
-<h2 id="model"><span class="sec-eyebrow">06</span>Recommended model &amp; required data</h2>
-<figure>
-<div class="fig-h">Model maturity ladder — advance only when data earns it</div>
-<div class="ladder">
-<div class="lstep"><div class="n">Rung 0 · now</div><h4>Reference-class base rate</h4><p>P = historical booking rate of leads in the same <em>segment/milestone</em> (e.g. "attended a tour"). A real, data-grounded probability; no ML; fully explainable. Needs only counts.</p></div>
-<div class="lstep"><div class="n">Rung 1 · modest data</div><h4>Calibrated logistic regression</h4><p>Few, strong features; penalised (ridge/LASSO) when thin; coefficients stay interpretable. Wrap in Platt calibration.<sup><a href="#s-sklearn">1</a></sup></p></div>
-<div class="lstep"><div class="n">Rung 2 · ample data</div><h4>Gradient-boosted trees</h4><p>Captures interactions; only when per-venue volume supports it and it beats Rung 1 on out-of-time calibration. Always calibrated (isotonic if ≥~1000).<sup><a href="#s-sklearn">1</a></sup></p></div>
-</div>
-<figcaption><b>Principle</b> &nbsp;Each rung outputs a genuine probability and is honest about its uncertainty. Start at Rung 0 — it needs no model and is immediately defensible — and climb only when validation shows the next rung is better calibrated, not merely more complex.</figcaption>
-</figure>
-<h3>Required historical data</h3>
-<ul>
-<li><strong>Labels:</strong> per lead, did it reach Won within W (and the deposit/agreement date) — to compute y and lead times.</li>
-<li><strong>Point-in-time features:</strong> each event with a reliable timestamp, so features can be reconstructed <em>as known at any scoring moment</em> (no future information).</li>
-<li><strong>Venue &amp; event type</strong> on every lead, for per-venue/segment modelling and the window.</li>
-<li><strong>Enough events</strong> (the minority class = bookings) — judged by context, not a fixed cutoff (§09).</li>
-</ul>
-
-<!-- 07 -->
-<h2 id="features"><span class="sec-eyebrow">07</span>Feature framework</h2>
-<p class="intro">The same CRM signals that drive the rules score become model features — but as point-in-time snapshots, de-duplicated, with unknowns kept neutral.</p>
-<div class="tablewrap"><table class="tight">
-<thead><tr><th>Feature</th><th>Definition / source</th><th>Timing</th><th>Stacking / dedup</th><th>Decay / reversal</th></tr></thead>
+<!-- 2 -->
+<h2><span class="n">2</span>The scoring matrix</h2>
+<p><code>Score = Fit + Buying Intent + Engagement − Negative Signals</code>, clamped to 0–100. <strong>Buying Intent</strong> uses the <em>highest milestone reached</em> (it does not add milestones together, so one tour isn't counted twice). Unknown fields score <strong>0</strong> — never negative.</p>
+<div class="tablewrap"><table>
+<caption>One scoring table — proposed weights, to validate against outcomes</caption>
+<thead><tr><th>Signal</th><th class="n">Points</th><th>How it is applied</th></tr></thead>
 <tbody>
-<tr><td>Inquiry specificity</td><td>Count of qualifying fields present + free-text richness at inquiry</td><td>At inquiry</td><td>Single value</td><td>Static</td></tr>
-<tr><td>Self-booked tour (Calendly)</td><td>Confirmed self-serve booking</td><td>On webhook</td><td>Distinct from "requested"; one per tour (idempotent by id)</td><td>Reverts on cancel</td></tr>
-<tr><td>Unconfirmed tour request</td><td>Asked, no held slot</td><td>On log</td><td>Superseded by a confirmed booking (no double count)</td><td>Expires if never booked</td></tr>
-<tr><td>Tour attended / no-show</td><td>Attendance outcome</td><td>At tour</td><td>Replaces "booked"; one outcome per tour</td><td>No-show reversible on reschedule+attend</td></tr>
-<tr><td>Speed to first reply</td><td>Inquiry → first meaningful two-way, where timestamps reliable<sup><a href="#s-hbr">8</a></sup></td><td>On first reply</td><td>Single value</td><td>Static once set</td></tr>
-<tr><td>Responsiveness / recency</td><td>Reply count; days since last meaningful contact</td><td>On reply + nightly</td><td>Collapse duplicate inbound in a window</td><td>Recency decays<sup><a href="#s-mautic">6</a></sup></td></tr>
-<tr><td>Event-date lead time</td><td>Days from inquiry/now to event date</td><td>On update + nightly</td><td>Single value</td><td>Recomputed</td></tr>
-<tr><td>Guest-vs-capacity fit</td><td>Guests ÷ selected-venue capacity (CPH 300 / ACD 100)</td><td>On update</td><td>Single value</td><td>&gt;capacity → disqualifier feature</td></tr>
-<tr><td>Budget fit</td><td>aligned / flexible / unknown / incompatible</td><td>On update</td><td>Single value</td><td><strong>Unknown = neutral</strong>, not negative</td></tr>
-<tr><td>Quote stage</td><td>requested / sent / revised</td><td>On quote event</td><td>One "quoted" state (request+send ≠ two)</td><td>Persists</td></tr>
-<tr><td>Deposit / booking-readiness</td><td>Asked how to reserve / deposit</td><td>On log</td><td>One "booking-intent" state</td><td>Persists</td></tr>
-<tr><td>Negative signals</td><td>No-show, repeated reschedule, prolonged silence after engagement</td><td>Event + nightly</td><td>Capped; one per cause</td><td>Reversible on recovery</td></tr>
-<tr><td>Disqualification / disinterest</td><td>Explicit no / unfit</td><td>On log</td><td>Terminal</td><td>Staff reopen only</td></tr>
-</tbody></table></div>
-<p class="small"><strong>Anti-leakage &amp; anti-double-count:</strong> every feature must be reconstructable from events dated at or before the scoring moment; correlated events (a booking and its automated confirmation) collapse to one state; unknown fields are encoded as an explicit "unknown" category, never imputed as a bad value.</p>
+<tr class="grp"><td colspan="3">Fit &amp; inquiry quality — max 35</td></tr>
+<tr><td>Inquiry quality — event type &amp; a serviceable date given</td><td class="n">15</td><td>Type 7 + date 8; recomputed when fields change</td></tr>
+<tr><td>Guest count within the venue's capacity</td><td class="n">10</td><td>Fits CPH ≤300 / ACD ≤100; over both → <span class="negc">disqualify</span></td></tr>
+<tr><td>Budget alignment</td><td class="n">10</td><td>Aligned 10 · flexible 6 · <strong>unknown 0 (neutral)</strong> · far below min → <span class="negc">disqualify</span></td></tr>
+<tr class="grp"><td colspan="3">Buying intent — max 55 · highest milestone wins</td></tr>
+<tr><td>Unconfirmed tour <em>request</em> (no slot yet)</td><td class="n">15</td><td>Intent signal; does <strong>not</strong> force Warm on its own</td></tr>
+<tr><td><strong>Calendly tour booked</strong> (confirmed, self-serve)</td><td class="n pos">28</td><td>25 + 3 self-booked bonus · <strong>→ at least Warm</strong> (§3)</td></tr>
+<tr><td>Tour attended</td><td class="n pos">38</td><td>Replaces "booked" · → at least Warm</td></tr>
+<tr><td>Quote requested or sent</td><td class="n pos">45</td><td>Request + send count once (not twice)</td></tr>
+<tr><td>Deposit / "how do I reserve" discussion</td><td class="n pos">52</td><td><strong>→ Hot</strong> (§3)</td></tr>
+<tr class="grp"><td colspan="3">Engagement — max 10 · fades with silence</td></tr>
+<tr><td>Responsiveness — actively replying</td><td class="n">10</td><td>Two-way replies 6 + prompt/repeat 4; decays to 0 over ~30–45 days of silence; returns on any reply</td></tr>
+<tr class="grp"><td colspan="3">Negative signals — capped at −25 · reversible</td></tr>
+<tr><td>Tour no-show</td><td class="n negc">−10</td><td>Temporary; clears if they reschedule &amp; attend</td></tr>
+<tr><td>Repeated cancels / reschedules</td><td class="n negc">−6</td><td>After the second time</td></tr>
+<tr><td>Prolonged silence after prior engagement</td><td class="n negc">−8</td><td>≥3 unanswered follow-ups; clears on any reply</td></tr>
+<tr><td>Explicit disinterest / disqualified</td><td class="n negc">Lost</td><td>Moves to Lost — overrides the score</td></tr>
+</tbody>
+<tfoot><tr><td>Positive total</td><td class="n">100</td><td>35 + 55 + 10</td></tr></tfoot>
+</table></div>
+<p style="font-size:13.5px;color:var(--muted)"><strong>Data completeness is tracked separately</strong> (how many key fields are known) as a readiness indicator — it never adds or removes points.</p>
 
-<!-- 08 -->
-<h2 id="automation"><span class="sec-eyebrow">08</span>CRM automation &amp; backend</h2>
-<figure>
-<div class="fig-h">One server-side pipeline — rules &amp; probability recomputed together</div>
-<div class="flow">
-<div class="fstep sig"><div class="fdot">1</div><div class="fname">Event</div><div class="fsub">Webhook / log / field change</div></div>
-<div class="fstep"><div class="fdot">2</div><div class="fname">Dedupe</div><div class="fsub">Idempotent by event id</div></div>
-<div class="fstep"><div class="fdot">3</div><div class="fname">Snapshot</div><div class="fsub">Rebuild point-in-time features</div></div>
-<div class="fstep sig"><div class="fdot">4</div><div class="fname">Score + Predict</div><div class="fsub">Rules score &amp; (if live) P(book)</div></div>
-<div class="fstep"><div class="fdot">5</div><div class="fname">Explain</div><div class="fsub">Top factors + which output shown</div></div>
-<div class="fstep conv"><div class="fdot">6</div><div class="fname">Persist</div><div class="fsub">Audit log; desktop = mobile</div></div>
-</div>
-<figcaption>Recompute on: new inquiry · field change/correction · tour booked/attended/missed/rescheduled/cancelled · reply/inactivity · quote requested/sent · deposit discussed/received · agreement signed · duplicate event (ignored). One source of truth; idempotent; audited; clients render stored values. <strong>Confirmed self-booked tour → Warm immediately</strong> (Output A), independent of Output B.</figcaption>
-</figure>
-<p><strong>When probability updates:</strong> each event produces a new feature snapshot → a fresh P from the live model; the value and its inputs are logged. <strong>Converted leads</strong> (Won) have a realised outcome — show "Booked", not a prediction — and exit prospect prioritisation. If the model is not live for a lead's venue/segment, the probability field reads "not yet available" and the priority score is shown instead.</p>
-
-<!-- 09 -->
-<h2 id="validation"><span class="sec-eyebrow">09</span>Validation, calibration &amp; sample size</h2>
-<figure>
-<div class="fig-h">Leakage-free, out-of-time validation</div>
-<div class="flow">
-<div class="fstep"><div class="fdot">1</div><div class="fname">Time-split</div><div class="fsub">Train on earlier inquiries, test on later</div></div>
-<div class="fstep"><div class="fdot">2</div><div class="fname">Per-fold prep</div><div class="fsub">Fit imputers/scalers inside each fold only</div></div>
-<div class="fstep sig"><div class="fdot">3</div><div class="fname">Calibrate</div><div class="fsub">On held-out data (Platt / isotonic)</div></div>
-<div class="fstep"><div class="fdot">4</div><div class="fname">Measure</div><div class="fsub">Reliability + Brier; AUC; FP/FN</div></div>
-<div class="fstep conv"><div class="fdot">5</div><div class="fname">Monitor</div><div class="fsub">Drift; scheduled review</div></div>
-</div>
-<figcaption>Random train/test splits on time-ordered leads leak the future into the past — always split chronologically and keep every feature to information available at the prediction point.<sup><a href="#s-leak">3</a></sup></figcaption>
-</figure>
-<div class="two">
-<figure style="margin:0">
-<div class="fig-h">Calibration — what "good" looks like <span class="illus">Conceptual</span></div>
-<svg viewBox="0 0 200 150" width="100%" height="150" role="img" aria-label="Reliability diagram concept: the dashed diagonal is perfect calibration; a curve below it is over-confident, a curve above is under-confident.">
-<line class="ax" x1="30" y1="120" x2="180" y2="120"/><line class="ax" x1="30" y1="120" x2="30" y2="15"/>
-<line class="perf" x1="30" y1="120" x2="180" y2="15"/>
-<path class="curve c1" d="M30,120 C80,110 110,70 180,15"/>
-<path class="curve c2" d="M30,120 C100,60 140,35 180,15"/>
-<text x="92" y="138">predicted P</text>
-<text x="6" y="70" transform="rotate(-90 10,70)">observed</text>
-<text x="120" y="96" fill="var(--viz)">over-confident</text>
-<text x="70" y="40" fill="var(--neg)">under-confident</text>
-</svg>
-<figcaption><b>Read it</b> &nbsp;Points on the dashed diagonal = predicted matches observed. Off-diagonal = miscalibrated; Brier score summarises it in one number. Schematic only — no measured data.</figcaption>
-</figure>
-<div>
-<h3 style="margin-top:0">Sample size — context, not a cutoff</h3>
-<p class="small">The ≈10-events-per-predictor heuristic is a <em>starting point</em>, challenged as a fixed rule; higher EPV or penalised regression is advised when bookings are rare, and modern guidance favours performance-based sizing.<sup><a href="#s-epv">2</a></sup> Practically: begin at Rung 0 (base rates need only counts), keep features few, penalise, and climb rungs per venue only when out-of-time calibration holds. Treat any single threshold (including the Salesforce vendor figure<sup><a href="#s-einstein">5</a></sup>) as context-dependent.</p>
-<h3>Per venue &amp; bias</h3>
-<p class="small">Validate CPH and ACD separately where samples allow; otherwise pool with a venue feature and note the limitation. Watch that the model doesn't systematically under-score new or thin-data leads, or encode staff-follow-up patterns as if they were customer intent.</p>
-</div>
-</div>
-<figure>
-<div class="fig-h">Error framing</div>
-<div class="cm">
-<div class="hd"></div><div class="hd">Booked</div><div class="hd">Not booked</div>
-<div class="hd">High P</div><div class="tp"><b>True +</b>prioritised right</div><div class="fp"><b>False +</b>wasted effort</div>
-<div class="hd">Low P</div><div class="fn"><b>False −</b>missed revenue (costliest)</div><div class="tn"><b>True −</b>rested right</div>
-</div>
-<figcaption>Track both error types at the chosen decision threshold, and choose that threshold from the business cost of a missed booking vs. wasted effort — not a default 0.5.</figcaption>
-</figure>
-
-<!-- 10 -->
-<h2 id="examples"><span class="sec-eyebrow">10</span>Worked examples</h2>
-<p class="intro">Showing the <em>mechanism</em>, not invented percentages. <code>⟨rate⟩</code> = a value the venue's own data supplies; never a number made up here.</p>
-<div class="tablewrap"><table class="tight">
-<thead><tr><th>#</th><th>Lead</th><th>Output A (priority)</th><th>Output B (probability)</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>New inquiry, type only, not contacted</td><td>Not scored yet</td><td><strong>Hidden</strong> — insufficient features; show priority, no %</td></tr>
-<tr><td>2</td><td>Self-books Calendly tour immediately</td><td><strong>Warm</strong> (override)</td><td>Rung 0: P = ⟨booking rate of self-booked-tour leads⟩, labelled "indicative" if the segment is small</td></tr>
-<tr><td>3</td><td>Unconfirmed tour request, no date</td><td>Not scored — high intent</td><td>P = ⟨rate of tour-request-only leads⟩ (lower segment than confirmed); or hidden if sample tiny</td></tr>
-<tr><td>4</td><td>Attended tour + requested quote</td><td>Hot</td><td>P = ⟨rate of toured+quoted leads⟩ — typically a strong segment</td></tr>
-<tr><td>5</td><td>Asks how to pay a deposit</td><td>Hot (floor)</td><td>P from the booking-readiness segment / model; highest pre-conversion band</td></tr>
-<tr><td>6</td><td>No-show, no reschedule</td><td>Cools (reversible −)</td><td>P moves to the no-show segment rate (lower); recovers if they rebook+attend</td></tr>
-<tr><td>7</td><td>Strong intent, unknown budget &amp; guests</td><td>Warm (confirmed tour)</td><td>Unknown fields enter as "unknown" (neutral); P from the features that <em>are</em> known</td></tr>
-<tr><td>8</td><td>Converted — deposit paid</td><td>Won (exits queue)</td><td><strong>Realised</strong> — show "Booked", not a prediction</td></tr>
-<tr><td>9</td><td>Any lead, model not live for its venue</td><td>Priority score shown</td><td>"Probability not yet available"</td></tr>
-</tbody></table></div>
-<p class="small">Ex. 2 preserves the business rule (Warm now) while Output B stays honest (a real segment rate or nothing). Ex. 1/9 show the fallback: no fabricated %. Ex. 8 shows conversion is a realised outcome, not a forecast.</p>
-
-<!-- 11 -->
-<h2 id="tests"><span class="sec-eyebrow">11</span>Acceptance tests</h2>
-<div class="tablewrap"><table class="tight">
-<thead><tr><th>#</th><th>Check</th><th>Pass criterion</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>Priority vs probability separated</td><td>A 70 priority is never displayed or stored as "70%"</td></tr>
-<tr><td>2</td><td>Insufficient data</td><td>No % shown; priority score / "not available" instead</td></tr>
-<tr><td>3</td><td>Confirmed self-booked tour</td><td>Classifies Warm immediately regardless of Output B</td></tr>
-<tr><td>4</td><td>Missing fields</td><td>Enter as "unknown" (neutral); do not lower P as a penalty</td></tr>
-<tr><td>5</td><td>No leakage</td><td>Features use only data dated ≤ scoring time; random-split vs time-split gap flagged<sup><a href="#s-leak">3</a></sup></td></tr>
-<tr><td>6</td><td>Calibration computed on held-out data</td><td>Reliability + Brier reported on an out-of-time set, not training data<sup><a href="#s-sklearn">1</a></sup></td></tr>
-<tr><td>7</td><td>Window labels</td><td>Censored (window-not-elapsed) leads excluded or survival-handled, not labelled non-booking</td></tr>
-<tr><td>8</td><td>Dedup / idempotent</td><td>Duplicate webhook → no change to features, score, or P</td></tr>
-<tr><td>9</td><td>Probability updates</td><td>New qualifying event → new snapshot → recomputed P, logged</td></tr>
-<tr><td>10</td><td>Converted lead</td><td>Won shows realised "Booked"; exits prioritisation &amp; prediction</td></tr>
-<tr><td>11</td><td>Per-venue</td><td>CPH/ACD validated separately where n permits; else pooled + noted</td></tr>
-<tr><td>12</td><td>Desktop = mobile</td><td>Identical stored A &amp; B values on both</td></tr>
-<tr><td>13</td><td>Drift monitor</td><td>Scheduled re-check; alert when calibration degrades</td></tr>
-<tr><td>14</td><td>No invented numbers</td><td>Every displayed % traces to a model/segment on real data</td></tr>
-<tr><td>15</td><td>Negative-signal recovery</td><td>Reply / reschedule+attend restores features and P appropriately</td></tr>
-</tbody></table></div>
-
-<!-- 12 -->
-<h2 id="roadmap"><span class="sec-eyebrow">12</span>Roadmap &amp; outstanding decisions</h2>
-<div class="phase"><div class="pnum">1</div><div class="pbody"><h4>Label &amp; history audit</h4><p class="m">Deliverable: outcome labels + inquiry→deposit lead-time distribution per venue/type · Done: W derivable; event timestamps confirmed reliable</p></div></div>
-<div class="phase"><div class="pnum">2</div><div class="pbody"><h4>Rung 0 base rates</h4><p class="m">Deliverable: segment booking rates (real probabilities) with sample-size labels · Done: shown only where n is adequate; small segments marked indicative or hidden</p></div></div>
-<div class="phase"><div class="pnum">3</div><div class="pbody"><h4>Rung 1 calibrated logistic</h4><p class="m">Deliverable: penalised model + Platt calibration, out-of-time validated · Done: beats base rate on calibration (Brier/reliability) without leakage</p></div></div>
-<div class="phase"><div class="pnum">4</div><div class="pbody"><h4>Serve + fallback</h4><p class="m">Deliverable: live P in CRM with the insufficient-data fallback &amp; explanation · Done: §11 suite passes on staging</p></div></div>
-<div class="phase"><div class="pnum">5</div><div class="pbody"><h4>Monitor &amp; (maybe) Rung 2 / survival</h4><p class="m">Deliverable: drift monitoring; GBM or discrete-time hazard only if it wins on calibration · Done: review cadence running</p></div></div>
-<h3>Decisions leadership must make</h3>
+<!-- 3 -->
+<h2><span class="n">3</span>Behaviour-driven rules (overrides)</h2>
+<p>Applied after the score, in this order — the first that matches wins:</p>
 <ol>
-<li>The commitment point for "Won" (paid deposit vs. signed agreement).</li>
-<li>Acceptance of a <em>derived</em> prediction window (and whether to invest in survival modelling for long horizons).</li>
-<li>The decision threshold trade-off (missed booking vs. wasted effort).</li>
-<li>Whether Rung-0 segment rates may be shown while small, clearly labelled, or withheld until robust.</li>
+<li><strong>Won</strong> — deposit paid or agreement signed → leaves the prospect queue.</li>
+<li><strong>Lost</strong> — explicit disinterest, or requirements fit neither venue → Cold, overrides any score.</li>
+<li><strong>Deposit discussion → Hot</strong>, regardless of the number.</li>
+<li><strong>Confirmed Calendly tour (or attended tour) → at least Warm</strong>, even if budget, guest count and everything else are missing.</li>
+<li><strong>Too little info → Not scored yet</strong> (with the missing fields), never Cold.</li>
+<li>Otherwise, classify by score (70 / 40 thresholds).</li>
 </ol>
-<h3>Developer questions to verify</h3>
+<div class="note key"><span class="k">The signature case</span><p>A customer submits an inquiry and <strong>immediately books a Calendly tour</strong>: +28 intent, and rule 4 makes them <strong>Warm on the spot</strong> — even with no budget or guest count yet. An <em>unconfirmed request</em> for a tour signals interest but does not force Warm; it is chased hard as a follow-up instead.</p></div>
+
+<!-- 4 -->
+<h2><span class="n">4</span>Automatic updates</h2>
+<p>The score and classification recalculate automatically — on the <strong>server</strong>, so desktop and mobile always match — whenever:</p>
+<ul>
+<li>A new inquiry arrives, or lead details are added or corrected.</li>
+<li>A Calendly tour is booked, rescheduled, cancelled, attended, or missed.</li>
+<li>A customer replies (or goes silent — a nightly check applies decay).</li>
+<li>A quote is requested or sent.</li>
+<li>A deposit is discussed, a deposit is received, or an agreement is signed.</li>
+</ul>
+<p>Requirements: <strong>one scoring function</strong> as the single source of truth; <strong>ignore duplicate events</strong> (same Calendly booking counts once); keep an <strong>audit log</strong> of score changes with the reason; negative signals are <strong>reversible</strong> when the customer re-engages. Each lead shows its score, classification, the top reasons, what's missing, and the recommended next action. <strong>Follow-up urgency is tracked separately</strong> from the score — a Hot lead can still have an overdue task, and a brand-new lead can need an urgent first reply.</p>
+
+<!-- 5 -->
+<h2><span class="n">5</span>Worked examples</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Lead</th><th>Calculation</th><th class="n">Score</th><th>Class</th><th>Next action</th></tr></thead>
+<tbody>
+<tr><td>New inquiry, event type only</td><td>fit 7 · intent 0 · eng 0</td><td class="n">7</td><td>Not scored yet</td><td>Respond fast; get date &amp; guests</td></tr>
+<tr><td>Inquiry + immediate Calendly tour (type &amp; date known)</td><td>15 + 28 + 0</td><td class="n">43</td><td><span class="warm">◐ Warm</span> (rule 4)</td><td>Confirm tour; qualify at the visit</td></tr>
+<tr><td>Attended tour + requested a quote (full fit, replying)</td><td>35 + 45 + 10</td><td class="n">90</td><td><span class="hot">● Hot</span></td><td>Send quote within 24h</td></tr>
+<tr><td>Asks how to pay the deposit</td><td>35 + 52 + 10</td><td class="n">97</td><td><span class="hot">● Hot</span> (rule 3)</td><td>Send agreement + deposit link</td></tr>
+<tr><td>Strong intent, budget &amp; guests unknown</td><td>15 + 28 + 6</td><td class="n">49</td><td><span class="warm">◐ Warm</span></td><td>Unknowns = 0, not a penalty</td></tr>
+<tr><td>No-show, then 3 unanswered follow-ups</td><td>25 + 28 + 0 − 18</td><td class="n">35</td><td><span class="cold">○ Cold</span></td><td>One reschedule offer; recovers if they reply</td></tr>
+<tr><td>Deposit paid</td><td>frozen</td><td class="n">—</td><td><span class="won">✓ Won</span></td><td>Hand to events team</td></tr>
+</tbody></table></div>
+<p style="font-size:13.5px;color:var(--muted)">Figures illustrative. Every example uses the one table and rules above; the score always stays within 0–100.</p>
+
+<!-- 6 -->
+<h2><span class="n">6</span>Priority score now, real probability later</h2>
+<p>Today's bands are a <strong>priority ranking</strong> — useful immediately and easy to explain. They are <strong>not</strong> a measured chance of booking, and must never be shown as one (a score of 70 is not "70% likely to book").</p>
+<p>Once the CRM has accumulated enough <strong>booked vs. not-booked history</strong>, actual probabilities can be calculated — and this is simple to start:</p>
 <ol>
-<li>Are all required event timestamps reliable and immutable enough to reconstruct point-in-time features?</li>
-<li>Where will labels, feature snapshots, model versions and the audit log live?</li>
-<li>Is there a clean historical export of leads + outcomes for backtesting, per venue?</li>
-<li>How are corrections/duplicates represented so re-derivation stays leakage-free?</li>
+<li>Record each lead's outcome: did it become a confirmed booking, and when.</li>
+<li>Compute the <strong>historical booking rate</strong> for each segment — e.g. "of leads that attended a tour, X% went on to book." That rate <em>is</em> a real, data-grounded probability.</li>
+<li>Show it only where the sample is large enough to be meaningful; otherwise keep showing the priority score. Later, a predictive model can refine these rates per venue.</li>
+</ol>
+<p>Keep the two clearly separate in the interface: the <strong>priority score</strong> (now) and the <strong>booking probability</strong> (later, labelled as such only when it is real).</p>
+
+<!-- 7 -->
+<h2><span class="n">7</span>Implementation priorities</h2>
+<ol>
+<li><span class="tag p1">First</span> &nbsp;Confirm the CRM records each signal in the table — especially Calendly booking <em>source</em>, tour attendance/no-show, replies with timestamps, quote events, and deposit/agreement events. Flag any gaps.</li>
+<li><span class="tag p1">First</span> &nbsp;Build the server-side scoring function, the six override rules, and the "Not scored yet" state. Backfill existing leads.</li>
+<li><span class="tag p2">Next</span> &nbsp;Add automatic recalculation on every event + a nightly decay job; dedupe duplicate events; keep the audit log.</li>
+<li><span class="tag p2">Next</span> &nbsp;Show score, classification, top reasons, missing info, and next action on the lead; keep follow-up urgency separate.</li>
+<li><span class="tag p3">Later</span> &nbsp;Once booking outcomes accrue, tune the weights and thresholds, then introduce segment booking rates (real probabilities) per §6.</li>
 </ol>
 
-<!-- 13 -->
-<h2 id="sources"><span class="sec-eyebrow">13</span>References</h2>
-<p class="small">Source type noted. Methodological sources (1–3) are primary/official; vendor figures (5, 8) are caveated and not treated as universal.</p>
-<ol class="srcs">
-<li id="s-sklearn"><a href="https://scikit-learn.org/stable/modules/calibration.html">scikit-learn — Probability calibration</a>: Platt (sigmoid) vs. isotonic; isotonic overfits with &lt;&lt;1000 samples; calibrate on held-out data (official documentation).</li>
-<li id="s-epv"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5045274/">van Smeden et al. (2016), BMC Med Res Methodol</a> &amp; <a href="https://link.springer.com/article/10.1186/s12874-016-0267-3">Ogundimu et al. (2016)</a> on the events-per-variable rule (after Peduzzi et al., 1996); sample size is context-dependent, penalised methods when events are rare (peer-reviewed).</li>
-<li id="s-leak"><a href="https://scikit-learn.org/stable/modules/cross_validation.html#time-series-split">scikit-learn — TimeSeriesSplit</a> and leakage guidance: chronological train/test, per-fold preprocessing, prediction-time-only features (official docs + practitioner consensus).</li>
-<li id="s-hubspot"><a href="https://grain.com/blog/hubspot-lead-scoring">HubSpot lead scoring</a>: explicit vs. implicit; decay (vendor).</li>
-<li id="s-einstein"><a href="https://www.octavehq.com/post/salesforce-einstein-ai-sales-lead-scoring-guide">Einstein Lead Scoring guide</a>: ≈1,000 leads/120 conversions — vendor-reported, window varies, not on official help; reference only.</li>
-<li id="s-mautic"><a href="https://kb.mautic.org/print-64.html">Mautic</a>: decay, negative scoring, floors (vendor).</li>
-<li id="s-chaffey"><a href="https://www.davechaffey.com/digital-marketing-glossary/lead-scoring-and-grading/">Dave Chaffey</a>: fit × interest grid (industry reference).</li>
-<li id="s-hbr"><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads">HBR (2011)</a> ≈7× within an hour; the 2007 <a href="https://www.insidesales.com/xant-com-research-stuns-2007-marketing-sherpa-b2b-summit">InsideSales/MIT MarketingSherpa presentation</a> "21×" — vendor-linked, not peer-reviewed; relative odds, not conversion rates.</li>
-</ol>
+<div class="note"><span class="k">Decisions for leadership</span><p>Approve: (1) the weights and the 70/40 thresholds; (2) the rule that a confirmed Calendly tour = Warm and a deposit discussion = Hot; (3) treating missing info as neutral and new leads as "Not scored yet"; (4) that the number is a priority score, not a booking probability, until §6 is in place.</p></div>
 
 <div class="foot">
-<p>Conversion-probability specification for Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard. October 2026. Extends the rules-based final spec (Output A); adds the model-based probability (Output B). Research, proposed rules and recommendations only — no interface built, no performance figure invented. Every displayed probability must trace to a validated, calibrated model on the venues' own data.</p>
+<p>Lead-scoring build specification for Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard. October 2026. Proposed rules for review and implementation; all weights, thresholds and percentage bands are provisional scoring bands pending validation against real booking outcomes — not measured probabilities.</p>
 </div>
-
-</main></div>
-<script>
-(function(){var links=[].slice.call(document.querySelectorAll('nav.toc a')),map={};
-links.forEach(function(a){var el=document.getElementById(a.getAttribute('href').slice(1));if(el)map[el.id]=a;});
-if(!('IntersectionObserver' in window))return;
-var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('cur')});if(map[e.target.id])map[e.target.id].classList.add('cur');}});},{rootMargin:'-8% 0px -84% 0px'});
-Object.keys(map).forEach(function(id){obs.observe(document.getElementById(id));});})();
-</script>
+</main>
 </body>
 </html>
