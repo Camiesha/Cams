@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPH / ACD Lead Scoring Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 24px 90px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;gap:24px}nav.toc{position:static}}
+nav.toc{position:sticky;top:24px;align-self:start;font-size:13.5px;max-height:calc(100vh - 48px);overflow:auto}
+nav.toc .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:4px 0;border-left:2px solid var(--line);padding-left:12px}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--wine);color:var(--wine);outline:none}
+main{min-width:0;max-width:820px}
+header.top{margin-bottom:40px}
+h1,h2,h3{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(34px,5vw,50px);letter-spacing:-.01em}
+h2{font-size:28px;margin:60px 0 14px;padding-top:20px;border-top:1px solid var(--line)}
+h3{font-size:20px;margin:30px 0 8px}
+h4{font-family:"Source Sans 3",sans-serif;font-size:16px;font-weight:600;margin:18px 0 4px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--wine)}
+.meta{color:var(--muted);font-size:15px;margin-top:10px;font-family:"IBM Plex Mono",monospace}
+p{margin:0 0 14px;max-width:72ch}
+.lede{font-size:19px;max-width:64ch}
+ul,ol{padding-left:20px;margin:0 0 14px;max-width:72ch}li{margin-bottom:5px}
+a{color:var(--wine)}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--code);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+.notice{background:var(--gold-soft);border-left:3px solid var(--gold);padding:14px 18px;margin:22px 0}
+.notice p:last-child{margin:0}
+.key{background:var(--good-soft);border-left:3px solid var(--good);padding:14px 18px;margin:22px 0}
+.key p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:bottom}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:14px 0 20px}
+tr.sub td{color:var(--muted)}
+tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.pill.high{background:var(--wine-soft);color:var(--wine)}.pill.med{background:var(--gold-soft);color:var(--gold)}.pill.low{background:var(--slate-soft);color:var(--slate)}
+.pill.pos{background:var(--good-soft);color:var(--good)}.pill.neg{background:var(--wine-soft);color:var(--wine)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+/* classification chips — meaning never by color alone: glyph + label */
+.cls{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid}
+.cls .g{font-size:12px;line-height:1}
+.cls.hot{background:var(--wine-soft);color:var(--wine);border-color:var(--wine)}
+.cls.warm{background:var(--gold-soft);color:var(--gold);border-color:var(--gold)}
+.cls.cold{background:var(--slate-soft);color:var(--slate);border-color:var(--slate)}
+.cls.ns{background:transparent;color:var(--muted);border-color:var(--line);border-style:dashed}
+/* factor bars */
+.fac{margin:4px 0}
+.fac-h{display:flex;justify-content:space-between;font-size:14px;gap:10px}
+.fac-h .pts{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--muted)}
+.bar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;border-radius:4px}
+.bar i.pos{background:var(--good)}.bar i.neg{background:var(--wine)}.bar i.fit{background:var(--slate)}.bar i.int{background:var(--gold)}
+/* mock card */
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0 22px}
+.col{background:transparent}
+.col-h{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 2px 8px;border-bottom:2px solid var(--line);margin-bottom:10px;display:flex;justify-content:space-between}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;font-size:14px}
+.card .nm{font-weight:600;font-size:15px}
+.card .sub{color:var(--muted);font-size:12.5px;margin:1px 0 8px}
+.card .row{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ring{--p:0;--c:var(--gold);width:40px;height:40px;border-radius:50%;flex:0 0 40px;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0);font-family:"IBM Plex Mono",monospace;font-size:0}
+.ring::before{content:"";width:30px;height:30px;border-radius:50%;background:var(--panel);grid-area:1/1}
+.ring b{grid-area:1/1;font-size:12px;font-family:"IBM Plex Mono",monospace;z-index:1}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--slate-soft);color:var(--slate);display:inline-flex;gap:4px;align-items:center}
+.chip.tour{background:var(--good-soft);color:var(--good)}
+.chip.warnx{background:var(--gold-soft);color:var(--gold)}
+.chip.alert{background:var(--wine-soft);color:var(--wine)}
+.nextline{margin-top:8px;font-size:12.5px;color:var(--ink);border-top:1px dashed var(--line);padding-top:7px}
+.nextline b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block}
+/* legend swatch */
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:6px;border:1px solid rgba(0,0,0,.12)}
+/* breakdown panel mock */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+.panel .ph{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.panel .ph .big{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:500}
+.seg{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.code{position:relative;background:var(--code);border:1px solid var(--line);margin:12px 0 20px;border-radius:6px}
+.code pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.5}
+.copy{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:4px 10px;cursor:pointer;border-radius:4px}
+.code .copy{position:absolute;top:8px;right:8px}
+.copy:hover,.copy:focus-visible{border-color:var(--wine);color:var(--wine);outline:none}
+.copy.done{background:var(--wine);color:#fff;border-color:var(--wine)}
+/* timeline */
+.tl{list-style:none;padding:0;margin:14px 0 20px;max-width:none}
+.tl li{position:relative;padding:0 0 16px 26px;border-left:2px solid var(--line);margin:0}
+.tl li::before{content:"";position:absolute;left:-7px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--panel);border:2px solid var(--slate)}
+.tl li.up::before{border-color:var(--good)}.tl li.down::before{border-color:var(--wine)}
+.tl .when{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted)}
+.tl .delta{font-family:"IBM Plex Mono",monospace;font-size:12px;font-variant-numeric:tabular-nums}
+.tl .delta.up{color:var(--good)}.tl .delta.down{color:var(--wine)}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.btn{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:9px 14px;border:1px solid var(--wine);color:var(--wine);background:transparent;border-radius:6px;text-decoration:none;display:inline-block}
+.btn.solid{background:var(--wine);color:#fff}
+.small{font-size:13.5px;color:var(--muted)}
+sup a{text-decoration:none;font-size:.7em;padding:0 1px}
+@media (prefers-reduced-motion:no-preference){.copy{transition:background .15s,color .15s}}
+</style>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Sections"><div class="eyebrow">Contents</div>
+<a href="#summary">1 · Executive summary</a>
+<a href="#audit">2 · Current model audit</a>
+<a href="#research">3 · Research &amp; best practice</a>
+<a href="#architecture">4 · Scoring architecture</a>
+<a href="#matrix">5 · Final scoring matrix</a>
+<a href="#classes">6 · Hot / Warm / Cold rules</a>
+<a href="#calc">7 · Calculation &amp; worked examples</a>
+<a href="#backend">8 · Automation &amp; backend</a>
+<a href="#ui">9 · CRM UI recommendations</a>
+<a href="#testing">10 · Testing &amp; validation</a>
+<a href="#roadmap">11 · Implementation roadmap</a>
+<a href="#visual">12 · Visual redesign</a>
+<a href="#final">Final recommendation</a>
+<a href="#sources">Sources</a>
+</nav>
+<main>
+<header class="top">
+<div class="eyebrow">CRM Lead-Scoring Research &amp; Redesign · October 2026</div>
+<h1>A Buying-Intent Lead Score for CPH &amp; ACD</h1>
+<div class="meta">Crown Prince Event Hall (CPH) · Alvin Studio &amp; Courtyard (ACD) · event-venue CRM · scoring methodology + UI specification + prototype</div>
+<p class="lede" style="margin-top:18px">A redesign of the lead score so it measures demonstrated buying intent and real progress toward a booking — not form completeness. Written to be handed directly to the CRM developer as scoring rules, backend logic, UI specs and test cases. A clickable prototype accompanies this document.</p>
+</header>
+
+<div class="notice"><p><strong>Read first — scope and honesty of the number.</strong> The figure this model produces is a <em>weighted buying-intent priority score out of 100</em>. It is <strong>not</strong> a statistically validated probability that a lead will book. Those are different things (§4, §5). Every sample score, conversion rate and threshold in this document is <strong>illustrative</strong> until it is recalibrated against CPH/ACD's own historical bookings (§10). Point values are starting assumptions to validate with data, not industry constants.</p></div>
+
+<!-- ============ 1 EXEC SUMMARY ============ -->
+<h2 id="summary">1 · Executive summary</h2>
+<p>The current model scores a lead mostly on how completely its profile is filled in and whether staff performed administrative actions (a phone call, a bar/catering question answered). It barely registers what the <em>customer</em> did. The result is backwards: a stranger who fills in a tidy form outscores a serious buyer who booked a tour the moment they inquired.</p>
+<p><strong>Recommended direction — a two-axis, lifecycle-aware score with classification overrides:</strong></p>
+<ul>
+<li><strong>Intent &amp; behaviour is the dominant axis (55 of 100 points).</strong> Points are driven by the furthest <em>booking milestone</em> the customer reaches — responded → tour booked → tour completed → quote → booking-intent — so the score rises as a real buyer progresses and cannot be gamed by filling in fields.</li>
+<li><strong>Fit / qualification is the secondary axis (35 points)</strong> — event type, serviceable date, guest count within capacity, date availability, budget alignment. <strong>Unknown fields score 0, never a penalty.</strong></li>
+<li><strong>Engagement quality (10 points)</strong> is the only pool that decays with silence, so an old reply doesn't keep a dead lead warm.</li>
+<li><strong>Negative signals</strong> (no-show, repeated non-response) are capped and mostly reversible; hard disqualifiers move the lead to a <em>Lost</em> lifecycle state rather than just denting the score.</li>
+<li><strong>Classification overrides</strong> guarantee the behaviour the business cares about: a self-booked Calendly tour makes a lead <strong>at least Warm</strong> even with an empty profile; a deposit discussion makes it <strong>Hot</strong>.</li>
+<li><strong>"Not scored yet"</strong> is a real state for new/uncontacted leads with too little information — shown with the missing fields and a next action, <strong>never a misleading low percentage that reads as "Cold".</strong></li>
+<li><strong>A booking is a conversion, not a 100-point prospect.</strong> Deposit paid / agreement signed moves the lead to a <em>Won</em> lifecycle state and retires it from active prospect scoring.</li>
+</ul>
+<p>The UI redesign turns the score into a decision aid: a compact card showing score, classification, tour status, last activity and the single next action; a click-to-open breakdown that separates <em>positive signals</em>, <em>attention items</em> and <em>genuinely unknown</em> fields; a score-vs-event timeline; and a prioritisation dashboard that ranks by urgency, not score alone. Everything is specified to reuse existing CRM lead and event records, compute on the server in California time, and keep weights in configuration so they can be tuned without a rewrite.</p>
+
+<!-- ============ 2 AUDIT ============ -->
+<h2 id="audit">2 · Current model audit — keep, change, drop</h2>
+<p>The current 100-point model and its known problems, assessed factor by factor.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Current factor</th><th class="n">Now</th><th>Verdict</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Guest count (200+ = full 30)</td><td class="n">30</td><td><span class="pill med">Change</span></td><td>Over-weighted, and "bigger is better" is wrong for a venue. A 300-guest wedding is not 5× more valuable than a 120-guest one that fills a weekend. Re-cast as <em>capacity &amp; package fit</em> worth 8, per venue.</td></tr>
+<tr><td>Event date window</td><td class="n">30</td><td><span class="pill med">Change</span></td><td>Keep a planning-window idea but cut to 10 and simplify. Date <em>urgency</em> (imminent events) belongs in prioritisation / next-action, not in the buying-intent score.</td></tr>
+<tr><td>Phone call completed (by staff)</td><td class="n">10</td><td><span class="pill high">Drop from score</span></td><td>A staff action is not customer intent. Rewarding it inflates leads the team happened to dial. A <em>customer reply</em> is the signal; track the call as activity, score the response.</td></tr>
+<tr><td>Bar/catering question answered</td><td class="n">10</td><td><span class="pill high">Drop / fold in</span></td><td>Pure profile completeness. Fold into engagement only if it came from a genuine two-way exchange; otherwise it is administrative.</td></tr>
+<tr><td>Event type provided</td><td class="n">10</td><td><span class="pill low">Keep, reduce</span></td><td>Legitimate fit signal; reduce to 6 and require it be serviceable.</td></tr>
+<tr><td>Email &amp; phone available</td><td class="n">10</td><td><span class="pill low">Keep as gate</span></td><td>Contactability matters, but as a data-readiness gate and small fit input, not a headline driver.</td></tr>
+<tr><td>Budget</td><td class="n">0</td><td><span class="pill high">Add (as fit)</span></td><td>Missing today. Add as a <em>qualification</em> factor worth 6 — aligned/flexible earns points, <strong>unknown is neutral</strong>, far-below-minimum is a disqualifier flag. Budget is fit, not buying intent.</td></tr>
+<tr><td colspan="4" style="color:var(--muted);padding-top:14px"><strong>Missing entirely — the costly gaps:</strong> tour booking (esp. self-booked Calendly), tour attendance / no-show, quotation requests, deposit &amp; agreement discussion, two-way responsiveness, and any lifecycle handling for Won / Lost. These are exactly the behaviours that predict a booking.</td></tr>
+</tbody></table></div>
+<p>The six stated problems are all real and all trace to one root cause: <strong>the model scores what the office recorded, not what the customer did.</strong> It cannot tell apart a lead who was never contacted, a lead who went quiet, and a lead actively closing — because it never looks at customer behaviour. The redesign fixes the cause, not the weights.</p>
+
+<!-- ============ 3 RESEARCH ============ -->
+<h2 id="research">3 · Research &amp; best practice</h2>
+<p>Five established approaches, with their fit for a small event-venue sales team. Vendor sources below describe methods credibly; the <em>specific point values</em> they quote are examples, not standards — a point made repeatedly in the literature itself.</p>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Approach</th><th>What it scores</th><th>Strength</th><th>Weakness / requirement</th></tr></thead>
+<tbody>
+<tr><td><strong>Explicit / fit</strong></td><td>Static attributes: event type, guest count, date, budget, capacity suitability</td><td>Available immediately; cheap; qualifies ICP</td><td>Says nothing about intent. A perfect-fit lead with no engagement is not sales-ready.<sup><a href="#s-prospeo">6</a></sup></td></tr>
+<tr><td><strong>Behavioural / intent</strong></td><td>Tour bookings, quote requests, availability questions, booking actions</td><td>The best near-term predictor of a booking; hard to fake</td><td>Needs reliable event capture in the CRM; nothing to score before first contact.</td></tr>
+<tr><td><strong>Engagement</strong></td><td>Replies, two-way conversations, response speed, repeat contact</td><td>Shows the relationship is live; speed matters hugely<sup><a href="#s-hbr">7</a></sup></td><td>Needs trustworthy timestamps; must decay or stale activity looks hot.<sup><a href="#s-mautic">4</a></sup></td></tr>
+<tr><td><strong>Lifecycle / milestone</strong></td><td>Progress: inquiry → qualified → tour → quote → deposit → booked</td><td>Naturally avoids double-counting; weights rise with progress; maps to the sales process<sup><a href="#s-pedowitz">8</a></sup></td><td>Requires agreed stage definitions shared by the whole team.</td></tr>
+<tr><td><strong>Predictive (ML)</strong></td><td>Historical outcomes → modelled probability of booking</td><td>Most accurate <em>once trained</em>; self-calibrating</td><td>Needs volume. Salesforce Einstein cites on the order of <strong>1,000 leads and 120 conversions</strong> before it is reliable.<sup><a href="#s-octave">3</a></sup> A single venue may take 1–2 years to reach that.</td></tr>
+</tbody></table></div>
+
+<h3>What the evidence says</h3>
+<ul>
+<li><strong>Score fit and engagement on two axes, then read them together.</strong> The most durable models keep a fit score and a behaviour/engagement score separate and act on the combination — the classic "A1" grid (fit graded A–D, interest 1–4; A1 = best).<sup><a href="#s-chaffey">5</a></sup> Neither axis alone is enough.<sup><a href="#s-prospeo">6</a></sup> <em>Established best practice.</em></li>
+<li><strong>Explicit is static, implicit (behaviour) is dynamic; the strongest leads score on both.</strong><sup><a href="#s-grain">1</a></sup> <em>Established best practice.</em></li>
+<li><strong>Decay behavioural points so recent activity outweighs old.</strong> Decay keeps a score tied to current engagement; without it, stale actions keep a dead lead looking hot.<sup><a href="#s-mautic">4</a></sup> Common example: reduce engagement points over ~30 days.<sup><a href="#s-grain">1</a></sup> <em>Established best practice.</em></li>
+<li><strong>Negative scoring has a role but needs a floor.</strong> Unsubscribes / disinterest should reduce a score; practitioners disagree on whether to allow negatives, so cap the downside and let a returning lead recover quickly.<sup><a href="#s-mautic">4</a></sup> <em>Established, with a documented debate.</em></li>
+<li><strong>Speed to respond is decisive.</strong> HBR's <em>Short Life of Online Sales Leads</em> found firms contacting a lead within an hour were ~7× more likely to have a qualifying conversation; a separate Lead Response Management study reported the odds of qualifying a lead were ~21× higher at 5 minutes than at 30.<sup><a href="#s-hbr">7</a></sup> These are <em>relative odds</em>, not conversion rates. <em>Evidence; informs the "respond fast" next-action, not the score directly.</em></li>
+<li><strong>Review weights regularly</strong> (≈ quarterly) against outcomes.<sup><a href="#s-mautic">4</a></sup> <em>Established best practice.</em></li>
+</ul>
+<div class="key"><p><strong>Our recommendation vs. the evidence.</strong> The evidence backs a two-axis, decaying, lifecycle-aligned model. <em>Our specific choices</em> — intent weighted at 55/100, the milestone ladder values, a Calendly booking forcing Warm, Hot ≥ 70 — are reasoned starting points tuned to this business, flagged throughout as "validate with data." We do <strong>not</strong> recommend a predictive ML model yet: the data volume isn't there. §10 defines the path to it.</p></div>
+
+<!-- ============ 4 ARCHITECTURE ============ -->
+<h2 id="architecture">4 · Recommended scoring architecture</h2>
+<p>Four candidate architectures were considered against the brief's explicit warning about inflating scores when only one or two factors are known.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Option</th><th>Behaviour</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td>Fixed weighted sum / 100</td><td>Points earned out of a fixed 100; absence = 0</td><td>New leads always look low → read as "Cold". The current model's core flaw.</td></tr>
+<tr><td>Normalised over known factors</td><td>Score = earned ÷ available</td><td><strong>Inflation:</strong> one known positive field → 100%. Dangerous with sparse data.</td></tr>
+<tr><td>Separate fit + behaviour scores</td><td>Two numbers, read as a grid</td><td>Accurate but two numbers are harder to show on a dense Kanban card.</td></tr>
+<tr><td><strong>Hybrid: one fixed-weight score + overrides + lifecycle states + a separate confidence indicator</strong> ✓</td><td>One 0–100 priority number for the card; classification governed by score <em>and</em> override rules <em>and</em> lifecycle; a distinct data-readiness gauge decides "Not scored yet"</td><td>Slightly more logic — but it is the only option that shows one clean number without either penalising new leads or inflating thin ones.</td></tr>
+</tbody></table></div>
+<p><strong>Recommended: the hybrid.</strong> It resolves the central tension directly:</p>
+<ul>
+<li>The <strong>priority score</strong> is a fixed-weight sum (max 100) of <em>positive earned points</em> minus a capped negative pool. Unknown ≠ negative; it is simply 0 earned, so no inflation from normalisation.</li>
+<li><strong>Not scored yet</strong> is decided by a separate <em>data-readiness / confidence</em> gauge (how many key fields are known), <em>not</em> by the low score — so a sparse new lead is "Not scored yet", not "Cold".</li>
+<li><strong>Classification overrides</strong> and <strong>lifecycle states</strong> catch the cases a raw number gets wrong (Calendly booking → Warm floor; deposit → Hot; disinterest → Lost).</li>
+</ul>
+<p>Internally this is still the two-axis model the evidence supports — fit and intent are computed separately (and both are shown in the breakdown and used by the dashboard grid) — but the card surfaces a single governed number.</p>
+
+<h3>What the percentage means — stated plainly</h3>
+<p>The headline number is a <strong>buying-intent priority score</strong>: "how strongly should a salesperson prioritise this lead right now." It is ordinal guidance, not a probability. A 90 is not "90% likely to book"; it means "well ahead of a 45 in the queue." To turn the score into a calibrated <em>probability of booking</em> requires training on CPH/ACD's own closed outcomes — see the migration path in §10. Until then the UI labels it <em>priority</em>, never <em>probability</em>.</p>
+
+<!-- ============ 5 MATRIX ============ -->
+<h2 id="matrix">5 · Final scoring matrix</h2>
+<p><code>Score = clamp( Fit + Intent + Engagement − Negatives , 0 , 100 )</code>. Caps are enforced per block so no block can overflow. Column <em>Type</em>: <strong>once</strong> = awarded once; <strong>upd</strong> = recomputed from current field value; <strong>ladder</strong> = highest milestone reached; <strong>decay</strong> = fades with inactivity; <strong>rev</strong> = reversible.</p>
+
+<h3>A · Fit / qualification — max 35</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Condition</th><th class="n">Wt</th><th>Rule</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>Event type provided &amp; serviceable</td><td class="n">6</td><td>Full if a serviceable type (wedding, quinceañera, corporate, party…); 0 if blank; disqualifier flag if clearly out of scope</td><td>once/upd</td></tr>
+<tr><td>Serviceable future event date</td><td class="n">10</td><td>Full in planning sweet-spot (≈14–300 days); 6 if 301–540 days or &lt;14-day rush; 0 if blank <em>(not penalised)</em>; past date → lifecycle check</td><td>upd</td></tr>
+<tr><td>Guest count within capacity &amp; package</td><td class="n">8</td><td>Full if a number fits the venue (CPH ≤300; ACD per its capacity) and maps to a package; 0 if blank; disqualifier flag if over capacity</td><td>upd</td></tr>
+<tr><td>Requested date confirmed available</td><td class="n">5</td><td>Full once staff/calendar confirms the date is open for that venue; 0 if unknown</td><td>upd</td></tr>
+<tr><td>Budget alignment</td><td class="n">6</td><td>Aligned to a package = 6; flexible = 4; <strong>unknown = 0 (neutral)</strong>; far below minimum with no flex = disqualifier flag</td><td>upd</td></tr>
+</tbody>
+<tfoot><tr><td>Fit subtotal</td><td class="n">35</td><td colspan="2">Contactability (email + phone) is a <em>data-readiness gate</em>, not scored points.</td></tr></tfoot>
+</table></div>
+
+<h3>B · Intent / behaviour — max 55 <span class="small">(the dominant axis)</span></h3>
+<p>Take the <strong>highest milestone reached</strong> as the base (not the sum — this prevents double-counting the same booking across fields), then add capped proactivity bonuses.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Milestone (highest reached = base)</th><th class="n">Base</th><th>Trigger</th></tr></thead>
+<tbody>
+<tr><td>Inquiry received</td><td class="n">0</td><td>Form/DM/call logged — starting point, never negative</td></tr>
+<tr><td>Engaged — genuine two-way contact</td><td class="n">10</td><td>Customer replies / a real conversation occurs</td></tr>
+<tr><td>Tour booked (Calendly self-serve <em>or</em> requested by text/email/call)</td><td class="n">25</td><td>A confirmed tour slot exists, however arranged</td></tr>
+<tr><td>Tour completed</td><td class="n">38</td><td>Attendance recorded</td></tr>
+<tr><td>Quotation requested or delivered</td><td class="n">44</td><td>Quote event exists</td></tr>
+<tr><td>Booking-intent — asks to reserve / wants agreement / discusses deposit</td><td class="n">52</td><td>Explicit move toward closing</td></tr>
+</tbody></table></div>
+<div class="tablewrap"><table>
+<thead><tr><th>Proactivity bonus (added, block capped at 55)</th><th class="n">Wt</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>Self-booked via Calendly (vs. staff-arranged)</td><td class="n">+3</td><td>once · the proactivity premium the brief calls out</td></tr>
+<tr><td>Customer initiated contact beyond the original form</td><td class="n">+2</td><td>once</td></tr>
+<tr><td>Negotiation signal — revised-quote or specific date-hold request</td><td class="n">+3</td><td>once</td></tr>
+</tbody>
+<tfoot><tr><td>Intent subtotal</td><td class="n">55</td><td>capped</td></tr></tfoot>
+</table></div>
+<p class="small">Deposit paid / agreement signed are deliberately <strong>absent</strong> from this ladder — they are the conversion exit (§6 lifecycle), not the top prospect rung.</p>
+
+<h3>C · Engagement quality — max 10 <span class="small">(the only decaying block)</span></h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Condition</th><th class="n">Wt</th><th>Rule</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>Actively responding</td><td class="n">6</td><td>≥1 meaningful two-way exchange in last 14 days</td><td>decay</td></tr>
+<tr><td>Fast / repeated engagement</td><td class="n">4</td><td>Replies quickly where timestamps are reliable, or multiple exchanges</td><td>decay</td></tr>
+</tbody>
+<tfoot><tr><td>Engagement subtotal</td><td class="n">10</td><td colspan="2">Decays linearly to 0 over ~30–45 days of silence; never goes negative.</td></tr></tfoot>
+</table></div>
+
+<h3>D · Negative modifiers — total floor −25, mostly reversible</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Signal</th><th class="n">Δ</th><th>Rule</th><th>Type</th></tr></thead>
+<tbody>
+<tr><td>Tour no-show</td><td class="n">−10</td><td>Temporary: auto-restores over 14 days, or fully on reschedule + re-attend</td><td>rev</td></tr>
+<tr><td>Client cancels / reschedules</td><td class="n">−2</td><td>First time −2; −6 if repeated (≥2)</td><td>rev</td></tr>
+<tr><td>Repeated unanswered follow-ups</td><td class="n">−8</td><td>≥3 outbound with no reply <em>after</em> prior engagement; clears on any reply. Does not apply to never-contacted leads.</td><td>rev</td></tr>
+<tr><td>Hard disqualifier</td><td class="n">—</td><td>Explicit "no longer interested", over capacity, date unavailable &amp; unwilling to move, spam/not relevant → sets <strong>Lost / Disqualified</strong> lifecycle, not a point deduction</td><td>state</td></tr>
+</tbody></table></div>
+<p>Anti-inflation / anti-spam: every scoring event is <strong>idempotent by event id</strong> (§8), and duplicate inbound messages within a short window count once — so repeated automated events or duplicated records cannot run the score up or down.</p>
+
+<!-- ============ 6 CLASSES ============ -->
+<h2 id="classes">6 · Hot / Warm / Cold classification rules</h2>
+<p>Thresholds are tuned so the worked examples (§7) land sensibly, then <strong>recalibrated against real conversion data</strong> (§10). Starting ranges:</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Class</th><th class="n">Score</th><th>Meaning</th><th>Enters when</th></tr></thead>
+<tbody>
+<tr><td><span class="cls hot"><span class="g">●</span>Hot</span></td><td class="n">70–100</td><td>Priority — act today</td><td>Tour done + quoting/booking-intent, or full fit + active + quote</td></tr>
+<tr><td><span class="cls warm"><span class="g">◐</span>Warm</span></td><td class="n">40–69</td><td>Qualified / promising — keep engaging</td><td>Tour booked, or good fit + some engagement</td></tr>
+<tr><td><span class="cls cold"><span class="g">○</span>Cold</span></td><td class="n">0–39</td><td>Low current priority — re-engage or let rest</td><td>Worked but low intent, or negative lifecycle</td></tr>
+<tr><td><span class="cls ns"><span class="g">◇</span>Not scored</span></td><td class="n">—</td><td>Too little info for a meaningful score</td><td>New / uncontacted, confidence below gate, no high-intent action yet</td></tr>
+</tbody></table></div>
+
+<h3>Critical rule — Cold is earned, not defaulted</h3>
+<p>A lead is <strong>Cold</strong> only if it has been <em>worked</em> (contacted and given a real chance to respond) and still shows low intent, <em>or</em> it hit a negative lifecycle event. A brand-new or never-contacted lead is <strong>Not scored yet</strong> — shown with its missing fields and a next action, never a red "Cold" that blames the lead for the office not calling.</p>
+
+<h3>Classification overrides (applied after the raw score)</h3>
+<ol>
+<li><strong>Calendly tour booked</strong> (not since cancelled/no-showed) → <strong>floor = Warm.</strong> The brief's headline requirement: an immediate self-booked tour is a strong buying signal regardless of empty qualification fields.</li>
+<li><strong>Tour completed</strong> → floor = Warm (and typically scores into Hot).</li>
+<li><strong>Booking-intent milestone</strong> (deposit/agreement discussion) → <strong>floor = Hot.</strong></li>
+<li><strong>Explicit disinterest / disqualified</strong> → <strong>ceiling = Cold</strong> and move to Lost lifecycle, overriding any high score.</li>
+<li><strong>Active, unrecovered no-show</strong> on a lead otherwise below Warm → may not display Hot until re-engaged.</li>
+</ol>
+
+<h3>Lifecycle states — separate from the score</h3>
+<p>Lifecycle is an operational status that runs alongside (not instead of) the score: <code>New → Working → Tour → Quoted → Negotiating → Won / Lost / Disqualified.</code></p>
+<ul>
+<li><strong>Won (Booked):</strong> deposit paid or agreement signed → lead is a <em>completed conversion</em>. Score is frozen and the lead leaves active prospect prioritisation, shown with a "Booked" badge. Deposit and signature are the exit, not ordinary scoring factors applied to an already-converted lead.</li>
+<li><strong>Lost / Disqualified:</strong> archived with a reason, classified Cold, excluded from active queues (still available for backtesting and re-engagement campaigns).</li>
+</ul>
+
+<!-- ============ 7 CALC ============ -->
+<h2 id="calc">7 · Automated calculation &amp; worked examples</h2>
+<h3>The formula</h3>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>fit        = min(35, Σ fit_points_for_known_fields)      // unknown fields contribute 0
+intent     = milestone_base(highest_reached)
+             + min(bonus_cap, Σ proactivity_bonuses)     // whole block capped at 55
+engagement = decay(active_pts + speed_pts, days_since_last_reply)   // 0..10, never < 0
+negatives  = min(25, Σ active_reversible_penalties)      // reversible; excludes never-contacted
+raw        = clamp(fit + intent + engagement - negatives, 0, 100)
+
+classification =
+  if lifecycle in {Won, Lost, Disqualified}      -> lifecycle badge (not Hot/Warm/Cold queue)
+  else if confidence < GATE and no high_intent    -> "Not scored yet"
+  else apply_overrides(band(raw))                 // band: 70+/40-69/<40 ; overrides set floors/ceilings
+confidence = known_key_fields / key_fields        // event type, date, guests, budget, contact</code></pre></div>
+<p>All of this runs <strong>server-side</strong> (§8) so desktop and mobile always agree, and all date math uses <strong>America/Los_Angeles</strong>.</p>
+
+<h3>Five worked examples</h3>
+<p class="small">Numbers illustrative; they demonstrate the mechanics, not validated outcomes.</p>
+
+<div class="panel">
+<div class="ph"><span class="cls ns"><span class="g">◇</span>Not scored</span><strong>Example 1 — brand-new inquiry, little info</strong></div>
+<p class="small">Form: event type "Wedding"; no date, guest count or budget; email + phone present; not yet contacted.</p>
+<table><tbody>
+<tr><td>Fit</td><td class="n">6</td><td>event type +6; date/guests/budget unknown → 0 (not penalised)</td></tr>
+<tr><td>Intent</td><td class="n">0</td><td>no response, no tour</td></tr>
+<tr><td>Engagement</td><td class="n">0</td><td>not contacted → 0, not a penalty</td></tr>
+<tr><td>Negatives</td><td class="n">0</td><td>never-contacted → no non-response penalty</td></tr>
+<tr class="sub"><td>Raw</td><td class="n">6</td><td>confidence 1/5 → below gate, no high-intent action</td></tr>
+</tbody></table>
+<p><strong>→ Not scored yet.</strong> Missing: date, guest count, budget. <em>Next action: respond within business hours; confirm date &amp; guest count.</em> The lead is <strong>not</strong> branded Cold for being new.</p>
+</div>
+
+<div class="panel">
+<div class="ph"><span class="big">44</span><span class="cls warm"><span class="g">◐</span>Warm</span><strong>Example 2 — new inquiry + immediate Calendly tour</strong></div>
+<p class="small">Wedding; date ≈ 240 days out; no guest count or budget; books a Calendly tour minutes after inquiring.</p>
+<table><tbody>
+<tr><td>Fit</td><td class="n">16</td><td>event type +6; serviceable date +10; guests/budget/availability unknown → 0</td></tr>
+<tr><td>Intent</td><td class="n">28</td><td>milestone <em>tour booked</em> 25; Calendly self-serve +3</td></tr>
+<tr><td>Engagement</td><td class="n">0</td><td>no two-way exchange yet</td></tr>
+<tr class="sub"><td>Raw</td><td class="n">44</td><td>already Warm band — and override #1 guarantees ≥ Warm</td></tr>
+</tbody></table>
+<p><strong>→ Warm — 44/100.</strong> <em>Next action: confirm the tour; send a short pre-tour note to capture guest count &amp; budget.</em> This is the brief's central case, handled correctly with an almost-empty profile.</p>
+</div>
+
+<div class="panel">
+<div class="ph"><span class="big">89</span><span class="cls hot"><span class="g">●</span>Hot</span><strong>Example 3 — qualified, actively communicating, requests a quote</strong></div>
+<p class="small">Corporate; ≈ 90 days out; 180 guests (fits); budget aligned; date confirmed available; several replies; requests a quotation.</p>
+<table><tbody>
+<tr><td>Fit</td><td class="n">35</td><td>all five fit fields known &amp; aligned → max</td></tr>
+<tr><td>Intent</td><td class="n">46</td><td>milestone <em>quotation</em> 44; customer-initiated +2</td></tr>
+<tr><td>Engagement</td><td class="n">8</td><td>actively responding +6; reasonably fast +2</td></tr>
+<tr class="sub"><td>Raw</td><td class="n">89</td><td>Hot band</td></tr>
+</tbody></table>
+<p><strong>→ Hot — 89/100.</strong> <em>Next action: send the quote within 24h; propose a tour / site visit to close.</em> Strong without a tour — a quote request plus perfect fit plus live conversation is genuinely hot.</p>
+</div>
+
+<div class="panel">
+<div class="ph"><span class="big">98</span><span class="cls hot"><span class="g">●</span>Hot</span><strong>Example 4 — completed tour, discussing a deposit</strong></div>
+<p class="small">Wedding; ≈ 150 days; 220 guests (fits); budget aligned; date available; tour completed; now asking how to reserve &amp; about the deposit.</p>
+<table><tbody>
+<tr><td>Fit</td><td class="n">35</td><td>all aligned</td></tr>
+<tr><td>Intent</td><td class="n">55</td><td>milestone <em>booking-intent</em> 52; date-hold +3 → capped 55</td></tr>
+<tr><td>Engagement</td><td class="n">8</td><td>active +6; fast +2</td></tr>
+<tr class="sub"><td>Raw</td><td class="n">98</td><td>Hot band; override #3 floors at Hot regardless</td></tr>
+</tbody></table>
+<p><strong>→ Hot — 98/100.</strong> <em>Next action: send agreement + deposit link; hold the date 48h.</em> The moment a deposit is paid → lifecycle <strong>Won/Booked</strong>, and the lead leaves the prospect queue.</p>
+</div>
+
+<div class="panel">
+<div class="ph"><span class="big">31</span><span class="cls cold"><span class="g">○</span>Cold</span><strong>Example 5 — was interested, then no-show &amp; silence</strong></div>
+<p class="small">Had booked a tour and replied once; then no-showed and ignored three follow-ups. Event type/date/guests known; budget unknown.</p>
+<table><tbody>
+<tr><td>Fit</td><td class="n">24</td><td>event +6; date +10; guests +8; budget unknown → 0</td></tr>
+<tr><td>Intent</td><td class="n">25</td><td>milestone <em>tour booked</em> 25 (the booking happened; the miss is a modifier)</td></tr>
+<tr><td>Engagement</td><td class="n">0</td><td>earlier replies decayed away during the silence</td></tr>
+<tr><td>Negatives</td><td class="n">−18</td><td>no-show −10 (temporary) + 3 unanswered follow-ups −8</td></tr>
+<tr class="sub"><td>Raw</td><td class="n">31</td><td>Cold band; was worked, so Cold is legitimate here</td></tr>
+</tbody></table>
+<p><strong>→ Cold — 31/100 (recoverable).</strong> <em>Next action: one reschedule offer; if no reply in 7 days, mark dormant.</em> If they reschedule and re-attend, the −10 clears and +13 (tour completed) lands → the lead climbs straight back to Warm/Hot. This is how the model tells "went quiet after interest" (recoverable Cold) apart from "disqualified" (Lost state).</p>
+</div>
+
+<!-- ============ 8 BACKEND ============ -->
+<h2 id="backend">8 · Automation &amp; backend requirements</h2>
+<h3>Compute on the server, on every relevant change</h3>
+<p>Scoring is a pure server-side function of the lead's current fields + its event log. Recalculate (idempotently) on each trigger:</p>
+<div class="grid2">
+<ul>
+<li>Inquiry created</li>
+<li>Event details added / changed</li>
+<li>Tour booked / rescheduled / cancelled / completed / no-show</li>
+<li>Customer message or reply recorded</li>
+</ul>
+<ul>
+<li>Quotation requested / created / revised</li>
+<li>Budget or package updated</li>
+<li>Booking requirements / deposit discussed</li>
+<li>Deposit recorded · agreement signed · booking confirmed / cancelled</li>
+</ul>
+</div>
+<p>Plus a nightly job for the only time-based effects — <strong>engagement decay</strong> and <strong>no-show penalty restoration</strong> — so a score can change with the passage of time without a user action.</p>
+
+<h3>Missing data — four distinct cases, never conflated</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Case</th><th>Example</th><th>Score effect</th><th>Shown as</th></tr></thead>
+<tbody>
+<tr><td>Known negative</td><td>No-showed; said "not interested"</td><td>Penalty / Lost state</td><td>Attention / risk</td></tr>
+<tr><td>Unknown / uncollected</td><td>Budget blank</td><td><strong>0 — neutral</strong></td><td>"Still unknown" (grey)</td></tr>
+<tr><td>Positive not yet occurred</td><td>Tour not booked yet</td><td>0</td><td>Opportunity / next step</td></tr>
+<tr><td>Not applicable</td><td>Budget N/A for a comp/hold</td><td>Excluded from confidence</td><td>Hidden or "n/a"</td></tr>
+</tbody></table></div>
+<p>The UI must visually distinguish "unknown budget" (grey, neutral) from "budget too low" (amber/red risk) — the brief is explicit that an unconfirmed budget must never read as "financially unqualified".</p>
+
+<h3>Persistence, audit &amp; configuration</h3>
+<ul>
+<li><strong>On the lead record:</strong> <code>score</code>, <code>classification</code>, <code>confidence</code>, <code>fit_sub</code>, <code>intent_sub</code>, <code>engagement_sub</code>, <code>lifecycle_state</code>, <code>top_positive[]</code>, <code>top_attention[]</code>, <code>unknown_fields[]</code>, <code>next_action</code>, <code>scored_at</code>.</li>
+<li><strong>Append-only <code>score_events</code> log</strong> (the audit + timeline source): <code>event_id</code> (idempotency key), <code>lead_id</code>, <code>type</code>, <code>delta</code>, <code>score_before</code>, <code>score_after</code>, <code>reason</code>, <code>source</code>, <code>occurred_at</code>. Dedupe on <code>event_id</code>; collapse duplicate inbound messages in a short window. This is what stops repeated/automated events inflating the score and what powers the trend timeline.</li>
+<li><strong>Weights &amp; thresholds live in a versioned config table</strong>, not in code — so staff/analyst can retune after backtesting without a rewrite, and each score row records which config version produced it.</li>
+<li><strong>Per-venue parameters</strong> (capacity, package budget bands) keyed by venue so CPH and ACD share one engine with different fit rules.</li>
+<li><strong>Tests:</strong> unit tests per factor; the five §7 examples as golden fixtures; idempotency test (same event twice → one delta); decay test (advance the clock); override tests; a backtest harness (§10).</li>
+</ul>
+
+<!-- ============ 9 UI ============ -->
+<h2 id="ui">9 · CRM UI recommendations</h2>
+<p>Principles: score and classification are <strong>visually distinct from the operational pipeline stage</strong> (a lead can be in "Contacted" yet score Hot); meaning is never carried by colour alone (every state pairs a glyph + label); show the few things that drive a decision, hide the rest behind a click. See §12 for the full visual system; this is the functional contract.</p>
+<ul>
+<li><strong>Pipeline card</strong> surfaces: name + event type · event date &amp; days-out · score (ring) · classification chip · tour status · last meaningful activity · one next action. Nothing else.</li>
+<li><strong>Click the score</strong> → breakdown drawer: current score &amp; class, strongest positives, attention/risks, still-unknown fields (clearly not the same as risks), per-factor contribution, recent score-changing events, recommended next action.</li>
+<li><strong>Trend timeline</strong> ties score changes to the CRM events that caused them.</li>
+<li><strong>Explainability is mandatory</strong>: every score shows its top positive and top negative drivers in plain language, sourced from <code>top_positive[]</code> / <code>top_attention[]</code>.</li>
+<li><strong>All Leads stays readable</strong>: show Hot/Warm chips only (Cold and Not-scored unlabelled or muted), exactly as today.</li>
+</ul>
+
+<!-- ============ 10 TESTING ============ -->
+<h2 id="testing">10 · Testing &amp; validation plan</h2>
+<ul>
+<li><strong>Backtest first.</strong> Replay historical leads through the engine using only data known at each point in time; compare the score/class the model <em>would</em> have given against who actually booked. Guard against look-ahead leakage (don't let a known booking inflate its own earlier score).</li>
+<li><strong>Core metrics by class:</strong> booking conversion rate for Hot / Warm / Cold (Hot should convert markedly higher or the model is miscalibrated); tour-booking &amp; attendance rate by class; lead→quote and lead→booking rates; time-to-booking.</li>
+<li><strong>Error analysis:</strong> false positives (Hot that never booked) and false negatives (Cold/low that booked — the expensive misses); inspect what the model missed.</li>
+<li><strong>Trajectory:</strong> how scores move across the journey; does a rising score precede bookings.</li>
+<li><strong>Bias watch:</strong> because the score partly reflects <em>staff</em> follow-up, monitor for leads scored low only because no one contacted them, and for differences by venue or staff member. Missing-data patterns must not become a hidden penalty.</li>
+<li><strong>Cadence:</strong> review weights quarterly against accumulated outcomes;<sup><a href="#s-mautic">4</a></sup> keep a config-version changelog.</li>
+</ul>
+<div class="key"><p><strong>When is it a probability?</strong> Only after enough closed outcomes to fit and validate a model and show the predicted probabilities match reality (calibration). As a reference point, Salesforce Einstein cites ~1,000 leads with ~120 conversions before predictive scoring is reliable.<sup><a href="#s-octave">3</a></sup> A two-venue operation will likely need <strong>12–24 months</strong> of clean data to approach that. Until then, present and label the number as a <em>priority score</em> — never as a conversion probability.</p></div>
+
+<!-- ============ 11 ROADMAP ============ -->
+<h2 id="roadmap">11 · Implementation roadmap</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Phase</th><th>Ship</th><th>Why first</th></tr></thead>
+<tbody>
+<tr><td><span class="pill high">1 · Core</span></td><td>Server scoring engine (Fit + Intent milestone + overrides), config table, <code>score_events</code> log with idempotency, "Not scored yet" + confidence gate, California-time dates. Backfill existing leads.</td><td>Fixes the root cause and the brief's headline cases (Calendly → Warm, new ≠ Cold) immediately.</td></tr>
+<tr><td><span class="pill high">2 · Behaviour depth</span></td><td>Engagement decay + nightly job, negative modifiers &amp; no-show restore, lifecycle states (Won/Lost), dedup of duplicate messages.</td><td>Completes the dynamic behaviour the score depends on.</td></tr>
+<tr><td><span class="pill med">3 · UI</span></td><td>Redesigned pipeline card, score breakdown drawer, explainability strings, All-Leads chips. (§12)</td><td>Makes the score usable day-to-day.</td></tr>
+<tr><td><span class="pill med">4 · Insight</span></td><td>Prioritisation dashboard, trend timeline, filters/sorting, mobile views.</td><td>Turns scores into daily prioritisation.</td></tr>
+<tr><td><span class="pill low">5 · Calibrate</span></td><td>Backtesting harness, quarterly weight review; <em>only once data volume allows</em>, pilot a predictive probability alongside (not replacing) the priority score.</td><td>Earns the right to call it a probability.</td></tr>
+</tbody></table></div>
+
+<!-- ============ 12 VISUAL ============ -->
+<h2 id="visual">12 · Visual CRM redesign</h2>
+<p>A working, clickable version of everything below is in the companion prototype — <code>lead-scoring/prototype.html</code> — with the pipeline board, breakdown drawer, a Calendly-booking that bumps a score live, the activity timeline, the dashboard and a mobile view. The specs here are the reference; sample data in both is labelled illustrative.</p>
+
+<h3>12.0 · Current-experience audit</h3>
+<p>Today the classification shows as a bare badge on the card, and only Hot/Warm appear in All Leads. There is no visible <em>why</em>, no tour-status at a glance, no next action, no trend, and no separation of score from pipeline stage. Scoring information is missing exactly where decisions are made: the card, a breakdown, and a prioritised list.</p>
+
+<h3>12.A · Three lead-card concepts</h3>
+<div class="board">
+<div class="col">
+<div class="col-h"><span>Concept A · Ring-led</span></div>
+<div class="card">
+<div class="row"><div><div class="nm">Maria L.</div><div class="sub">Quinceañera · Jun 6 · 234d</div></div><div class="ring" style="--p:72;--c:var(--gold)"><b>72</b></div></div>
+<div class="row" style="margin-top:4px"><span class="cls warm"><span class="g">◐</span>Warm</span><span class="small">CPH</span></div>
+<div class="chiprow"><span class="chip tour">✓ Tour booked</span><span class="chip">💬 2d ago</span></div>
+<div class="nextline"><b>Next</b>Confirm tour · send pre-tour note</div>
+</div>
+</div>
+<div class="col">
+<div class="col-h"><span>Concept B · Bar-led</span></div>
+<div class="card">
+<div class="nm">Maria L. <span class="cls warm" style="float:right"><span class="g">◐</span>72</span></div>
+<div class="sub">Quinceañera · Jun 6 · 234d · CPH</div>
+<div class="bar" style="margin:8px 0"><i class="int" style="width:72%"></i></div>
+<div class="chiprow"><span class="chip tour">✓ Tour booked</span><span class="chip warnx">⏱ Tour in 3d</span></div>
+<div class="nextline"><b>Next</b>Confirm tour · send pre-tour note</div>
+</div>
+</div>
+<div class="col">
+<div class="col-h"><span>Concept C · Minimal</span></div>
+<div class="card">
+<div class="row"><div class="nm">Maria L.</div><span class="cls warm"><span class="g">◐</span>Warm 72</span></div>
+<div class="sub">Quinceañera · Jun 6 · 234d · CPH · Tour booked</div>
+<div class="nextline"><b>Next</b>Confirm tour · send pre-tour note</div>
+</div>
+</div>
+</div>
+<p><strong>Recommended: Concept A (ring-led).</strong> On a dense Kanban column the circular ring reads as a score fastest, the classification chip carries the glyph + word for colour-blind safety, and tour/activity chips plus the next-action line give the whole decision in one glance without crowding. Concept B suits wider screens; Concept C is the All-Leads / list density fallback.</p>
+
+<h3>12.B · Score &amp; colour system</h3>
+<p>Accessible, and never colour-only — each class has a <strong>glyph + label</strong>:</p>
+<ul style="list-style:none;padding-left:0">
+<li><span class="sw" style="background:var(--wine)"></span><span class="cls hot"><span class="g">●</span>Hot</span> — filled circle · wine · highest priority</li>
+<li><span class="sw" style="background:var(--gold)"></span><span class="cls warm"><span class="g">◐</span>Warm</span> — half circle · gold · promising</li>
+<li><span class="sw" style="background:var(--slate)"></span><span class="cls cold"><span class="g">○</span>Cold</span> — open circle · slate · low priority</li>
+<li><span class="sw" style="background:var(--line)"></span><span class="cls ns"><span class="g">◇</span>Not scored</span> — dashed · neutral grey · needs info</li>
+</ul>
+<p><strong>Behaviour on change</strong> (restrained — no flashing, no dramatic motion, honouring <code>prefers-reduced-motion</code>):</p>
+<ul>
+<li>Score <strong>up</strong>: ring fills with a brief ≤300ms ease; a small green "▲ +N" appears for the session.</li>
+<li>Score <strong>down</strong>: ring eases down; muted wine "▼ −N"; no alarm.</li>
+<li><strong>Class change</strong>: chip cross-fades; the change is written to the timeline.</li>
+<li><strong>High-intent action</strong> (Calendly booking): tour chip appears + a one-line "Buying signal: tour booked" note; card may sort up.</li>
+<li><strong>Negative</strong> (no-show): amber attention chip; score dips but penalty is marked <em>temporary</em> in the breakdown.</li>
+<li><strong>Insufficient info</strong>: no number — the "Not scored" chip + a data-readiness meter.</li>
+</ul>
+
+<h3>12.C · Score breakdown panel</h3>
+<div class="panel">
+<div class="ph"><span class="ring" style="--p:72;--c:var(--gold)"><b>72</b></span><div><span class="cls warm"><span class="g">◐</span>Warm</span><div class="small" style="margin-top:3px">Maria L. · Quinceañera · CPH</div></div></div>
+<div class="seg">Positive signals</div>
+<div class="fac"><div class="fac-h"><span>Tour booked via Calendly</span><span class="pts">+25</span></div><div class="bar"><i class="pos" style="width:83%"></i></div></div>
+<div class="fac"><div class="fac-h"><span>Serviceable event date (234d)</span><span class="pts">+10</span></div><div class="bar"><i class="fit" style="width:33%"></i></div></div>
+<div class="fac"><div class="fac-h"><span>Event type identified</span><span class="pts">+6</span></div><div class="bar"><i class="fit" style="width:20%"></i></div></div>
+<div class="fac"><div class="fac-h"><span>Actively responding</span><span class="pts">+6</span></div><div class="bar"><i class="pos" style="width:20%"></i></div></div>
+<div class="seg">Attention needed</div>
+<ul style="margin:2px 0 6px"><li>Tour not yet completed (scheduled in 3 days)</li></ul>
+<div class="seg">Still unknown <span class="small">(not a negative)</span></div>
+<ul style="margin:2px 0 6px;color:var(--muted)"><li>Guest count · Budget — ask at the tour</li></ul>
+<div class="seg">Recommended next action</div>
+<p style="margin:2px 0 0"><strong>Confirm the scheduled tour; send a short pre-tour note to capture guest count &amp; budget.</strong></p>
+</div>
+<p class="small">The three zones are deliberately separate so staff never read an <em>unknown</em> field (grey) as a <em>risk</em> (amber). Bars are colour-coded by block (slate = fit, gold/green = intent &amp; engagement, wine = negative) with the signed point value always in text.</p>
+
+<h3>12.D · Score trend &amp; activity timeline</h3>
+<ul class="tl">
+<li class="up"><span class="when">Sep 28 · 14:02</span> — Inquiry received <span class="delta up">0 → 35</span><br><span class="small">Event type + date captured on the form</span></li>
+<li class="up"><span class="when">Sep 28 · 14:09</span> — Tour booked via Calendly <span class="delta up">35 → 58</span><br><span class="small">Self-booked 7 min after inquiring — strong buying signal (→ Warm floor)</span></li>
+<li class="up"><span class="when">Oct 2 · 10:41</span> — Customer confirmed event details <span class="delta up">58 → 68</span></li>
+<li class="up"><span class="when">Oct 9 · 16:20</span> — Tour completed <span class="delta up">68 → 78</span></li>
+<li class="up"><span class="when">Oct 13 · 09:15</span> — Deposit discussion initiated <span class="delta up">78 → 88</span> <span class="cls hot" style="margin-left:6px"><span class="g">●</span>Hot</span></li>
+</ul>
+<p class="small">Each node carries time, event, before→after score and the reason. Values illustrative. Built from the deduplicated <code>score_events</code> log, so duplicate records never appear as separate steps. Render as a step line where it adds value, but always keep the readable event list.</p>
+
+<h3>12.E · Lead-prioritisation dashboard</h3>
+<div class="grid2">
+<div class="card" style="margin:0">
+<div class="small" style="text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Lead distribution</div>
+<div style="display:flex;gap:14px;margin-top:8px;font-family:'IBM Plex Mono',monospace">
+<div><div style="font-size:22px;color:var(--wine)">●12</div><div class="small">Hot</div></div>
+<div><div style="font-size:22px;color:var(--gold)">◐28</div><div class="small">Warm</div></div>
+<div><div style="font-size:22px;color:var(--slate)">○41</div><div class="small">Cold</div></div>
+<div><div style="font-size:22px;color:var(--muted)">◇ 9</div><div class="small">Not scored</div></div>
+</div>
+<div class="small" style="margin-top:8px">Each count filters the list. Illustrative.</div>
+</div>
+<div class="card" style="margin:0">
+<div class="small" style="text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Follow-up attention</div>
+<ul style="margin:8px 0 0;font-size:14px">
+<li><span class="chip alert">!</span> 3 Hot leads with overdue follow-ups</li>
+<li>2 toured, awaiting follow-up</li>
+<li>4 tours to confirm this week</li>
+<li>5 previously-engaged gone quiet</li>
+<li>6 new leads with no first reply</li>
+</ul>
+</div>
+</div>
+<p style="margin-top:14px">Five components: <strong>1 Lead distribution</strong> (clickable counts), <strong>2 Highest-priority list</strong> — ranked by <em>urgency</em> (event-date proximity + overdue follow-up + next milestone), <strong>not score alone</strong>, each row showing name, score+class, date, tour status, last interaction, next action, follow-up due; <strong>3 Buying-intent signals</strong> (new tours, toured-awaiting-follow-up, quote requests, deposit questions); <strong>4 Follow-up attention</strong> (kept <em>operationally separate</em> from score — a high score does not mean a follow-up is due); <strong>5 Conversion insights</strong> (only where reliable history exists; historical class conversion rates clearly distinguished from any individual predicted probability).</p>
+
+<h3>12.F · Filters &amp; sorting</h3>
+<div class="grid2">
+<div><h4>Filter by</h4><ul style="font-size:14.5px"><li>Classification · score range</li><li>Event date / days-out · tour status</li><li>Lifecycle stage · follow-up due</li><li>Last meaningful activity · budget-fit</li><li>Venue (CPH / ACD) · next action</li></ul></div>
+<div><h4>Sort by</h4><ul style="font-size:14.5px"><li>Buying-intent score · most-urgent date</li><li>Upcoming tours · overdue follow-ups</li><li>Recently-increased scores</li><li>Newly-demonstrated buying intent</li><li>Longest since meaningful contact</li></ul></div>
+</div>
+<p class="small">New leads are never auto-sunk to the bottom for thin history: "Not scored yet" leads surface in their own band and in the "needs first reply" alert, so speed-to-lead isn't lost.</p>
+
+<h3>12.G · New leads &amp; missing data</h3>
+<div class="panel" style="max-width:360px">
+<div class="ph"><span class="cls ns"><span class="g">◇</span>Not scored yet</span></div>
+<div class="small" style="text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Information still needed</div>
+<ul style="margin:6px 0 10px"><li>Event date</li><li>Guest count</li><li>Event type</li></ul>
+<div class="bar" style="margin-bottom:6px"><i class="fit" style="width:25%"></i></div>
+<div class="small">Data-readiness 1 / 4</div>
+<div class="nextline"><b>Next</b>Contact the client to confirm event requirements</div>
+</div>
+<p>Instead of a misleading low percentage, show a neutral <em>Not scored yet</em> state, a data-readiness meter, the specific missing fields, and the action to get them. <strong>But</strong> if a high-intent action has already happened (a Calendly tour), show that immediately — the lead jumps to Warm with a tour chip even while qualification fields are still blank. Score, classification and confidence are three distinct ideas and are shown as three distinct elements.</p>
+
+<h3>12.H · Mobile</h3>
+<p>Mobile-first, for staff in the field: a compact card (ring + class + date + tour + one next action + quick call/text/email buttons), a bottom-sheet breakdown (the §12.C zones, stacked, charts simplified to bars), a condensed timeline (event list, line chart hidden), and follow-up / upcoming-tour reminders up top. Keep: score, class, next action, breakdown list, activity list. Simplify/hide: multi-series charts and the dashboard's wide conversion visuals. Because scoring is server-side, the number and class are identical to desktop.</p>
+
+<h3>12.I · Visual direction</h3>
+<p>Modern, professional, minimal — the editorial system of this document (Bodoni Moda headings, Source Sans body, IBM Plex Mono for data), restrained wine/gold/slate accents, subtle borders, accessible contrast, reusable components, responsive. No redundant KPI tiles, no gradients/heavy shadows, no oversized charts, and nothing that duplicates information already in the CRM. The redesign <em>improves</em> the existing pipeline and All-Leads views; it does not touch unrelated modules or the lifecycle stages.</p>
+
+<h3>12.J · Component &amp; data requirements</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Component</th><th>Reusable UI</th><th>Data it needs</th></tr></thead>
+<tbody>
+<tr><td>Lead card</td><td>ScoreRing · ClassChip · TourChip · ActivityChip · NextAction</td><td><code>score, classification, event_type, event_date, tour_status, last_activity_at, next_action, venue</code></td></tr>
+<tr><td>Breakdown drawer</td><td>FactorBar · FactorList · ZoneHeader</td><td><code>top_positive[], top_attention[], unknown_fields[], fit_sub, intent_sub, engagement_sub</code></td></tr>
+<tr><td>Timeline</td><td>EventNode · StepLine</td><td><code>score_events[]</code> (deduped)</td></tr>
+<tr><td>Dashboard</td><td>DistributionBar · PriorityRow · AlertList</td><td>aggregates + per-lead fields above</td></tr>
+<tr><td>Not-scored state</td><td>ReadinessMeter · MissingFieldList</td><td><code>confidence, unknown_fields[], next_action</code></td></tr>
+</tbody></table></div>
+<p class="small">Every field above is produced by the engine in §8 and persisted on the lead or in <code>score_events</code> — no new customer-facing data capture is required beyond what the CRM already records; the engine reuses existing lead fields and event records.</p>
+
+<!-- ============ FINAL ============ -->
+<h2 id="final">Final recommendation</h2>
+<p>Replace the completeness-weighted score with a <strong>two-axis, lifecycle-aware buying-intent priority score</strong>: intent/behaviour dominant (55), fit secondary (35), decaying engagement (10), capped reversible negatives, classification overrides (Calendly → Warm, deposit → Hot), a genuine "Not scored yet" state for thin new leads, and Won/Lost lifecycle handling so a booking is treated as a conversion, not a prospect. Compute it server-side on event triggers in California time, log every change idempotently for audit and the trend timeline, and keep weights in config for quarterly retuning. Surface it through the redesigned card, breakdown drawer, timeline and prioritisation dashboard specified in §12 and shown in the prototype. <strong>Call the number a priority score, not a probability,</strong> until it has been backtested and calibrated against CPH/ACD's own bookings — the point at which, with enough data, a predictive model can run alongside it. Build in the five phases of §11; Phase 1 alone fixes the brief's headline failures within the existing CRM.</p>
+
+<!-- ============ SOURCES ============ -->
+<h2 id="sources">Sources</h2>
+<p class="small">Lead-scoring methods are well documented; the <em>specific point values and thresholds</em> in these sources are examples, not standards — as several of the sources themselves note. Primary studies are distinguished from vendor guidance.</p>
+<ol style="font-size:14.5px">
+<li id="s-grain"><a href="https://grain.com/blog/hubspot-lead-scoring">A Complete Guide to HubSpot Lead Scoring</a> — explicit vs. implicit scoring; decay (vendor guide).</li>
+<li id="s-xcelli"><a href="https://www.xcellimark.com/how-to-hubspot/control-lead-score-durations-with-decay-timeframe-settings-hubspot-lead-scoring-tips">Control Lead Score Durations with Decay &amp; Timeframe Settings</a> — decay vs. timeframe (vendor guide).</li>
+<li id="s-octave"><a href="https://www.octavehq.com/post/salesforce-einstein-ai-sales-lead-scoring-guide">Salesforce Einstein AI for Sales: Lead Scoring Guide</a> — predictive data thresholds (~1,000 leads / 120 conversions); verify against current Salesforce docs (secondary).</li>
+<li id="s-mautic"><a href="https://kb.mautic.org/print-64.html">Lead scoring best practices with Mautic</a> — decay for inactivity, negative scoring, score floors (vendor docs); corroborated by the <a href="https://experienceleaguecommunities.adobe.com/adobe-marketo-engage-27/reset-lead-score-to-zero-for-leads-197458">Adobe Marketo community thread</a> on flooring/resetting scores.</li>
+<li id="s-chaffey"><a href="https://www.davechaffey.com/digital-marketing-glossary/lead-scoring-and-grading/">Lead scoring and grading (A1 grid)</a> — fit (A–D) × interest (1–4) matrix (industry reference).</li>
+<li id="s-prospeo"><a href="https://prospeo.io/s/marketing-qualified-lead-criteria">Marketing Qualified Lead Criteria: Scoring &amp; SLA</a> — fit and engagement both required; composite thresholds (vendor guide).</li>
+<li id="s-hbr"><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads">HBR — The Short Life of Online Sales Leads</a> (Oldroyd, McElheran, Elkington, 2011): ~7× qualifying odds when contacting within an hour. Separate Lead Response Management / InsideSales (2007) study: ~21× qualify odds at 5 vs 30 min (relative odds, not conversion rates) — see <a href="https://verse.ai/blog/speed-to-lead-statistics">speed-to-lead summary</a>.</li>
+<li id="s-pedowitz"><a href="https://www.pedowitzgroup.com/why-align-lead-scoring-with-lifecycle-stages">Why Align Lead Scoring with Lifecycle Stages</a> — same behaviour means different things at different stages (vendor guide).</li>
+</ol>
+
+<div class="foot">
+<p>Prepared for Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard · CRM lead-scoring redesign · October 2026. Companion files: <code>lead-scoring/prototype.html</code> (clickable prototype) · <code>lead-scoring/README.md</code>. Every score, rate and threshold herein is illustrative until validated against historical bookings.</p>
+</div>
+
+</main></div>
+<script>
+document.addEventListener('click',function(e){var b=e.target.closest('.copy');if(!b)return;var t=b.parentElement.querySelector('code').textContent;navigator.clipboard.writeText(t).then(function(){b.classList.add('done');b.textContent='Copied';setTimeout(function(){b.classList.remove('done');b.textContent='Copy'},1500)}).catch(function(){b.textContent='Select & copy'})});
+</script>
+</body>
+</html>
