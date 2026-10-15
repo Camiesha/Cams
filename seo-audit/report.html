@@ -1,0 +1,421 @@
+<title>Crown Prince Hall SEO Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--code:#F8F7F4;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--code:#1B1820;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--code:#1B1820;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr;gap:24px}nav.toc{position:static}}
+nav.toc{position:sticky;top:24px;align-self:start;font-size:14px}
+nav.toc .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:5px 0;border-left:2px solid var(--line);padding-left:12px}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--wine);color:var(--wine);outline:none}
+main{min-width:0;max-width:760px}
+header.top{margin-bottom:40px}
+h1,h2,h3{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:clamp(34px,5vw,50px);letter-spacing:-.01em}
+h2{font-size:28px;margin:56px 0 14px;padding-top:20px;border-top:1px solid var(--line)}
+h3{font-size:20px;margin:28px 0 8px}
+h4{font-family:"Source Sans 3",sans-serif;font-size:17px;margin:0 0 4px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--wine)}
+.meta{color:var(--muted);font-size:15px;margin-top:10px;font-family:"IBM Plex Mono",monospace}
+p{margin:0 0 14px;max-width:68ch}
+.notice{background:var(--gold-soft);border-left:3px solid var(--gold);padding:14px 18px;margin:24px 0}
+.notice p:last-child{margin:0}
+.finding{padding:14px 0;border-bottom:1px dashed var(--line)}
+.finding:last-child{border-bottom:0}
+.f-head{display:flex;gap:10px;align-items:center;margin-bottom:4px}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.pill.high{background:var(--wine-soft);color:var(--wine)}.pill.medium{background:var(--gold-soft);color:var(--gold)}.pill.low{background:var(--slate-soft);color:var(--slate)}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.mono{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.code{position:relative;background:var(--code);border:1px solid var(--line);margin:12px 0 20px}
+.code pre{margin:0;padding:16px 18px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.5}
+.copy{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:4px 10px;cursor:pointer}
+.code .copy{position:absolute;top:8px;right:8px}
+.copy:hover,.copy:focus-visible{border-color:var(--wine);color:var(--wine);outline:none}
+.copy.done{background:var(--wine);color:#fff;border-color:var(--wine)}
+.tm{border:1px solid var(--line);background:var(--panel);margin:0 0 12px}
+.tm-page{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.06em;padding:8px 14px;border-bottom:1px solid var(--line);color:var(--muted)}
+.tm-row{display:grid;grid-template-columns:48px 1fr 130px auto;gap:12px;align-items:center;padding:10px 14px;font-size:15px}
+.tm-row+.tm-row{border-top:1px dashed var(--line)}
+@media (max-width:600px){.tm-row{grid-template-columns:48px 1fr auto}.tm-row .budget{grid-column:2}}
+.lbl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.budget{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.meter{display:inline-block;height:6px;width:80px;background:var(--line);vertical-align:middle}
+.meter i{display:block;height:100%;background:var(--gold)}
+.num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+details{border:1px solid var(--line);background:var(--panel);margin:0 0 10px}
+summary{cursor:pointer;padding:10px 14px;font-family:"IBM Plex Mono",monospace;font-size:13px}
+details .code{margin:0 14px 14px}
+.aio{background:var(--panel);border:1px solid var(--line);padding:16px 18px;margin:0 0 14px}
+.aio-h{font-family:"Bodoni Moda",serif;font-size:20px;font-weight:600;margin-bottom:8px}
+.aio .where{display:block;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+.aio p{margin:0 0 10px}
+.aio-f{display:flex;justify-content:space-between;align-items:center}
+.faq{padding:12px 0;border-bottom:1px dashed var(--line)}
+.faq p{margin:0;color:var(--ink)}
+ul{padding-left:20px;margin:0 0 14px;max-width:68ch}li{margin-bottom:4px}
+ol.cta{padding-left:20px;max-width:68ch}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media (max-width:700px){.two{grid-template-columns:1fr}}
+.lede{font-size:19px;max-width:62ch}
+a{color:var(--wine)}
+@media (prefers-reduced-motion:no-preference){.copy{transition:background .15s,color .15s}}
+</style>
+<div class="wrap">
+<nav class="toc" aria-label="Sections"><div class="eyebrow">Contents</div>
+<a href="#basis">Audit basis</a><a href="#findings">Findings</a><a href="#plan">Priority plan</a><a href="#a">A · Titles &amp; metas</a><a href="#b">B · Heading structure</a><a href="#c">C · AI Overview blocks</a><a href="#d">D · FAQ + schema</a><a href="#e">E · Venue schema</a><a href="#f">F · Brochure conversion</a><a href="#g">G · Google Business Profile</a></nav>
+<main>
+<header class="top">
+<div class="eyebrow">SEO audit &amp; action plan · September 2026</div>
+<h1>Crown Prince Event Hall</h1>
+<div class="meta">crownprincehall.com · 1654 Burdette Dr, San Jose, CA 95121 · (408) 408-1654 · 4,100 sq ft · 300 guests</div>
+<p class="lede" style="margin-top:18px">On-page SEO, AI Overview copy, local schema, conversion and Google Business Profile for a San Jose banquet hall serving weddings, quinceañeras, corporate events and milestone parties. Every snippet below is ready to paste.</p>
+</header>
+
+<h2 id="basis">How this audit was built</h2>
+<div class="notice"><p><strong>The raw HTML could not be pulled.</strong> The audit environment's network policy blocks crownprincehall.com, Yelp, Eventective and the Wayback Machine. Findings come from what Google and Bing have indexed from the site and from third-party listings. Confirm three things before rollout:</p>
+<ul><li>View source on the homepage: the live title, meta description, and whether any <code>application/ld+json</code> block exists.</li><li>Run the Google Rich Results Test on the homepage.</li><li>Run PageSpeed Insights on mobile; a 360° tour embed usually drags the Largest Contentful Paint score and should be lazy-loaded.</li></ul></div>
+
+<h2 id="findings">Findings</h2>
+<div class="finding"><div class="f-head"><span class="pill high">High</span><strong>The site is a single page</strong></div><p>Only the homepage is indexed. No wedding, quinceañera, corporate, party or pricing URL surfaces for any query, so one page is competing for five intents.</p></div><div class="finding"><div class="f-head"><span class="pill high">High</span><strong>Meta description runs about 255 characters</strong></div><p>Google cuts it mid-sentence at roughly 160. The indexed snippet ends at “…360° virtual tour, and 100+ gated parking.”</p></div><div class="finding"><div class="f-head"><span class="pill high">High</span><strong>Title leads with brand, not the query</strong></div><p>Current: “Crown Prince Event Hall — San José Event &amp; Banquet Venue”. “Banquet hall” and unaccented “San Jose” are not front-loaded and “wedding” is absent.</p></div><div class="finding"><div class="f-head"><span class="pill high">High</span><strong>No pricing page</strong></div><p>A direct competitor, The Prestige Venue, ranks an indexed /pricing URL. Cost queries are the highest-intent searches in this category.</p></div><div class="finding"><div class="f-head"><span class="pill high">High</span><strong>Business name is inconsistent</strong></div><p>“Crown Prince Hall” in body copy versus “Crown Prince Event Hall” in the title and on Yelp. Name, address and phone must match everywhere.</p></div><div class="finding"><div class="f-head"><span class="pill medium">Medium</span><strong>Yelp category and hours</strong></div><p>Yelp lists “Country Dance Halls” and “Open 24 hours”. Wrong categories dilute relevance and 24-hour hours look low quality to Google.</p></div><div class="finding"><div class="f-head"><span class="pill medium">Medium</span><strong>No FAQ block or FAQ schema</strong></div><p>Policies exist as prose only. Question-and-answer format is what AI Overviews lift.</p></div><div class="finding"><div class="f-head"><span class="pill medium">Medium</span><strong>Three competing calls to action</strong></div><p>Book a tour, 360° tour and same-day quote share equal weight, with nothing for the researching majority.</p></div><div class="finding"><div class="f-head"><span class="pill low">Low</span><strong>Accented “San José” in the title</strong></div><p>Google matches the forms, but the exact typed form wins SERP bolding. Keep the accent in brand copy; use “San Jose” in titles, metas, H1s and schema.</p></div>
+
+<h2 id="plan">Priority action plan</h2>
+<div class="tablewrap"><table><thead><tr><th>Impact</th><th>Action</th><th>Where · effort</th></tr></thead><tbody><tr><td><span class="pill high">High</span></td><td>Replace homepage title and meta description</td><td class="mono">Head · 15 min</td></tr><tr><td><span class="pill high">High</span></td><td>Add LocalBusiness / EventVenue JSON-LD to every page</td><td class="mono">Head · 30 min</td></tr><tr><td><span class="pill high">High</span></td><td>Build four service pages: /weddings/, /quinceaneras/, /corporate-events/, /parties/</td><td class="mono">New pages · 1–2 days</td></tr><tr><td><span class="pill high">High</span></td><td>Build /pricing/ with package comparison and the brochure lead capture</td><td class="mono">New page · 1 day</td></tr><tr><td><span class="pill high">High</span></td><td>Google Business Profile: primary category Banquet hall, secondaries, description, services, real hours, exact name</td><td class="mono">GBP · 1 hour</td></tr><tr><td><span class="pill high">High</span></td><td>Yelp: remove Country Dance Halls, match hours and name to GBP</td><td class="mono">Yelp · 20 min</td></tr><tr><td><span class="pill medium">Medium</span></td><td>FAQ section above the footer plus FAQPage JSON-LD</td><td class="mono">Homepage · 1 hour</td></tr><tr><td><span class="pill medium">Medium</span></td><td>Three AI Overview answer paragraphs directly under their H2s</td><td class="mono">Homepage, /pricing/ · 1 hour</td></tr><tr><td><span class="pill medium">Medium</span></td><td>Reorder CTAs: pricing brochure primary, private tour secondary, 360° tour text link; click-to-call in mobile header</td><td class="mono">Sitewide · 2 hours</td></tr><tr><td><span class="pill medium">Medium</span></td><td>Image file names and alt text with event + city, WebP, lazy-load the 360° embed</td><td class="mono">Sitewide · 2 hours</td></tr><tr><td><span class="pill medium">Medium</span></td><td>Canonical tags, XML sitemap, Search Console submission, nav and footer links to every service page</td><td class="mono">Technical · 1 hour</td></tr><tr><td><span class="pill medium">Medium</span></td><td>Embed Google Map and reviews widget; request a Google review 48 hours after every event</td><td class="mono">Homepage · 1 hour</td></tr><tr><td><span class="pill low">Low</span></td><td>Match NAP on The Knot, WeddingWire, Zola, Eventective, Peerspace, Tagvenue, Quinceanera.com</td><td class="mono">Citations · 3 hours</td></tr><tr><td><span class="pill low">Low</span></td><td>Two guides: 300-guest wedding cost in San Jose; quinceañera venue checklist</td><td class="mono">Blog · 1 day</td></tr><tr><td><span class="pill low">Low</span></td><td>Spanish quinceañera page at /es/quinceaneras/ with hreflang</td><td class="mono">New page · 1 day</td></tr><tr><td><span class="pill low">Low</span></td><td>Event schema for open-house or tasting dates</td><td class="mono">Events · 30 min</td></tr></tbody></table></div>
+
+<h2 id="a">Snippet A · Title tags and meta descriptions</h2>
+<p>Titles stay under 60 characters and descriptions under 160. The meter shows how much of each budget is used.</p>
+<div class="tm"><div class="tm-page">Homepage /</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Crown Prince Event Hall | Banquet Hall in San Jose, CA</span><span class="budget"><span class="meter" title="54 of 60 characters"><i style="width:90%"></i></span><span class="num">54/60</span></span><button class="copy sm" type="button" data-copy-text="Crown Prince Event Hall | Banquet Hall in San Jose, CA">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Crown Prince Event Hall is a 4,100 sq ft banquet hall in San Jose, CA for up to 300 guests. Stage, dance floor, full bar, 100+ gated parking. Book a tour today.</span><span class="budget"><span class="meter" title="160 of 160 characters"><i style="width:100%"></i></span><span class="num">160/160</span></span><button class="copy sm" type="button" data-copy-text="Crown Prince Event Hall is a 4,100 sq ft banquet hall in San Jose, CA for up to 300 guests. Stage, dance floor, full bar, 100+ gated parking. Book a tour today.">Copy</button></div></div><div class="tm"><div class="tm-page">/weddings/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">San Jose Wedding Venue for 300 Guests | Crown Prince Hall</span><span class="budget"><span class="meter" title="57 of 60 characters"><i style="width:95%"></i></span><span class="num">57/60</span></span><button class="copy sm" type="button" data-copy-text="San Jose Wedding Venue for 300 Guests | Crown Prince Hall">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Host your wedding at Crown Prince Event Hall in San Jose. Red-carpet entrance, bridal suite, dance floor and full bar for up to 300 guests. Same-day quotes.</span><span class="budget"><span class="meter" title="156 of 160 characters"><i style="width:98%"></i></span><span class="num">156/160</span></span><button class="copy sm" type="button" data-copy-text="Host your wedding at Crown Prince Event Hall in San Jose. Red-carpet entrance, bridal suite, dance floor and full bar for up to 300 guests. Same-day quotes.">Copy</button></div></div><div class="tm"><div class="tm-page">/quinceaneras/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Quinceañera Venue in San Jose, CA | Crown Prince Hall</span><span class="budget"><span class="meter" title="53 of 60 characters"><i style="width:88%"></i></span><span class="num">53/60</span></span><button class="copy sm" type="button" data-copy-text="Quinceañera Venue in San Jose, CA | Crown Prince Hall">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Celebrate your quinceañera at Crown Prince Event Hall, San Jose. Grand entrance, stage, dance floor and 100+ gated parking for up to 300 guests. Book a tour.</span><span class="budget"><span class="meter" title="157 of 160 characters"><i style="width:98%"></i></span><span class="num">157/160</span></span><button class="copy sm" type="button" data-copy-text="Celebrate your quinceañera at Crown Prince Event Hall, San Jose. Grand entrance, stage, dance floor and 100+ gated parking for up to 300 guests. Book a tour.">Copy</button></div></div><div class="tm"><div class="tm-page">/corporate-events/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Corporate Event Venue San Jose | Crown Prince Hall</span><span class="budget"><span class="meter" title="50 of 60 characters"><i style="width:83%"></i></span><span class="num">50/60</span></span><button class="copy sm" type="button" data-copy-text="Corporate Event Venue San Jose | Crown Prince Hall">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Corporate event venue in San Jose with stage, big-screen TVs, sound and planning support. Seats up to 300 for banquets, mixers and presentations. Get a quote.</span><span class="budget"><span class="meter" title="158 of 160 characters"><i style="width:99%"></i></span><span class="num">158/160</span></span><button class="copy sm" type="button" data-copy-text="Corporate event venue in San Jose with stage, big-screen TVs, sound and planning support. Seats up to 300 for banquets, mixers and presentations. Get a quote.">Copy</button></div></div><div class="tm"><div class="tm-page">/parties/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Birthday &amp; Party Venue San Jose | Crown Prince Hall</span><span class="budget"><span class="meter" title="51 of 60 characters"><i style="width:85%"></i></span><span class="num">51/60</span></span><button class="copy sm" type="button" data-copy-text="Birthday &amp; Party Venue San Jose | Crown Prince Hall">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Birthday, anniversary and graduation venue in San Jose for up to 300 guests. Packages with Chiavari seating, full bar and gated parking. Book a tour.</span><span class="budget"><span class="meter" title="149 of 160 characters"><i style="width:93%"></i></span><span class="num">149/160</span></span><button class="copy sm" type="button" data-copy-text="Birthday, anniversary and graduation venue in San Jose for up to 300 guests. Packages with Chiavari seating, full bar and gated parking. Book a tour.">Copy</button></div></div><div class="tm"><div class="tm-page">/pricing/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Banquet Hall Pricing &amp; Packages San Jose | Crown Prince</span><span class="budget"><span class="meter" title="55 of 60 characters"><i style="width:92%"></i></span><span class="num">55/60</span></span><button class="copy sm" type="button" data-copy-text="Banquet Hall Pricing &amp; Packages San Jose | Crown Prince">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">See Crown Prince Hall packages for San Jose weddings, quinceañeras and parties. All fees up front, same-day quotes, 90-day refund policy. Get the brochure.</span><span class="budget"><span class="meter" title="155 of 160 characters"><i style="width:97%"></i></span><span class="num">155/160</span></span><button class="copy sm" type="button" data-copy-text="See Crown Prince Hall packages for San Jose weddings, quinceañeras and parties. All fees up front, same-day quotes, 90-day refund policy. Get the brochure.">Copy</button></div></div><div class="tm"><div class="tm-page">/virtual-tour/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">360° Virtual Tour | Crown Prince Event Hall San Jose</span><span class="budget"><span class="meter" title="52 of 60 characters"><i style="width:87%"></i></span><span class="num">52/60</span></span><button class="copy sm" type="button" data-copy-text="360° Virtual Tour | Crown Prince Event Hall San Jose">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Take a 360° virtual tour of Crown Prince Event Hall, a 4,100 sq ft San Jose banquet hall for up to 300 guests. Then book a private in-person tour.</span><span class="budget"><span class="meter" title="146 of 160 characters"><i style="width:91%"></i></span><span class="num">146/160</span></span><button class="copy sm" type="button" data-copy-text="Take a 360° virtual tour of Crown Prince Event Hall, a 4,100 sq ft San Jose banquet hall for up to 300 guests. Then book a private in-person tour.">Copy</button></div></div><div class="tm"><div class="tm-page">/book-a-tour/</div>
+<div class="tm-row"><span class="lbl">Title</span><span class="val">Book a Tour | Crown Prince Event Hall, San Jose CA</span><span class="budget"><span class="meter" title="50 of 60 characters"><i style="width:83%"></i></span><span class="num">50/60</span></span><button class="copy sm" type="button" data-copy-text="Book a Tour | Crown Prince Event Hall, San Jose CA">Copy</button></div>
+<div class="tm-row"><span class="lbl">Meta</span><span class="val">Book a private tour of Crown Prince Event Hall, 1654 Burdette Dr, San Jose, CA 95121. Call (408) 408-1654 or send your date and guest count for a quick quote.</span><span class="budget"><span class="meter" title="158 of 160 characters"><i style="width:99%"></i></span><span class="num">158/160</span></span><button class="copy sm" type="button" data-copy-text="Book a private tour of Crown Prince Event Hall, 1654 Burdette Dr, San Jose, CA 95121. Call (408) 408-1654 or send your date and guest count for a quick quote.">Copy</button></div></div>
+<h3>Homepage head block</h3>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>&lt;title&gt;Crown Prince Event Hall | Banquet Hall in San Jose, CA&lt;/title&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Crown Prince Event Hall is a 4,100 sq ft banquet hall in San Jose, CA for up to 300 guests. Stage, dance floor, full bar, 100+ gated parking. Book a tour today.&quot;&gt;
+&lt;link rel=&quot;canonical&quot; href=&quot;https://crownprincehall.com/&quot;&gt;
+&lt;meta property=&quot;og:type&quot; content=&quot;business.business&quot;&gt;
+&lt;meta property=&quot;og:title&quot; content=&quot;Crown Prince Event Hall | Banquet Hall in San Jose, CA&quot;&gt;
+&lt;meta property=&quot;og:description&quot; content=&quot;4,100 sq ft San Jose event venue for weddings, quinceañeras, corporate events and milestone parties. Up to 300 guests, full bar, 100+ gated parking.&quot;&gt;
+&lt;meta property=&quot;og:url&quot; content=&quot;https://crownprincehall.com/&quot;&gt;
+&lt;meta property=&quot;og:image&quot; content=&quot;https://crownprincehall.com/REPLACE/hall-wide-1200x630.jpg&quot;&gt;
+&lt;meta property=&quot;og:locale&quot; content=&quot;en_US&quot;&gt;
+&lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot;&gt;
+&lt;meta name=&quot;geo.region&quot; content=&quot;US-CA&quot;&gt;
+&lt;meta name=&quot;geo.placename&quot; content=&quot;San Jose&quot;&gt;</code></pre></div>
+
+<h2 id="b">Snippet B · Heading structure</h2>
+<p>One H1 per page. H2s carry the question or intent people type; H3s carry package and feature names. Follow every H2 with at least 40 words of real copy.</p>
+<details open><summary>Homepage /</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  San Jose Banquet Hall &amp; Event Venue for Up to 300 Guests
+H2  Weddings, Quinceañeras &amp; Corporate Events at Crown Prince Event Hall
+H2  What&#x27;s Included in Every Crown Prince Event Hall Package
+    H3  Weekday Flex (Monday–Thursday, hourly)
+    H3  Weekend Essentials (Friday–Sunday)
+    H3  Celebration Plus
+    H3  Wedding &amp; Debut Premium
+H2  How Much Does a Banquet Hall in San Jose Cost?
+H2  Venue Features: Stage, Dance Floor, Full Bar &amp; 100+ Gated Parking
+H2  Take the 360° Virtual Tour
+H2  Download the 2026 Pricing &amp; Floor Plan Brochure
+H2  Frequently Asked Questions About Crown Prince Event Hall
+H2  Visit Us: 1654 Burdette Dr, San Jose, CA 95121</code></pre></div></details><details ><summary>/weddings/</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  Wedding Venue in San Jose, CA for Up to 300 Guests
+H2  Why Couples Choose Crown Prince Event Hall
+H2  Wedding &amp; Debut Premium Package: What&#x27;s Included
+    H3  Red-Carpet Grand Entrance
+    H3  Bridal &amp; VIP Prep Room
+    H3  6-Hour Event Window Plus 2 Hours of Setup
+H2  Wedding Add-Ons: DJ, Photobooth &amp; Bar Packages
+H2  How Much Does a Wedding Venue in San Jose Cost?
+H2  Wedding FAQs
+H2  Book a Private Wedding Tour</code></pre></div></details><details ><summary>/quinceaneras/</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  Quinceañera Venue in San Jose, CA (Salón para Quinceañeras)
+H2  A Grand Entrance for Her Big Day
+H2  Quinceañera Package: What&#x27;s Included
+    H3  Stage &amp; Dance Floor for the Vals and Baile Sorpresa
+    H3  Seating for Up to 300 Family and Friends
+    H3  Bar Packages, with Outside Catering Welcome
+H2  Quinceañera Add-Ons: DJ, Photobooth &amp; Marquee Numbers
+H2  Quinceañera FAQs
+H2  Reserve Your Date</code></pre></div></details><details ><summary>/corporate-events/</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  Corporate Event Venue in San Jose for Meetings, Banquets &amp; Mixers
+H2  Built for Presentations: Stage, Sound &amp; Big-Screen TVs
+H2  Weekday Flex: Hourly Rates for Monday–Thursday Events
+H2  Corporate Events We Host
+    H3  Holiday Parties &amp; Award Banquets
+    H3  Product Launches &amp; Networking Mixers
+    H3  Trainings, Town Halls &amp; Community Events
+H2  Parking &amp; Accessibility: 100+ Gated Spaces
+H2  Request a Corporate Quote</code></pre></div></details><details ><summary>/parties/</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  Birthday, Anniversary &amp; Graduation Party Venue in San Jose
+H2  Celebration Plus Package: The Extras Handled
+    H3  Gold Chiavari Seating, Big-Screen TVs &amp; Dance Floor
+    H3  Chafers, Table Runners &amp; Marquee Numbers
+H2  Party Add-Ons: DJ, Photobooth &amp; Bar Packages
+H2  Party FAQs
+H2  Book a Tour</code></pre></div></details><details ><summary>/pricing/</summary><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H1  Banquet Hall Pricing &amp; Packages in San Jose
+H2  How Much Does Crown Prince Event Hall Cost?
+H2  Compare Packages
+    H3  Weekday Flex
+    H3  Weekend Essentials
+    H3  Celebration Plus
+    H3  Wedding &amp; Debut Premium
+H2  Popular Add-Ons &amp; Pricing
+H2  Deposits, Payments &amp; Our 90-Day Refund Policy
+H2  Download the 2026 Pricing &amp; Floor Plan Brochure</code></pre></div></details>
+
+<h2 id="c">Snippet C · AI Overview answer blocks</h2>
+<p>Paste each paragraph directly under its H2, before images or bullet lists. Replace the bracketed prices before publishing; the market ranges come from current San Jose listings on Peerspace, Tagvenue, Eventective and Wedding Spot.</p>
+<div class="aio"><div class="aio-h"><span class="lbl">H2</span> How Much Does a Banquet Hall in San Jose Cost? <span class="where">Homepage and /pricing/</span></div><p>Banquet halls in San Jose typically cost $3,500 to $8,000 for a full weekend event rental, with weekday hourly rates from about $300 to $800 per hour and luxury venues running $8,000 to $20,000. Crown Prince Event Hall offers Weekday Flex from [$XXX per hour] and Weekend Essentials from [$X,XXX], including a 6-hour event window, 2 hours of setup, Gold Chiavari seating and 100+ gated parking spaces for up to 300 guests. All fees are stated up front and standard quotes are returned the same day.</p><div class="aio-f"><span class="num">86 words</span><button class="copy sm" type="button" data-copy-text="Banquet halls in San Jose typically cost $3,500 to $8,000 for a full weekend event rental, with weekday hourly rates from about $300 to $800 per hour and luxury venues running $8,000 to $20,000. Crown Prince Event Hall offers Weekday Flex from [$XXX per hour] and Weekend Essentials from [$X,XXX], including a 6-hour event window, 2 hours of setup, Gold Chiavari seating and 100+ gated parking spaces for up to 300 guests. All fees are stated up front and standard quotes are returned the same day.">Copy</button></div></div><div class="aio"><div class="aio-h"><span class="lbl">H2</span> What&#x27;s Included in Every Crown Prince Event Hall Package? <span class="where">Homepage</span></div><p>Every weekend package at Crown Prince Event Hall includes a 6-hour event window, 2 hours of complimentary setup, 8 hours of on-site event attendants, Gold Chiavari chairs and tables, big-screen TVs, the stage, the dance floor and access to the full bar. Weekday Flex is billed hourly Monday through Thursday. Optional add-ons include a DJ, digital photobooth, bridal or VIP prep room, VIP grand entrance, bar packages, chafers, table runners and marquee numbers.</p><div class="aio-f"><span class="num">73 words</span><button class="copy sm" type="button" data-copy-text="Every weekend package at Crown Prince Event Hall includes a 6-hour event window, 2 hours of complimentary setup, 8 hours of on-site event attendants, Gold Chiavari chairs and tables, big-screen TVs, the stage, the dance floor and access to the full bar. Weekday Flex is billed hourly Monday through Thursday. Optional add-ons include a DJ, digital photobooth, bridal or VIP prep room, VIP grand entrance, bar packages, chafers, table runners and marquee numbers.">Copy</button></div></div><div class="aio"><div class="aio-h"><span class="lbl">H2</span> How Many Guests Can Crown Prince Event Hall Hold? <span class="where">Homepage venue features section</span></div><p>Crown Prince Event Hall seats up to 300 guests in a 4,100 sq ft hall in San Jose, CA. The room can be set for banquet, theater or reception layouts around a permanent stage and dance floor. Guests park in a private gated lot with more than 100 spaces, with free street parking nearby and valet available for formal arrivals.</p><div class="aio-f"><span class="num">60 words</span><button class="copy sm" type="button" data-copy-text="Crown Prince Event Hall seats up to 300 guests in a 4,100 sq ft hall in San Jose, CA. The room can be set for banquet, theater or reception layouts around a permanent stage and dance floor. Guests park in a private gated lot with more than 100 spaces, with free street parking nearby and valet available for formal arrivals.">Copy</button></div></div>
+
+<h2 id="d">Snippet D · FAQ section and FAQPage schema</h2>
+<p>Place the FAQ on the homepage above the footer under the H2 “Frequently Asked Questions About Crown Prince Event Hall”, each question as an H3. The schema text must match the visible text word for word.</p>
+<div class="faq"><h4>How many guests can Crown Prince Event Hall hold?</h4><p>Crown Prince Event Hall seats up to 300 guests in a 4,100 sq ft hall with a stage and dance floor. Gold Chiavari chairs and tables are included, and the floor plan can be arranged for banquet, theater or reception layouts.</p></div><div class="faq"><h4>What is included in a Crown Prince Event Hall package?</h4><p>Weekend packages include a 6-hour event window, 2 hours of complimentary setup, 8 hours of on-site event attendants, Gold Chiavari chairs and tables, big-screen TVs, the stage and dance floor, and access to the full bar. Weekday Flex is billed hourly Monday through Thursday. Add-ons include DJ, digital photobooth, bridal/VIP prep room, VIP grand entrance, bar packages, chafers, table runners and marquee numbers.</p></div><div class="faq"><h4>Can I bring my own caterer or alcohol to Crown Prince Event Hall?</h4><p>Outside catering is welcome with venue approval. Alcohol is served through the venue&#x27;s bar packages only; outside alcohol is not permitted. The hall is all-ages and non-smoking indoors.</p></div><div class="faq"><h4>Is there parking at Crown Prince Event Hall in San Jose?</h4><p>Yes. The venue has a private gated lot with more than 100 spaces, plus free street parking nearby. Valet service can be added for weddings and formal arrivals.</p></div><div class="faq"><h4>What is Crown Prince Event Hall&#x27;s cancellation and refund policy?</h4><p>Crown Prince Event Hall offers a clear 90-day refund policy: bookings cancelled at least 90 days before the event date are refunded per the written agreement. All fees are stated up front on your quote, and standard events receive a tailored quote the same day.</p></div>
+<h3 style="margin-top:24px">FAQPage JSON-LD</h3>
+<p>Paste into the site header. Google has shown FAQ dropdowns only for government and health sites since 2023, so do not expect the rich result. The markup still feeds AI Overviews and entity understanding.</p>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>&lt;script type=&quot;application/ld+json&quot;&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;@id&quot;: &quot;https://crownprincehall.com/#faq&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;How many guests can Crown Prince Event Hall hold?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;Crown Prince Event Hall seats up to 300 guests in a 4,100 sq ft hall with a stage and dance floor. Gold Chiavari chairs and tables are included, and the floor plan can be arranged for banquet, theater or reception layouts.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;What is included in a Crown Prince Event Hall package?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;Weekend packages include a 6-hour event window, 2 hours of complimentary setup, 8 hours of on-site event attendants, Gold Chiavari chairs and tables, big-screen TVs, the stage and dance floor, and access to the full bar. Weekday Flex is billed hourly Monday through Thursday. Add-ons include DJ, digital photobooth, bridal/VIP prep room, VIP grand entrance, bar packages, chafers, table runners and marquee numbers.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;Can I bring my own caterer or alcohol to Crown Prince Event Hall?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;Outside catering is welcome with venue approval. Alcohol is served through the venue&#x27;s bar packages only; outside alcohol is not permitted. The hall is all-ages and non-smoking indoors.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;Is there parking at Crown Prince Event Hall in San Jose?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;Yes. The venue has a private gated lot with more than 100 spaces, plus free street parking nearby. Valet service can be added for weddings and formal arrivals.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;What is Crown Prince Event Hall&#x27;s cancellation and refund policy?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;Crown Prince Event Hall offers a clear 90-day refund policy: bookings cancelled at least 90 days before the event date are refunded per the written agreement. All fees are stated up front on your quote, and standard events receive a tailored quote the same day.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</code></pre></div>
+
+<h2 id="e">Snippet E · LocalBusiness / EventVenue JSON-LD</h2>
+<p>Paste into the header of every page. Replace each <code>REPLACE</code> value: email, image URLs, map coordinates, social profiles, package prices and the accessibility flag. The opening hours must match Google Business Profile exactly. Validate at validator.schema.org and the Rich Results Test.</p>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>&lt;script type=&quot;application/ld+json&quot;&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: [&quot;EventVenue&quot;, &quot;LocalBusiness&quot;],
+  &quot;@id&quot;: &quot;https://crownprincehall.com/#venue&quot;,
+  &quot;name&quot;: &quot;Crown Prince Event Hall&quot;,
+  &quot;alternateName&quot;: &quot;Crown Prince Hall&quot;,
+  &quot;description&quot;: &quot;Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA for weddings, quinceañeras, debuts, birthdays, graduations and corporate events for up to 300 guests, with a stage, dance floor, red-carpet entrance, full bar and a private gated lot with 100+ parking spaces.&quot;,
+  &quot;url&quot;: &quot;https://crownprincehall.com/&quot;,
+  &quot;telephone&quot;: &quot;+1-408-408-1654&quot;,
+  &quot;email&quot;: &quot;REPLACE_WITH_BOOKING_EMAIL@crownprincehall.com&quot;,
+  &quot;image&quot;: [
+    &quot;https://crownprincehall.com/REPLACE/hall-wide-16x9.jpg&quot;,
+    &quot;https://crownprincehall.com/REPLACE/hall-4x3.jpg&quot;,
+    &quot;https://crownprincehall.com/REPLACE/hall-1x1.jpg&quot;
+  ],
+  &quot;logo&quot;: &quot;https://crownprincehall.com/REPLACE/logo.png&quot;,
+  &quot;priceRange&quot;: &quot;$$$&quot;,
+  &quot;currenciesAccepted&quot;: &quot;USD&quot;,
+  &quot;paymentAccepted&quot;: &quot;Cash, Credit Card, Debit Card, Bank Transfer&quot;,
+  &quot;address&quot;: {
+    &quot;@type&quot;: &quot;PostalAddress&quot;,
+    &quot;streetAddress&quot;: &quot;1654 Burdette Dr&quot;,
+    &quot;addressLocality&quot;: &quot;San Jose&quot;,
+    &quot;addressRegion&quot;: &quot;CA&quot;,
+    &quot;postalCode&quot;: &quot;95121&quot;,
+    &quot;addressCountry&quot;: &quot;US&quot;
+  },
+  &quot;geo&quot;: {
+    &quot;@type&quot;: &quot;GeoCoordinates&quot;,
+    &quot;latitude&quot;: &quot;REPLACE_FROM_GOOGLE_MAPS e.g. 37.3xxx&quot;,
+    &quot;longitude&quot;: &quot;REPLACE_FROM_GOOGLE_MAPS e.g. -121.8xxx&quot;
+  },
+  &quot;hasMap&quot;: &quot;https://www.google.com/maps/search/?api=1&amp;query=1654+Burdette+Dr,+San+Jose,+CA+95121&quot;,
+  &quot;openingHoursSpecification&quot;: [
+    {
+      &quot;@type&quot;: &quot;OpeningHoursSpecification&quot;,
+      &quot;dayOfWeek&quot;: [&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;, &quot;Sunday&quot;],
+      &quot;opens&quot;: &quot;09:00&quot;,
+      &quot;closes&quot;: &quot;21:00&quot;,
+      &quot;description&quot;: &quot;Inquiry and tour hours. Event rentals available all day, 7 days a week. EDIT to match the hours shown on Google Business Profile.&quot;
+    }
+  ],
+  &quot;maximumAttendeeCapacity&quot;: 300,
+  &quot;additionalProperty&quot;: [
+    { &quot;@type&quot;: &quot;PropertyValue&quot;, &quot;name&quot;: &quot;Floor area&quot;, &quot;value&quot;: &quot;4100&quot;, &quot;unitText&quot;: &quot;sq ft&quot; },
+    { &quot;@type&quot;: &quot;PropertyValue&quot;, &quot;name&quot;: &quot;Seated capacity&quot;, &quot;value&quot;: &quot;300&quot;, &quot;unitText&quot;: &quot;guests&quot; },
+    { &quot;@type&quot;: &quot;PropertyValue&quot;, &quot;name&quot;: &quot;Parking spaces&quot;, &quot;value&quot;: &quot;100+&quot;, &quot;unitText&quot;: &quot;gated on-site spaces&quot; }
+  ],
+  &quot;smokingAllowed&quot;: false,
+  &quot;publicAccess&quot;: false,
+  &quot;amenityFeature&quot;: [
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Stage&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Dance floor&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Full bar&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Red-carpet entrance&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Gold Chiavari chairs and tables&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Big-screen TVs and sound system&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Bridal / VIP prep room&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Private gated parking lot (100+ spaces)&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Valet parking available&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Outside catering welcome with approval&quot;, &quot;value&quot;: true },
+    { &quot;@type&quot;: &quot;LocationFeatureSpecification&quot;, &quot;name&quot;: &quot;Wheelchair accessible&quot;, &quot;value&quot;: &quot;REPLACE true/false&quot; }
+  ],
+  &quot;areaServed&quot;: [
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;San Jose&quot; },
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;Santa Clara&quot; },
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;Milpitas&quot; },
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;Campbell&quot; },
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;Sunnyvale&quot; },
+    { &quot;@type&quot;: &quot;City&quot;, &quot;name&quot;: &quot;Fremont&quot; },
+    { &quot;@type&quot;: &quot;AdministrativeArea&quot;, &quot;name&quot;: &quot;Santa Clara County&quot; },
+    { &quot;@type&quot;: &quot;Place&quot;, &quot;name&quot;: &quot;San Francisco Bay Area&quot; }
+  ],
+  &quot;sameAs&quot;: [
+    &quot;https://www.yelp.com/biz/crown-prince-event-hall-san-jose&quot;,
+    &quot;REPLACE_WITH_GOOGLE_BUSINESS_PROFILE_URL&quot;,
+    &quot;REPLACE_WITH_INSTAGRAM_URL&quot;,
+    &quot;REPLACE_WITH_FACEBOOK_URL&quot;
+  ],
+  &quot;hasOfferCatalog&quot;: {
+    &quot;@type&quot;: &quot;OfferCatalog&quot;,
+    &quot;name&quot;: &quot;Crown Prince Event Hall Packages&quot;,
+    &quot;itemListElement&quot;: [
+      { &quot;@type&quot;: &quot;Offer&quot;, &quot;name&quot;: &quot;Weekday Flex&quot;, &quot;description&quot;: &quot;Monday–Thursday hourly rental for meetings, rehearsals, community events and small gatherings.&quot;, &quot;priceCurrency&quot;: &quot;USD&quot;, &quot;price&quot;: &quot;REPLACE_HOURLY_RATE&quot;, &quot;url&quot;: &quot;https://crownprincehall.com/pricing/#weekday-flex&quot; },
+      { &quot;@type&quot;: &quot;Offer&quot;, &quot;name&quot;: &quot;Weekend Essentials&quot;, &quot;description&quot;: &quot;Friday–Sunday event-ready rental: 6-hour event window, 2 hours setup, 8 hours of on-site attendants, Gold Chiavari chairs and tables, big-screen TVs.&quot;, &quot;priceCurrency&quot;: &quot;USD&quot;, &quot;price&quot;: &quot;REPLACE_PACKAGE_PRICE&quot;, &quot;url&quot;: &quot;https://crownprincehall.com/pricing/#weekend-essentials&quot; },
+      { &quot;@type&quot;: &quot;Offer&quot;, &quot;name&quot;: &quot;Celebration Plus&quot;, &quot;description&quot;: &quot;Birthdays, graduations and anniversaries with the extras handled.&quot;, &quot;priceCurrency&quot;: &quot;USD&quot;, &quot;price&quot;: &quot;REPLACE_PACKAGE_PRICE&quot;, &quot;url&quot;: &quot;https://crownprincehall.com/pricing/#celebration-plus&quot; },
+      { &quot;@type&quot;: &quot;Offer&quot;, &quot;name&quot;: &quot;Wedding &amp; Debut Premium&quot;, &quot;description&quot;: &quot;Weddings, quinceañeras and debuts with full red-carpet treatment, bridal/VIP prep room and VIP grand entrance.&quot;, &quot;priceCurrency&quot;: &quot;USD&quot;, &quot;price&quot;: &quot;REPLACE_PACKAGE_PRICE&quot;, &quot;url&quot;: &quot;https://crownprincehall.com/pricing/#wedding-debut-premium&quot; }
+    ]
+  },
+  &quot;potentialAction&quot;: {
+    &quot;@type&quot;: &quot;ReserveAction&quot;,
+    &quot;name&quot;: &quot;Book a private tour&quot;,
+    &quot;target&quot;: {
+      &quot;@type&quot;: &quot;EntryPoint&quot;,
+      &quot;urlTemplate&quot;: &quot;https://crownprincehall.com/book-a-tour/&quot;,
+      &quot;actionPlatform&quot;: [&quot;http://schema.org/DesktopWebPlatform&quot;, &quot;http://schema.org/MobileWebPlatform&quot;]
+    },
+    &quot;result&quot;: { &quot;@type&quot;: &quot;Reservation&quot;, &quot;name&quot;: &quot;Venue tour&quot; }
+  }
+}
+&lt;/script&gt;</code></pre></div>
+
+<h2 id="f">Snippet F · Connect, convert, close</h2>
+<h3>Critique of the current calls to action</h3>
+<p>The indexed copy pushes three actions with equal weight: book a private tour, take the 360° tour, and get a same-day quote. A tour is a high-commitment ask that suits the small share of visitors comparing finalists. The 360° tour is engagement, not conversion, and leaves no contact record. The quote requires the visitor to compose a message. Nothing serves the majority who are still researching and want a price range and floor plan to share with a spouse, a parent or a committee. They leave and come back through a directory that charges for the lead.</p>
+<h3>Recommended hierarchy</h3>
+<ol class="cta"><li><strong>Primary</strong> on every page, hero and sticky mobile bar: “Get 2026 Pricing &amp; Floor Plan”, opening the brochure form.</li><li><strong>Secondary:</strong> “Book a Private Tour”, a form that collects date, guest count and event type so the sales team qualifies before the visit.</li><li><strong>Tertiary</strong>, text link only: “Take the 360° Tour”.</li><li><strong>Header on mobile:</strong> click-to-call <code>&lt;a href="tel:+14084081654"&gt;(408) 408-1654&lt;/a&gt;</code>.</li></ol>
+<h3>Brochure section copy</h3>
+<p>Place after the packages section on the homepage and as the closing section of /pricing/, with a one-line version in the footer.</p>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>H2   Download the 2026 Pricing &amp; Floor Plan Brochure
+Sub  Every package, every add-on and the full 4,100 sq ft floor plan, in one PDF you can share with family or your team.
+
+What&#x27;s inside
+• 2026 package pricing for Weekday Flex, Weekend Essentials, Celebration Plus and Wedding &amp; Debut Premium
+• Scaled floor plan with banquet, theater and reception layouts for 100, 200 and 300 guests
+• Add-on price list: DJ, photobooth, bar packages, valet, VIP prep room
+• Deposit schedule and the 90-day refund policy in plain language
+• Preferred caterer list and outside-catering approval checklist
+
+Form fields (keep to six)
+  First name*  ·  Email*  ·  Mobile*
+  Event type* (Wedding / Quinceañera / Corporate / Birthday or Anniversary / Other)
+  Event date (or &quot;not sure yet&quot;)  ·  Estimated guest count (under 100 / 100–200 / 200–300)
+
+Button   Send Me the Brochure
+Under    Delivered instantly by email. No spam, and we never share your details.
+Trust    ★★★★★ &quot;…&quot; — [client name], [event type], [month year]  ·  90-day refund policy  ·  Same-day quotes</code></pre></div>
+<h3>Layout</h3>
+<p>Two columns on desktop, stacked on mobile. Left: headline, the “what's inside” list, and a photo or mockup of the brochure cover showing the floor plan. Right: the form on a slightly raised panel with a full-width button. Beneath both: one row of three trust items. On mobile, a sticky bottom bar with “Get Pricing” and a phone icon.</p>
+<h3>Close sequence after submit</h3>
+<ul><li><strong>Instant:</strong> email with the PDF, a one-click “Book a private tour” link and the direct phone number.</li><li><strong>Day 1, text:</strong> “Hi [name], this is [owner] at Crown Prince Event Hall. Did the brochure answer your questions about [event type]? Happy to hold [date] for 48 hours while you decide.”</li><li><strong>Day 3, email:</strong> “How our 90-day refund policy protects your date”, with two recent photos of the same event type.</li><li><strong>Day 7, last touch:</strong> “Dates in [month] are filling; reply with your guest count for a same-day quote.”</li></ul>
+<p>Record brochure downloads as a conversion in Google Analytics 4 and Google Ads so paid traffic optimizes to it.</p>
+
+<h2 id="g">Snippet G · Google Business Profile</h2>
+<p><strong>Business name, exact, everywhere:</strong> Crown Prince Event Hall</p>
+<p><strong>Primary category:</strong> Banquet hall<br><strong>Secondary categories:</strong> Event venue · Wedding venue · Reception hall · Function room facility · Party planner (only if planning is sold as a service)</p>
+<h3>Description (745 of 750 characters)</h3>
+<div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA, for weddings, quinceañeras, debuts, birthdays, graduations and corporate events for up to 300 guests. The hall is event-ready with a stage, dance floor, red-carpet entrance, full bar, Gold Chiavari chairs and big-screen TVs, plus a private gated lot with 100+ parking spaces and valet on request. Choose Weekday Flex hourly rentals, Weekend Essentials, Celebration Plus or Wedding/Debut Premium packages with a 6-hour event window and 2 hours of setup. Outside catering is welcome with approval. Take the 360° virtual tour, book a private tour and get a same-day quote with all fees stated up front. Serving San Jose, Santa Clara, Milpitas and the South Bay.</code></pre></div>
+<div class="two"><div><h3>Services</h3><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>Wedding venue rental
+Wedding reception hall
+Quinceañera venue rental
+Debut and sweet 16 venue
+Birthday party venue
+Anniversary party venue
+Graduation party venue
+Corporate event venue
+Holiday party venue
+Award banquet and gala venue
+Meeting and presentation space
+Community and church event rental
+Weekday hourly hall rental
+Bar packages (full bar)
+DJ and sound services
+Digital photobooth rental
+Valet parking
+Event planning support</code></pre></div></div><div><h3>Amenities and attributes</h3><div class="code"><button class="copy" type="button" data-copy>Copy</button><pre><code>Capacity: up to 300 guests
+4,100 sq ft hall
+Stage and dance floor
+Full bar (in-house bar packages only)
+Red-carpet entrance
+Gold Chiavari chairs and tables included
+Big-screen TVs and sound system
+Bridal / VIP prep room
+Private gated parking lot, 100+ spaces
+Free street parking
+Valet available
+Outside catering welcome with approval
+All ages welcome
+Non-smoking indoors
+Security cameras on site
+Wheelchair accessible entrance and restroom (confirm before checking)
+360° virtual tour available
+Same-day quotes; 90-day refund policy</code></pre></div></div></div>
+<h3>Hours and posting</h3>
+<p>Set hours to when someone answers the phone, for example Mon–Sun 9:00 AM to 9:00 PM, not “Open 24 hours”. Match Yelp and the schema to this exactly. Post once a week, rotating wedding, quinceañera, corporate and birthday, each with a photo, the event type, the city and a “Get 2026 pricing” link.</p>
+</main></div>
+<script>
+document.addEventListener('click',function(e){var b=e.target.closest('.copy');if(!b)return;var t=b.hasAttribute('data-copy-text')?b.getAttribute('data-copy-text'):b.parentElement.querySelector('code').textContent;navigator.clipboard.writeText(t).then(function(){b.classList.add('done');b.textContent='Copied';setTimeout(function(){b.classList.remove('done');b.textContent='Copy'},1500)}).catch(function(){b.textContent='Select & copy'})});
+</script>

@@ -1,0 +1,49 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://crownprincehall.com/#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many guests can Crown Prince Event Hall hold?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Crown Prince Event Hall seats up to 300 guests in a 4,100 sq ft hall with a stage and dance floor. Gold Chiavari chairs and tables are included, and the floor plan can be arranged for banquet, theater or reception layouts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is included in a Crown Prince Event Hall package?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Weekend packages include a 6-hour event window, 2 hours of complimentary setup, 8 hours of on-site event attendants, Gold Chiavari chairs and tables, big-screen TVs, the stage and dance floor, and access to the full bar. Weekday Flex is billed hourly Monday through Thursday. Add-ons include DJ, digital photobooth, bridal/VIP prep room, VIP grand entrance, bar packages, chafers, table runners and marquee numbers."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I bring my own caterer or alcohol to Crown Prince Event Hall?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Outside catering is welcome with venue approval. Alcohol is served through the venue's bar packages only; outside alcohol is not permitted. The hall is all-ages and non-smoking indoors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there parking at Crown Prince Event Hall in San Jose?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The venue has a private gated lot with more than 100 spaces, plus free street parking nearby. Valet service can be added for weddings and formal arrivals."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Crown Prince Event Hall's cancellation and refund policy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Crown Prince Event Hall offers a clear 90-day refund policy: bookings cancelled at least 90 days before the event date are refunded per the written agreement. All fees are stated up front on your quote, and standard events receive a tailored quote the same day."
+      }
+    }
+  ]
+}
+</script>
