@@ -12,19 +12,20 @@ hand-written.
 
 ## How it was made
 
-The original export had an irregular internal text layer, so field placement by text
-extraction was unreliable. Instead each page is rendered as a high-resolution background
-(200 DPI) and the form fields are drawn on top at fixed coordinates — so the printed text
-is never altered and the fields always line up. See `generator/` to regenerate:
+The form fields are stamped directly onto the **original vector pages** — the text stays
+sharp at any zoom and the contract wording is never touched. Field coordinates were tuned
+against a rendered copy of each page, but the delivered PDF keeps the original vector
+content. Two steps, in `generator/`:
 
 ```bash
 cd generator
-python3 build.py      # writes ../Crown_Prince_Rental_Agreement_Fillable.pdf
+python3 build_overlay.py   # 1. transparent overlay carrying just the AcroForm fields
+python3 merge_vector.py    # 2. graft those fields onto source_original.pdf -> ../Crown_Prince_Rental_Agreement_Fillable.pdf
 ```
 
-Requires `pypdfium2`, `reportlab`, and `Pillow`. Field positions live in
+Requires `reportlab` (overlay) and `pikepdf` (vector graft). Field positions live in
 `generator/fields.py` (coordinates in PDF points, measured from the top of each page), so
-nudging a field is a one-line edit followed by a rebuild.
+nudging a field is a one-line edit followed by re-running both steps.
 
 ## Field keys
 
