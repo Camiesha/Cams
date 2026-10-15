@@ -6,8 +6,13 @@
 
 ## What's here
 
+> **Start with `final-specification.html`** — the single, audited, internally-consistent **final** spec. It reconciles and **supersedes** the earlier scoring drafts (`report.html`, `scoring-automation-spec.html`): it locks one formula, recalculates all 15 worked examples against it, adds a deliberate confirmed-tour-vs-unconfirmed-request distinction, dormancy handling, venue-specific capacity, a defined conversion-probability window, re-verified sources, and leadership-decision + developer-verification checklists. The other files remain for history and for the visualization research.
+
 | File | What it is |
 |---|---|
+| `final-specification.html` | **FINAL · authoritative.** The consolidated, consistency-audited scoring specification (formula, matrix, classification precedence, 15 recalculated examples, automation triggers, validation, 15 acceptance tests, roadmap, dual summaries, decision/verification lists). |
+| `scoring-automation-spec.html` | Earlier implementation-grade spec (superseded by the final spec; kept for history). |
+| `visualization-research.html` | Research-only report on how to *visualize* the score (display, explainability, dashboards, WCAG). |
 | `report.html` | The full deliverable — all 12 sections: executive summary, current-model audit, research & best practice (with cited sources), scoring architecture, the final scoring matrix, Hot/Warm/Cold rules, the calculation formula with five worked examples, backend/automation requirements, UI recommendations, a testing & validation plan, a phased roadmap, and the complete visual redesign spec. Open it in any browser. |
 | `prototype.html` | A self-contained, clickable prototype. Pipeline board with live score rings, a click-to-open score breakdown drawer, an activity/score timeline, a prioritisation dashboard, and a mobile view. The **“Simulate Calendly tour”** button on the new lead recomputes the score with the real model and shows the override pushing it to Warm. |
 
