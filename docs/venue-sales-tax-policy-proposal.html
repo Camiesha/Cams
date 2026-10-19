@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Venue Sales Tax Policy Proposal</title>
+<meta name="description" content="Research-backed California sales tax policy proposal for Crown Prince Event Hall and Alvin Studio & Courtyard, San Jose." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout concept: a formal, print-friendly executive proposal in the Crown Prince house identity
+     (navy / gold / cream), structured as a scannable dashboard with navy section bars,
+     KPI tiles, color+label-coded decision tables, a CSS decision flow, and worked invoice mockups. */
+  :root{
+    /* brand */
+    --navy:#22314d;
+    --navy-deep:#1d2a44;
+    --navy-soft:#2c3e60;
+    --gold:#b8912f;
+    --gold-soft:#c9a24b;
+    --gold-tint:#f7f1df;
+    --cream:#f3efe4;
+    --paper:#ffffff;
+    --ink:#20242b;
+    --ink-soft:#3b424d;
+    --muted:#6b7280;
+    --line:#d9d9d9;
+    --line-soft:#e9e9e4;
+    /* semantic status (color + always paired with a text label) */
+    --tax-fg:#9e2f2f;   --tax-bg:#fbe9e9;   --tax-bd:#e0b0b0;
+    --non-fg:#256b45;   --non-bg:#e7f4ec;   --non-bd:#a9d4bd;
+    --con-fg:#8a5a00;   --con-bg:#fdf3df;   --con-bd:#e7ce93;
+    --unr-fg:#4f5864;   --unr-bg:#eef0f3;   --unr-bd:#cbd2db;
+    --shadow:0 1px 2px rgba(29,42,68,.06), 0 6px 18px rgba(29,42,68,.06);
+    color-scheme: light;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:"Source Sans 3", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{
+    max-width:1060px;
+    margin:0 auto;
+    padding-left:max(16px, env(safe-area-inset-left,0px));
+    padding-right:max(16px, env(safe-area-inset-right,0px));
+  }
+  h1,h2,h3,h4{font-family:"Archivo", system-ui, Arial, sans-serif; text-wrap:balance; color:var(--navy); margin:0;}
+  p{margin:0 0 12px;}
+  a{color:#285a8f;}
+  strong{color:var(--ink);}
+  .mono{font-family:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;}
+  .tnum{font-variant-numeric:tabular-nums;}
+  .small{font-size:13px;}
+  .muted{color:var(--muted);}
+
+  /* ---------- sticky header ---------- */
+  header.top{
+    position:sticky; top:env(safe-area-inset-top,0px); z-index:30;
+    background:var(--navy); color:#fff;
+    border-bottom:3px solid var(--gold);
+    box-shadow:0 2px 10px rgba(0,0,0,.18);
+  }
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--navy);}
+  .top .wrap{display:flex; align-items:center; justify-content:space-between; gap:14px; padding-block:12px; flex-wrap:wrap;}
+  .brand h1{color:#fff; font-size:21px; font-weight:800; letter-spacing:.3px; line-height:1.05;}
+  .brand h1 .eh{color:var(--gold-soft); font-size:13px; letter-spacing:.5px; display:block; font-weight:700; margin-top:2px;}
+  .brand .sub{color:#c7cedd; font-size:12px; margin-top:3px;}
+  .top .status{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end;}
+  .chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; letter-spacing:.2px;}
+  .chip.rate{background:var(--gold); color:#2a2206;}
+  .chip.draft{background:#fff; color:var(--navy); border:1px solid #cdd3dd;}
+
+  /* ---------- section nav ---------- */
+  nav.toc{background:var(--navy-deep); border-bottom:1px solid #30406a; position:sticky; top:calc(env(safe-area-inset-top,0px) + 58px); z-index:20;}
+  nav.toc .wrap{display:flex; gap:4px; overflow-x:auto; padding-block:7px; scrollbar-width:thin;}
+  nav.toc a{color:#cdd6e6; text-decoration:none; font-size:12px; font-weight:600; white-space:nowrap; padding:5px 10px; border-radius:6px;}
+  nav.toc a:hover{background:#30406a; color:#fff;}
+
+  /* ---------- section shell ---------- */
+  section{padding-block:30px;}
+  .sec-head{display:flex; align-items:baseline; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+  .sec-num{font-family:"Archivo"; font-weight:800; font-size:13px; color:var(--gold); letter-spacing:1px; background:var(--gold-tint); border:1px solid var(--gold-soft); border-radius:6px; padding:3px 9px;}
+  .sec-head h2{font-size:23px; font-weight:800;}
+  .sec-head .lede{flex-basis:100%; color:var(--ink-soft); font-size:15px; max-width:70ch;}
+  .bar{background:var(--navy); color:#fff; padding:8px 13px; font-family:"Archivo"; font-size:14px; font-weight:700; letter-spacing:.3px; border-radius:7px 7px 0 0;}
+  .bar .lite{font-weight:400; font-size:12px; color:#c7cedd; margin-left:8px;}
+
+  .card{background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow);}
+  .card.pad{padding:18px;}
+  .stack{display:flex; flex-direction:column; gap:16px;}
+
+  /* ---------- KPI tiles ---------- */
+  .tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+  .tile{background:var(--paper); border:1px solid var(--line); border-top:4px solid var(--navy); border-radius:9px; padding:14px; box-shadow:var(--shadow);}
+  .tile.gold{border-top-color:var(--gold);}
+  .tile.red{border-top-color:var(--tax-fg);}
+  .tile.green{border-top-color:var(--non-fg);}
+  .tile .k{font-size:12px; font-weight:700; color:var(--muted); letter-spacing:.3px; text-transform:uppercase;}
+  .tile .v{font-family:"Archivo"; font-weight:800; font-size:30px; color:var(--navy); line-height:1.1; margin-top:4px;}
+  .tile .v.sm{font-size:21px;}
+  .tile .d{font-size:12.5px; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- status pill ---------- */
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:700; padding:3px 9px; border-radius:999px; border:1px solid; white-space:nowrap; letter-spacing:.2px;}
+  .pill::before{content:""; width:7px; height:7px; border-radius:50%;}
+  .pill.tax{color:var(--tax-fg); background:var(--tax-bg); border-color:var(--tax-bd);} .pill.tax::before{background:var(--tax-fg);}
+  .pill.non{color:var(--non-fg); background:var(--non-bg); border-color:var(--non-bd);} .pill.non::before{background:var(--non-fg);}
+  .pill.con{color:var(--con-fg); background:var(--con-bg); border-color:var(--con-bd);} .pill.con::before{background:var(--con-fg);}
+  .pill.unr{color:var(--unr-fg); background:var(--unr-bg); border-color:var(--unr-bd);} .pill.unr::before{background:var(--unr-fg);}
+  .conf{font-size:11px; font-weight:700; padding:2px 7px; border-radius:5px; letter-spacing:.3px;}
+  .conf.h{background:#e7f4ec; color:var(--non-fg);}
+  .conf.m{background:#fdf3df; color:var(--con-fg);}
+  .conf.l{background:#f3e5e5; color:var(--tax-fg);}
+
+  /* ---------- tables ---------- */
+  .tbl-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:0 0 10px 10px; background:var(--paper); min-width:0;}
+  table{border-collapse:collapse; width:100%; font-size:13.5px;}
+  thead th{background:var(--navy-soft); color:#fff; font-family:"Archivo"; font-weight:600; text-align:left; padding:9px 11px; font-size:12.5px; letter-spacing:.2px; position:sticky; top:0;}
+  tbody td{border-top:1px solid var(--line-soft); padding:9px 11px; vertical-align:top;}
+  tbody tr:nth-child(even){background:#fbfaf6;}
+  td.c{text-align:center;} td.r{text-align:right;}
+  td .why{color:var(--ink-soft); font-size:12.5px;}
+  .lbl{font-weight:700; color:var(--navy);}
+  caption{caption-side:top; text-align:left; font-size:12.5px; color:var(--muted); padding:8px 2px;}
+
+  /* key / legend */
+  .legend{display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 14px;}
+  .legend .pill{cursor:default;}
+
+  /* ---------- rate breakdown bar ---------- */
+  .ratebar{display:flex; height:46px; border-radius:8px; overflow:hidden; border:1px solid var(--line); font-size:12px; font-weight:700;}
+  .ratebar > div{display:flex; align-items:center; justify-content:center; color:#fff; text-align:center; padding:2px; line-height:1.1;}
+  .seg-state{background:var(--navy); flex: 6.00;}
+  .seg-bb{background:var(--navy-soft); flex:1.25;}
+  .seg-dist{background:var(--gold); color:#2a2206; flex:2.75;}
+  .rtick{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:6px;}
+
+  /* ---------- flowchart ---------- */
+  .flow{display:flex; flex-direction:column; align-items:center; gap:0; padding:6px 0;}
+  .fnode{background:var(--paper); border:2px solid var(--navy); border-radius:9px; padding:10px 14px; max-width:620px; width:100%; text-align:center; font-size:13.5px; box-shadow:var(--shadow);}
+  .fnode .t{font-family:"Archivo"; font-weight:700; color:var(--navy); font-size:13px;}
+  .fnode.start{background:var(--navy); color:#fff; border-color:var(--navy);}
+  .fnode.start .t{color:#fff;}
+  .fnode.decision{border-color:var(--gold); border-style:dashed; background:var(--gold-tint);}
+  .fnode.tax{border-color:var(--tax-bd); background:var(--tax-bg);}
+  .fnode.non{border-color:var(--non-bd); background:var(--non-bg);}
+  .farrow{width:2px; height:20px; background:var(--gold-soft); position:relative;}
+  .farrow::after{content:""; position:absolute; bottom:-2px; left:-4px; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid var(--gold-soft);}
+  .fsplit{display:flex; gap:16px; width:100%; max-width:720px; justify-content:center; flex-wrap:wrap;}
+  .fbranch{flex:1; min-width:230px; display:flex; flex-direction:column; align-items:center;}
+  .fbranch .elab{font-size:11.5px; font-weight:700; color:var(--gold); background:var(--gold-tint); border:1px solid var(--gold-soft); border-radius:999px; padding:2px 10px; margin-bottom:6px;}
+
+  /* ---------- scenario cards ---------- */
+  .scen-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .scen{background:var(--paper); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow); overflow:hidden;}
+  .scen .sh{background:var(--navy); color:#fff; padding:9px 13px; font-family:"Archivo"; font-weight:700; font-size:14px; display:flex; justify-content:space-between; gap:8px; align-items:center;}
+  .scen .sh .tag{font-size:11px; font-weight:700; background:var(--gold); color:#2a2206; padding:2px 8px; border-radius:999px;}
+  .scen table{font-size:13px;}
+  .scen .foot{padding:11px 13px; background:#fbfaf6; border-top:1px solid var(--line); font-size:13px;}
+  .scen .foot .row{display:flex; justify-content:space-between; gap:8px;}
+  .scen .foot .row.total{font-weight:800; color:var(--navy); font-family:"Archivo"; font-size:15px; border-top:1px dashed var(--line); margin-top:6px; padding-top:6px;}
+
+  /* invoice mockup */
+  .invoice{border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--paper); box-shadow:var(--shadow);}
+  .invoice .ih{background:var(--cream); padding:14px 16px; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid var(--gold); flex-wrap:wrap; gap:8px;}
+  .invoice .ih .b{font-family:"Archivo"; font-weight:800; color:var(--navy); font-size:17px;}
+  .invoice .ih .m{font-size:12px; color:var(--muted); text-align:right;}
+  .invoice table td, .invoice table th{font-size:13px;}
+  .invoice .tot{padding:12px 16px; background:#fbfaf6; border-top:1px solid var(--line);}
+  .invoice .tot .row{display:flex; justify-content:space-between; padding:3px 0; font-size:13.5px;}
+  .invoice .tot .row.grand{font-family:"Archivo"; font-weight:800; font-size:16px; color:var(--navy); border-top:2px solid var(--navy); margin-top:6px; padding-top:7px;}
+  .invoice .tot .row.bal{color:var(--tax-fg); font-weight:700;}
+
+  /* before/after */
+  .ba{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .ba .col{border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow);}
+  .ba .col h4{padding:9px 13px; font-size:13px; color:#fff;}
+  .ba .col.before h4{background:#7a2e2e;}
+  .ba .col.after h4{background:var(--non-fg);}
+  .ba ul{margin:0; padding:12px 14px 14px 30px; background:var(--paper);}
+  .ba li{margin-bottom:7px; font-size:13.5px;}
+
+  /* roadmap */
+  .phase{display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-top:1px solid var(--line-soft);}
+  .phase:first-child{border-top:none;}
+  .phase .n{flex:none; width:34px; height:34px; border-radius:50%; background:var(--navy); color:#fff; font-family:"Archivo"; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .phase .n.gold{background:var(--gold); color:#2a2206;}
+  .phase .body h4{font-size:14.5px; margin-bottom:2px;}
+  .phase .body .meta{font-size:12px; color:var(--muted); font-weight:600;}
+
+  /* bars for pricing chart */
+  .hbar-row{display:grid; grid-template-columns:150px 1fr; gap:10px; align-items:center; margin-bottom:9px; font-size:13px;}
+  .hbar-track{background:#eef0ee; border-radius:5px; overflow:hidden; height:22px; position:relative;}
+  .hbar-fill{height:100%; background:var(--gold); display:flex; align-items:center; padding-left:8px; color:#2a2206; font-weight:700; font-size:11.5px; white-space:nowrap;}
+  .hbar-fill.navy{background:var(--navy); color:#fff;}
+
+  .callout{border-left:4px solid var(--gold); background:var(--gold-tint); border-radius:0 9px 9px 0; padding:13px 16px; font-size:14px;}
+  .callout.warn{border-left-color:var(--tax-fg); background:var(--tax-bg);}
+  .callout.good{border-left-color:var(--non-fg); background:var(--non-bg);}
+  .callout h4{font-size:14px; margin-bottom:4px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+
+  ul.clean{margin:0 0 12px; padding-left:20px;}
+  ul.clean li{margin-bottom:6px;}
+  ol.clean{margin:0 0 12px; padding-left:20px;}
+  ol.clean li{margin-bottom:6px;}
+
+  .footer{background:var(--navy); color:#c7cedd; padding:26px 0; margin-top:10px; font-size:12.5px;}
+  .footer .wrap{display:flex; flex-direction:column; gap:8px;}
+  .footer a{color:#9fc0e6;}
+
+  .anchor{scroll-margin-top:120px;}
+
+  @media (max-width:860px){
+    .tiles{grid-template-columns:repeat(2,1fr);}
+    .scen-grid{grid-template-columns:1fr;}
+    .ba{grid-template-columns:1fr;}
+    .grid2,.grid3{grid-template-columns:1fr;}
+    .hbar-row{grid-template-columns:110px 1fr;}
+  }
+  @media print{
+    body{background:#fff;}
+    header.top, nav.toc{position:static;}
+    nav.toc{display:none;}
+    .card,.tile,.scen,.invoice{box-shadow:none;}
+    section{padding-block:16px; page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>CROWN PRINCE EVENT HALL <span class="eh">· ALVIN STUDIO &amp; COURTYARD</span></h1>
+      <div class="sub">Sales Tax Research &amp; Policy Proposal · San Jose, Santa Clara County, CA</div>
+    </div>
+    <div class="status">
+      <span class="chip rate">San Jose rate 10.000%</span>
+      <span class="chip draft">PROPOSED — not yet approved</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#dash">Dashboard</a>
+    <a href="#findings">Findings</a>
+    <a href="#rate">Tax Rate</a>
+    <a href="#matrix">Taxability Matrix</a>
+    <a href="#flow">Decision Flow</a>
+    <a href="#calc">Calculations</a>
+    <a href="#market">Market Pricing</a>
+    <a href="#policy">Proposed Policy</a>
+    <a href="#contract">Contract Wording</a>
+    <a href="#crm">CRM Specs</a>
+    <a href="#risk">Risk &amp; Roadmap</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#sources">Sources</a>
+    <a href="#cpa">CPA Questions</a>
+    <a href="#action">Action Sheet</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ 01 DASHBOARD ============ -->
+<section id="dash" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <h2>Executive Dashboard</h2>
+    <p class="lede">A research-backed view of what these two San Jose venues must — and must not — charge sales tax on. Prepared for management review on 19 October 2026. Figures and classifications below are proposals grounded in CDTFA guidance; items marked for confirmation must be reviewed with a CPA or CDTFA before the policy goes live.</p>
+  </div>
+
+  <div class="tiles">
+    <div class="tile gold">
+      <div class="k">Charges reviewed</div>
+      <div class="v">22</div>
+      <div class="d">Across both venues, line by line</div>
+    </div>
+    <div class="tile green">
+      <div class="k">Likely non-taxable</div>
+      <div class="v">9</div>
+      <div class="d">Incl. the core room/courtyard rental</div>
+    </div>
+    <div class="tile red">
+      <div class="k">Likely taxable</div>
+      <div class="v">4</div>
+      <div class="d">Led by the venue's own bar/alcohol sales</div>
+    </div>
+    <div class="tile">
+      <div class="k">Conditional / to confirm</div>
+      <div class="v">9</div>
+      <div class="d">Depend on how each fee is structured</div>
+    </div>
+  </div>
+
+  <div style="height:16px"></div>
+
+  <div class="grid2">
+    <div class="callout good">
+      <h4>Headline finding</h4>
+      <p style="margin:0">Renting the <strong>hall or courtyard itself is real property</strong> — it is <strong>not</strong> a sale of tangible personal property, so it is <strong>generally not subject to California sales tax</strong>. The charge these venues most clearly <em>must</em> collect and remit tax on is their own <strong>bar / alcoholic-beverage sales</strong>. The biggest money risks are therefore the opposite of what many venues assume: <strong>over-charging tax on a non-taxable room rental</strong>, and <strong>under-collecting on bar sales</strong> or <strong>not paying use tax on owned equipment.</strong></p>
+    </div>
+    <div class="callout warn">
+      <h4>Top compliance risks</h4>
+      <ul class="clean" style="margin:0">
+        <li><strong>Mandatory bundled fees</strong> (cleaning, coordinator) can be pulled into the taxable measure when the package also rents taxable equipment.</li>
+        <li><strong>Equipment use tax:</strong> if tables, linens, A/V, LED, photo booth were bought without paying CA tax, their rental to customers becomes taxable.</li>
+        <li><strong>Bar sales</strong> must be taxed and remitted; an ABC license is required.</li>
+        <li><strong>Web CRM vs. mobile app</strong> must calculate tax identically.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="height:16px"></div>
+  <div class="callout">
+    <h4>Decisions management must make (detail in §12)</h4>
+    <p style="margin:0">(1) Confirm whether CA sales/use tax was paid when buying the venues' tables, chairs, linens and A/V equipment. (2) Decide whether cleaning, security and insurance fees are <em>mandatory</em> or <em>optional</em>, and state them separately. (3) Confirm the venue bar is licensed and tax-registered. (4) Approve one written tax policy for both venues. (5) Authorize the CRM tax-engine changes in §08.</p>
+  </div>
+</section>
+
+<!-- ============ 02 FINDINGS ============ -->
+<section id="findings" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <h2>Key Findings &amp; Recommendations</h2>
+    <p class="lede">California taxes retail sales of <em>tangible personal property</em> (TPP) and leases of TPP. It does not tax real-property rental or stand-alone services. Everything below follows from that rule and the CDTFA <em>Tax Guide for Venue Rental Businesses</em>.</p>
+  </div>
+
+  <div class="stack">
+    <div class="card pad">
+      <h3 style="font-size:16px; margin-bottom:8px;">What we found</h3>
+      <ol class="clean">
+        <li><strong>The room and the courtyard are not taxable.</strong> A charge for the use of real property is not a sale or lease of TPP. The base venue/courtyard rental is not subject to sales tax. <span class="conf h">HIGH</span></li>
+        <li><strong>Tables, chairs, linens and equipment are the pivot.</strong> These are TPP. Under CDTFA rules, if the venue <em>paid CA sales/use tax when it bought them</em> and rents them in the same form, the charge to the customer is <em>not</em> taxed again. If the venue bought them tax-free (e.g., for resale), the rental charge to the customer <em>is</em> taxable. <span class="conf m">CONFIRM PURCHASE-TAX STATUS</span></li>
+        <li><strong>The venue bar is a taxable retailer.</strong> Alcoholic-beverage and other drink/food sales the venue makes are taxable TPP sales and require an ABC license and sales-tax collection. <span class="conf h">HIGH</span></li>
+        <li><strong>Separately stated, optional services are generally not taxable</strong> — DJ, security, parking attendants, entertainment — provided the staff do not prepare or serve food/beverages. <span class="conf h">HIGH (if separately stated)</span></li>
+        <li><strong>Mandatory cleaning and mandatory "coordinator" fees are a grey zone.</strong> CDTFA treats a <em>mandatory</em> charge tied to a taxable sale/lease as part of the taxable amount; a genuinely <em>optional</em>, separately stated service charge generally is not. <span class="conf m">CONFIRM</span></li>
+        <li><strong>Outside caterers and customer-hired third parties collect their own tax.</strong> When the customer pays a caterer, DJ, florist or rental company directly, that vendor — not the venue — is responsible for the tax on its charges. <span class="conf h">HIGH</span></li>
+        <li><strong>Refundable deposits are not taxed when taken</strong> — only if/when applied to a taxable charge. <span class="conf h">HIGH</span></li>
+      </ol>
+    </div>
+
+    <div class="grid2">
+      <div class="callout good">
+        <h4>Recommendations — start now</h4>
+        <ul class="clean" style="margin:0">
+          <li>Stop adding sales tax to the bare room/courtyard rental line.</li>
+          <li>Pull every bar/alcohol sale into tax collection and remittance.</li>
+          <li>Separate-state each fee on quotes and invoices with its own taxable / non-taxable flag.</li>
+          <li>Make cleaning, security and insurance genuinely optional where feasible.</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <h4>Recommendations — confirm, then configure</h4>
+        <ul class="clean" style="margin:0">
+          <li>Audit purchase invoices for owned TPP — was CA tax paid? Accrue use tax if not.</li>
+          <li>Get written CDTFA / CPA confirmation on mandatory cleaning &amp; coordinator fees.</li>
+          <li>Confirm the real nature of the "$125 insurance" charge (pass-through premium vs. admin fee).</li>
+          <li>Configure the CRM per §08 before charging tax under the new policy.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 RATE ============ -->
+<section id="rate" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <h2>Verified Tax Rate — San Jose</h2>
+    <p class="lede">Both venues (Crown Prince, 1654 Burdette Dr; Alvin Studio &amp; Courtyard, 2470 Alvin Ave, 95121) sit inside the City of San Jose, Santa Clara County. The same combined rate applies to both.</p>
+  </div>
+
+  <div class="card pad stack">
+    <div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
+        <h3 style="font-size:16px;">Combined rate: <span class="mono" style="color:var(--gold);">10.000%</span></h3>
+        <span class="small muted">Effective 1 April 2026 (raised from 9.375%) · CDTFA Notice L-1022</span>
+      </div>
+      <div class="ratebar" style="margin-top:12px;">
+        <div class="seg-state">State<br>6.000%</div>
+        <div class="seg-bb">Local (Bradley-Burns)<br>1.250%</div>
+        <div class="seg-dist">District (Santa Clara / San Jose)<br>2.750%</div>
+      </div>
+      <div class="rtick"><span>State + local base = 7.250%</span><span>+ District (transactions &amp; use) = 2.750%</span><span>= 10.000%</span></div>
+    </div>
+    <table style="font-size:13.5px;">
+      <thead><tr><th>Component</th><th>Rate</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">State</td><td class="mono">6.000%</td><td class="why">Statewide sales &amp; use tax.</td></tr>
+        <tr><td class="lbl">Local (Bradley-Burns)</td><td class="mono">1.250%</td><td class="why">County/city share every jurisdiction receives (0.25% county + 1.00% local).</td></tr>
+        <tr><td class="lbl">District (add-on)</td><td class="mono">2.750%</td><td class="why">Voter-approved Santa Clara County &amp; City of San Jose transactions &amp; use taxes.</td></tr>
+        <tr style="background:var(--gold-tint)"><td class="lbl">Combined — City of San Jose</td><td class="mono" style="font-weight:700;">10.000%</td><td class="why">Rate applied to taxable charges at these venues.</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <p style="margin:0"><strong>Verify per address before go-live.</strong> A few San Jose ZIPs that straddle neighbouring city lines (e.g., Campbell-area 95117/95125/95128/95130) carry up to 10.500%. These two venues are in central/east San Jose (≈95121/95122) and should be 10.000%, but confirm each exact address on the CDTFA address-level lookup. The <em>district</em> portion applies based on where the taxable transaction/use occurs — at the venue, in San Jose. <span class="small muted">(The CDTFA lookup could not be reached directly from this research environment — the finance team should confirm it in a browser.)</span></p>
+    </div>
+    <p class="small muted" style="margin:0">Sales tax is <strong>not</strong> VAT. It is a single-stage tax on the retail transaction, not a value-added tax. It is also separate from the City of San Jose business tax / business-license fee and from any transient-occupancy tax, none of which are sales tax.</p>
+  </div>
+</section>
+
+<!-- ============ 04 MATRIX ============ -->
+<section id="matrix" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <h2>Taxability Matrix — Every Charge</h2>
+    <p class="lede">Classification is based on the <em>transaction</em>, not the fee's label. "Separately stated" and "mandatory vs. optional" repeatedly change the answer, so each is noted. Confirm all amber/grey rows with a CPA or CDTFA.</p>
+  </div>
+
+  <div class="legend">
+    <span class="pill tax">Likely taxable</span>
+    <span class="pill non">Likely non-taxable</span>
+    <span class="pill con">Conditional — depends on structure</span>
+    <span class="pill unr">Unresolved — needs confirmation</span>
+  </div>
+
+  <div class="bar">COMPLETE TAXABILITY MATRIX <span class="lite">22 charge types · California (CDTFA) basis</span></div>
+  <div class="tbl-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width:170px;">Charge / transaction</th>
+          <th style="min-width:120px;">Likely treatment</th>
+          <th style="min-width:230px;">Basis &amp; key condition</th>
+          <th style="min-width:150px;">Separately-stating effect</th>
+          <th style="min-width:120px;">Who collects</th>
+          <th style="min-width:80px;">Confidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">Venue / hall rental (room only)</td>
+          <td><span class="pill non">Non-taxable</span></td>
+          <td class="why">Use of real property is not a sale/lease of TPP. Not within the sales-tax base.</td>
+          <td class="why">State alone, on its own line.</td>
+          <td class="why">Venue (no tax)</td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Courtyard add-on (ACD)</td>
+          <td><span class="pill non">Non-taxable</span></td>
+          <td class="why">Same as room — real property.</td>
+          <td class="why">Keep separate; same treatment.</td>
+          <td class="why">Venue (no tax)</td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Bundled venue "package"</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">True-object test (Reg. 1501). If it bundles taxable TPP with mandatory charges, part or all of the bundle can be taxed. Itemizing helps isolate the non-taxable parts.</td>
+          <td class="why"><strong>Critical</strong> — separate each component.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Tables &amp; chairs (venue-owned)</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">TPP rental (Reg. 1660). If venue paid CA tax at purchase and rents in same form → no tax on the customer charge. If bought tax-free → customer rental charge is taxable.</td>
+          <td class="why">Doesn't change it — purchase-tax status does.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Tablecloths / linens</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Same TPP-rental rule as tables. Rental vs. sale: a sale is taxable; a rental follows the paid-at-purchase test.</td>
+          <td class="why">Neutral.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Decorations / backdrops</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Sold décor = taxable TPP. Rented décor = TPP-rental test. Separately stated installation labor after the lease starts and optional → generally not taxed.</td>
+          <td class="why">Separate the labor from the item.</td>
+          <td class="why">Venue / vendor</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">A/V equipment (sound, TVs, DJ lights, uplights, LED)</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">TPP-rental test (Reg. 1660). Owned + CA-tax-paid → no customer tax. Rented-in or bought tax-free → taxable to customer.</td>
+          <td class="why">Neutral.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Photo booth / 360 / magic mirror</td>
+          <td><span class="pill unr">Unresolved</span></td>
+          <td class="why">Turns on true object: a self-operated equipment rental leans taxable; a fully-attended digital-only photography <em>service</em> with no tangible prints leans non-taxable. Prints = taxable TPP.</td>
+          <td class="why">Separate equipment from attendant service &amp; prints.</td>
+          <td class="why">Venue / vendor</td>
+          <td class="c"><span class="conf l">LOW</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Cleaning fee</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Mandatory cleaning tied to a taxable lease is taxable; a genuinely optional, separately stated cleaning service generally is not. A "never rent without it" track record is evidence it's mandatory.</td>
+          <td class="why">Helps only if also <strong>optional</strong>.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Security fee</td>
+          <td><span class="pill non">Non-taxable</span></td>
+          <td class="why">Separately stated security service is not taxed, provided the guards don't prepare/serve food or beverages. Risk only if folded into a taxable bundle.</td>
+          <td class="why"><strong>Required</strong> — state separately.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf h">HIGH*</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Event insurance fee</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">A true third-party insurance premium is not subject to sales tax. An in-house "admin/coverage" charge bundled with taxable items could be taxable. Must establish what the $125 actually is.</td>
+          <td class="why">Separate; label as premium pass-through if that's what it is.</td>
+          <td class="why">Insurer / venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Setup / teardown labor</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Labor to set up/tear down <em>leased TPP</em> is taxable as part of the lease unless it is optional and occurs after the lease begins. Labor tied only to the non-taxable room is not taxed.</td>
+          <td class="why">Make optional &amp; after commencement.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Delivery / pickup</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">For TPP, separately stated delivery by common carrier can be exempt; lessor pickup/handling tied to a taxable lease rides with it. Largely N/A when the customer comes to the venue.</td>
+          <td class="why">Separate; use carrier where possible.</td>
+          <td class="why">Venue / vendor</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Catering &amp; food (outside caterer)</td>
+          <td><span class="pill non">Non-taxable to venue</span></td>
+          <td class="why">The caterer is the retailer of the food and collects tax on its taxable charges (Reg. 1603). Not the venue's receipt or responsibility — unless the venue resells it.</td>
+          <td class="why">Keep off the venue invoice.</td>
+          <td class="why"><strong>Caterer</strong></td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Bar / alcoholic-beverage service (venue's own)</td>
+          <td><span class="pill tax">Taxable</span></td>
+          <td class="why">Sale of beverages is a retail sale of TPP (Pub. 22). Venue collects &amp; remits; ABC license required. Tax-included drink pricing is allowed if posted (Reg. 1700).</td>
+          <td class="why">Tax applies either way.</td>
+          <td class="why"><strong>Venue</strong></td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Third-party vendors (DJ, florist, rentals) paid by customer</td>
+          <td><span class="pill non">Non-taxable to venue</span></td>
+          <td class="why">Each vendor collects its own tax on its own charges. Venue has no collection duty on money it never receives.</td>
+          <td class="why">Keep off the venue invoice.</td>
+          <td class="why"><strong>Each vendor</strong></td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Damage / security deposit (refundable)</td>
+          <td><span class="pill non">Non-taxable</span></td>
+          <td class="why">Not consideration for a sale when taken. Taxable only if later applied to a taxable charge; retained as damages (not for TPP) is generally not a taxable sale.</td>
+          <td class="why">Track in a separate liability account.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Reservation deposit (applied to balance)</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Tax follows the underlying charge. A deposit toward a non-taxable room rental carries no tax; a deposit toward a taxable item carries tax proportionally when that item is billed.</td>
+          <td class="why">Allocate deposit across taxable/non-taxable lines.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Cancellation fee</td>
+          <td><span class="pill unr">Unresolved</span></td>
+          <td class="why">A forfeited amount kept as liquidated damages (no TPP/service delivered) is generally not taxable consideration; if it is really payment for a taxable item, tax may apply. Fact-specific.</td>
+          <td class="why">Document as damages, not a sale.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf l">LOW</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Discounts &amp; promotions</td>
+          <td><span class="pill non">Reduces taxable base</span></td>
+          <td class="why">A cash discount given at the time of sale reduces the taxable selling price of the item discounted.</td>
+          <td class="why">Apply the discount to the correct line.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf h">HIGH</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Credit-card / processing surcharge</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">A mandatory surcharge added to a taxable sale becomes part of taxable gross receipts; a surcharge on a non-taxable charge is not taxed. (CA also requires clear surcharge disclosure.)</td>
+          <td class="why">Match the surcharge to what it's charged on.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+        <tr>
+          <td class="lbl">Admin / convenience / coordinator fee</td>
+          <td><span class="pill con">Conditional</span></td>
+          <td class="why">Taxability follows purpose. A mandatory coordinator fee tied to food/bar/TPP is generally taxable; a fee tied only to the non-taxable room is not.</td>
+          <td class="why">Define what each fee pays for.</td>
+          <td class="why">Venue</td>
+          <td class="c"><span class="conf m">MED</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted" style="margin-top:8px;">* Security is HIGH confidence <em>only</em> when it is separately stated and the guards do not handle food/beverage service. A mandatory security charge folded into a taxable package loses that protection.</p>
+</section>
+
+<!-- ============ 05 FLOW ============ -->
+<section id="flow" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">05</span>
+    <h2>Tax Decision Flowchart</h2>
+    <p class="lede">Run every line item on a quote through this once. It encodes the California rule sequence, not a generic one.</p>
+  </div>
+
+  <div class="card pad">
+    <div class="flow">
+      <div class="fnode start"><span class="t">A charge appears on the quote / invoice</span></div>
+      <div class="farrow"></div>
+      <div class="fnode decision"><span class="t">1 · What is the underlying transaction?</span><br>Real property · Tangible property (TPP) · Pure service · Pass-through</div>
+      <div class="farrow"></div>
+      <div class="fsplit">
+        <div class="fbranch">
+          <span class="elab">Real property or pure service</span>
+          <div class="fnode non"><span class="t">Room / courtyard rental, stand-alone security, DJ, insurance premium</span><br>→ Generally <strong>not taxable</strong></div>
+        </div>
+        <div class="fbranch">
+          <span class="elab">Tangible personal property</span>
+          <div class="fnode decision"><span class="t">2 · Did the venue pay CA tax when it bought the item?</span></div>
+        </div>
+      </div>
+      <div class="farrow"></div>
+      <div class="fsplit">
+        <div class="fbranch">
+          <span class="elab">Non-taxable branch continues</span>
+          <div class="fnode decision"><span class="t">3 · Is a service fee mandatory AND bundled with taxable TPP?</span></div>
+        </div>
+        <div class="fbranch">
+          <span class="elab">Yes, tax paid at purchase</span>
+          <div class="fnode non"><span class="t">Rented in same form</span><br>→ <strong>No tax</strong> on the customer charge</div>
+          <span class="elab" style="margin-top:8px;">No / bought tax-free</span>
+          <div class="fnode tax"><span class="t">Rental receipts</span><br>→ <strong>Taxable</strong> to the customer</div>
+        </div>
+      </div>
+      <div class="farrow"></div>
+      <div class="fsplit">
+        <div class="fbranch">
+          <span class="elab">Mandatory + bundled w/ taxable TPP</span>
+          <div class="fnode tax"><span class="t">Rides with the taxable measure</span><br>→ <strong>Likely taxable</strong> (confirm)</div>
+        </div>
+        <div class="fbranch">
+          <span class="elab">Optional &amp; separately stated</span>
+          <div class="fnode non"><span class="t">Stand-alone service</span><br>→ Generally <strong>not taxable</strong></div>
+        </div>
+      </div>
+      <div class="farrow"></div>
+      <div class="fnode decision"><span class="t">4 · Who is the seller?</span> Customer-paid third party (caterer, DJ, rentals) → <strong>that vendor</strong> collects. Venue-billed → venue applies the result above.</div>
+      <div class="farrow"></div>
+      <div class="fnode start"><span class="t">5 · Calculate · 6 · Show the line correctly · 7 · Record, reconcile &amp; remit</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 CALCULATIONS ============ -->
+<section id="calc" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">06</span>
+    <h2>Worked Tax Calculations</h2>
+    <p class="lede">Illustrations only, using the working prices in the brief and the verified 10.000% rate. They assume the recommended structure: room = non-taxable, security = non-taxable service, venue-owned TPP = CA-tax-paid at purchase. The amber "watch" amount shows the extra tax if the conditional fees (cleaning, insurance) were later ruled taxable. These are not final tax advice.</p>
+  </div>
+
+  <div class="callout warn" style="margin-bottom:16px;">
+    <p style="margin:0"><strong>Working figures vs. live rate card.</strong> The brief's working figures ($3,000 / $4,000 venue + $480 cleaning + $125 insurance + $240 security) match the "Quick Package Guide + required fees" layout. The current internal rate card instead lists $3,845 / $4,845 <em>with cleaning, security, insurance and 10 tables already bundled in</em>. Reconcile the two before quoting — the bundling choice directly affects taxability (see §04, bundled package).</p>
+  </div>
+
+  <div class="scen-grid">
+
+    <!-- A -->
+    <div class="scen">
+      <div class="sh">Scenario A — Crown Prince, weekday <span class="tag">6-hr min</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Venue rental (room)</td><td class="r mono">$3,000.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>Security</td><td class="r mono">$240.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>Cleaning</td><td class="r mono">$480.00</td><td class="c"><span class="pill con">Watch</span></td></tr>
+          <tr><td>Insurance</td><td class="r mono">$125.00</td><td class="c"><span class="pill con">Watch</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>Taxable subtotal (recommended)</span><span class="mono">$0.00</span></div>
+        <div class="row"><span>Sales tax @ 10% (recommended)</span><span class="mono">$0.00</span></div>
+        <div class="row muted small"><span>Watch: if cleaning+insurance taxable (+$605)</span><span class="mono">+$60.50</span></div>
+        <div class="row total"><span>Customer total</span><span class="mono">$3,845.00</span></div>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="scen">
+      <div class="sh">Scenario B — Crown Prince, weekend <span class="tag">6-hr min</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Venue rental (room)</td><td class="r mono">$4,000.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>Security</td><td class="r mono">$240.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>Cleaning</td><td class="r mono">$480.00</td><td class="c"><span class="pill con">Watch</span></td></tr>
+          <tr><td>Insurance</td><td class="r mono">$125.00</td><td class="c"><span class="pill con">Watch</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>Taxable subtotal (recommended)</span><span class="mono">$0.00</span></div>
+        <div class="row"><span>Sales tax @ 10% (recommended)</span><span class="mono">$0.00</span></div>
+        <div class="row muted small"><span>Watch: if cleaning+insurance taxable (+$605)</span><span class="mono">+$60.50</span></div>
+        <div class="row total"><span>Customer total</span><span class="mono">$4,845.00</span></div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="scen">
+      <div class="sh">Scenario C — Alvin Studio, weekday <span class="tag">Mon–Thu</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Venue rental (indoor + courtyard)</td><td class="r mono">$1,865.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>Taxable subtotal</span><span class="mono">$0.00</span></div>
+        <div class="row"><span>Sales tax @ 10%</span><span class="mono">$0.00</span></div>
+        <div class="row muted small"><span>If bundled tables/chairs are not CA-tax-paid, that portion becomes taxable — confirm.</span><span></span></div>
+        <div class="row total"><span>Customer total</span><span class="mono">$1,865.00</span></div>
+      </div>
+    </div>
+
+    <!-- D -->
+    <div class="scen">
+      <div class="sh">Scenario D — Alvin Studio, weekend <span class="tag">Fri–Sun / Hol</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Venue rental (indoor + courtyard)</td><td class="r mono">$2,665.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>Taxable subtotal</span><span class="mono">$0.00</span></div>
+        <div class="row"><span>Sales tax @ 10%</span><span class="mono">$0.00</span></div>
+        <div class="row muted small"><span>Same caveat as Scenario C on any bundled TPP.</span><span></span></div>
+        <div class="row total"><span>Customer total</span><span class="mono">$2,665.00</span></div>
+      </div>
+    </div>
+
+    <!-- E -->
+    <div class="scen">
+      <div class="sh">Scenario E — Bundled package (weekend) <span class="tag">illustrative</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Treatment</th></tr></thead>
+        <tbody>
+          <tr><td>Venue rental (room)</td><td class="r mono">$4,000.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>DJ (service)</td><td class="r mono">$600.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>LED wall (equipment)</td><td class="r mono">$800.00</td><td class="c"><span class="pill con">TPP*</span></td></tr>
+          <tr><td>Photo booth — digital</td><td class="r mono">$250.00</td><td class="c"><span class="pill unr">TPP?*</span></td></tr>
+          <tr><td>Cleaning / Insurance / Security</td><td class="r mono">$845.00</td><td class="c"><span class="pill con">Mixed</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>If LED + booth are CA-tax-paid → taxable</span><span class="mono">$0.00</span></div>
+        <div class="row muted small"><span>If NOT tax-paid: taxable $1,050 → tax</span><span class="mono">+$105.00</span></div>
+        <div class="row total"><span>Customer total (before any tax)</span><span class="mono">$6,495.00</span></div>
+      </div>
+    </div>
+
+    <!-- F -->
+    <div class="scen">
+      <div class="sh">Scenario F — Third-party vendor <span class="tag">who collects?</span></div>
+      <div class="tbl-scroll" style="border:none; border-radius:0;">
+      <table>
+        <thead><tr><th>Line item</th><th class="r">Amount</th><th class="c">Billed by</th></tr></thead>
+        <tbody>
+          <tr><td>Alvin venue rental (weekend)</td><td class="r mono">$2,665.00</td><td class="c">Venue</td></tr>
+          <tr><td>— venue sales tax</td><td class="r mono">$0.00</td><td class="c"><span class="pill non">Non-tax</span></td></tr>
+          <tr><td>Outside caterer food + service</td><td class="r mono">$3,500.00</td><td class="c">Caterer</td></tr>
+          <tr><td>— caterer sales tax @ 10%</td><td class="r mono">$350.00</td><td class="c"><span class="pill tax">Caterer</span></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="foot">
+        <div class="row"><span>Venue collects / remits</span><span class="mono">$0.00</span></div>
+        <div class="row"><span>Caterer collects / remits</span><span class="mono">$350.00</span></div>
+        <div class="row total"><span>Venue invoice total</span><span class="mono">$2,665.00</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="small muted" style="margin-top:10px;">* Equipment lines are taxable to the customer only if the venue bought them tax-free; if CA tax was paid at purchase, no customer tax applies. Photo booth treatment is unresolved (§04).</p>
+
+  <!-- Bar example -->
+  <div style="height:18px"></div>
+  <div class="callout warn">
+    <h4>Venue bar — the one the venue clearly must tax</h4>
+    <p style="margin:0">A hosted or cash bar selling, say, <span class="mono">$1,800</span> of drinks is a retail sale of TPP. Sales tax @ 10% = <span class="mono">$180.00</span>, which the venue must collect (or build into posted tax-included drink pricing) and remit. This is independent of everything above and requires an ABC license.</p>
+  </div>
+
+  <!-- Invoice mockup -->
+  <div style="height:22px"></div>
+  <div class="bar">SAMPLE INVOICE PRESENTATION <span class="lite">Scenario B · recommended line-item layout</span></div>
+  <div class="invoice" style="border-radius:0 0 10px 10px; border-top:none;">
+    <div class="ih">
+      <div>
+        <div class="b">CROWN PRINCE EVENT HALL</div>
+        <div class="small muted">1654 Burdette Dr, San Jose, CA · Seller's Permit # [____]</div>
+      </div>
+      <div class="m">Invoice #CPH-2026-0412<br>Event date: Sat 2026-11-14<br>Combined tax rate: 10.000%</div>
+    </div>
+    <div class="tbl-scroll" style="border:none; border-radius:0;">
+    <table>
+      <thead><tr><th>Description</th><th class="c">Taxable?</th><th class="r">Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Weekend venue rental (room — real property)</td><td class="c"><span class="pill non">No</span></td><td class="r mono">$4,000.00</td></tr>
+        <tr><td>Security service (separately stated)</td><td class="c"><span class="pill non">No</span></td><td class="r mono">$240.00</td></tr>
+        <tr><td>Cleaning service — <em>optional</em></td><td class="c"><span class="pill con">Review</span></td><td class="r mono">$480.00</td></tr>
+        <tr><td>Event insurance (premium pass-through)</td><td class="c"><span class="pill con">Review</span></td><td class="r mono">$125.00</td></tr>
+        <tr><td>Bar — beverage sales (hosted)</td><td class="c"><span class="pill tax">Yes</span></td><td class="r mono">$1,800.00</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="tot">
+      <div class="row"><span>Non-taxable subtotal</span><span class="mono">$4,845.00</span></div>
+      <div class="row"><span>Taxable subtotal (bar)</span><span class="mono">$1,800.00</span></div>
+      <div class="row"><span>Sales tax @ 10.000%</span><span class="mono">$180.00</span></div>
+      <div class="row grand"><span>Invoice total</span><span class="mono">$6,825.00</span></div>
+      <div class="row"><span>Less reservation deposit (paid at booking, allocated)</span><span class="mono">−$3,412.50</span></div>
+      <div class="row"><span>Refundable damage deposit (held, not taxed)</span><span class="mono">$500.00</span></div>
+      <div class="row bal"><span>Balance due before event</span><span class="mono">$3,412.50</span></div>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:8px;">Every line carries its own taxable flag; the refundable deposit sits outside the taxable total in its own liability line. "Review" lines resolve to Yes/No once §12 decisions are made.</p>
+</section>
+
+<!-- ============ 07 MARKET ============ -->
+<section id="market" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">07</span>
+    <h2>Market Pricing References</h2>
+    <p class="lede">Real, publicly posted San Jose / Bay Area prices gathered 19 Oct 2026, for comparison only. None of the sources stated that posted prices include sales tax — treat all as pre-tax. Another vendor's tax practice is not proof of what is legally correct.</p>
+  </div>
+
+  <div class="bar">PUBLIC PRICE REFERENCES <span class="lite">San Jose / Bay Area · checked 2026-10-19</span></div>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th style="min-width:150px;">Category</th><th style="min-width:160px;">Provider</th><th style="min-width:160px;">Published price (verbatim)</th><th style="min-width:110px;">Type</th><th class="c">Tax shown?</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl" rowspan="2">Venue rental</td><td>Peerspace (San Jose halls)</td><td class="mono small">from ~$150/hr, 4-hr min; up to $495/hr</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td>Fuze Hall (via Tagvenue), 220 seats</td><td class="mono small">from $300/hr hire fee</td><td class="why">Advertised rate</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">Tables / chairs / linens</td><td>iCelebrate Events (San Jose)</td><td class="mono small">folding chair $2.19; 6-ft table $11.50; linen $22.95 (1–4 days)</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td>Rocket Jumpers (San Jose)</td><td class="mono small">event chair $5.00; 6-ft table $20.00; round table $30.00</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">Photo booth / 360</td><td>The Movement Booth (360)</td><td class="mono small">$900 / 2 hr · $1,050 / 3 hr · $1,400 / 4 hr</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td>Magic Tymes (Magic Mirror)</td><td class="mono small">$499 starting</td><td class="why">Advertised starting</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">Event cleaning</td><td>Event Cleanup Service (national)</td><td class="mono small">$400–$1,600 per event</td><td class="why">Published estimate</td><td class="c">No</td></tr>
+        <tr><td>TIDY (San Jose)</td><td class="mono small">starts at $55</td><td class="why">Advertised starting</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">Event security</td><td>Surefire Security (Bay Area)</td><td class="mono small">$35–$55/hr unarmed; $45–$85/hr armed</td><td class="why">Pricing guide</td><td class="c">No</td></tr>
+        <tr><td>HireSecurityNow (San Jose)</td><td class="mono small">$42–$72 per guard/hr (4–6 hr min)</td><td class="why">Published estimate</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">A/V equipment</td><td>DJ Bay Area</td><td class="mono small">projector+screen $195; PA $195; JBL pair $350; uplight $20 — per day/weekend</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td>Bay Area Event</td><td class="mono small">projector pkg $275; 2 speakers $395; uplights $45 ea — per day/weekend</td><td class="why">Public rate card</td><td class="c">No</td></tr>
+        <tr><td class="lbl" rowspan="2">Event insurance</td><td>GEICO / EventHelper</td><td class="mono small">from $75 / "as low as $66"</td><td class="why">Advertised starting</td><td class="c">No</td></tr>
+        <tr><td>Special Event Insurance / ACT</td><td class="mono small">starts at $218 / from $49</td><td class="why">Advertised starting</td><td class="c">No</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="height:16px"></div>
+  <div class="grid2">
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:10px;">Required fees ($) — venue vs. market reference</h4>
+      <div class="hbar-row"><span>Cleaning — ours</span><div class="hbar-track"><div class="hbar-fill navy" style="width:30%;">$480</div></div></div>
+      <div class="hbar-row"><span>Cleaning — market</span><div class="hbar-track"><div class="hbar-fill" style="width:100%;">$400–$1,600 / event</div></div></div>
+      <div class="hbar-row"><span>Security — ours</span><div class="hbar-track"><div class="hbar-fill navy" style="width:28%;">$240</div></div></div>
+      <div class="hbar-row"><span>Security — market</span><div class="hbar-track"><div class="hbar-fill" style="width:70%;">~$42–$72/guard-hr</div></div></div>
+      <div class="hbar-row"><span>Insurance — ours</span><div class="hbar-track"><div class="hbar-fill navy" style="width:20%;">$125</div></div></div>
+      <div class="hbar-row"><span>Insurance — market</span><div class="hbar-track"><div class="hbar-fill" style="width:40%;">$49–$218 start</div></div></div>
+      <p class="small muted" style="margin:8px 0 0;">Bars illustrate relative magnitude, not a single comparable unit (ours are flat per-event; market cleaning/security are per-event or per-hour ranges).</p>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:8px;">What this tells management</h4>
+      <ul class="clean" style="margin:0">
+        <li>Our flat <strong>$480 cleaning</strong> and <strong>$240 security</strong> sit at or below market — pricing is competitive, so there's room to make them genuinely <em>optional</em> without losing position.</li>
+        <li>Our <strong>$125 insurance</strong> is in line with real one-day event-liability premiums ($49–$218 start), supporting treating it as a <strong>pass-through premium</strong> (non-taxable) rather than a marked-up admin fee.</li>
+        <li>Rental vendors post <strong>per-item, pre-tax</strong> prices; that's the norm. It does not tell us whether <em>we</em> owe tax — our own purchase-tax status does.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small muted" style="margin-top:8px;">WedSafe and several caterers publish no rate card — a direct quote must be requested. Sources listed in §13.</p>
+</section>
+
+<!-- ============ 08 POLICY ============ -->
+<section id="policy" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">08</span>
+    <h2>Proposed Internal Sales Tax Policy</h2>
+    <p class="lede">A practical draft for management approval. <strong>This is a proposal, not an approved company policy.</strong> It applies to both venues and takes effect only after the §12 decisions and CPA/CDTFA confirmation.</p>
+  </div>
+
+  <div class="stack">
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">A · Pricing &amp; quotations</h3>
+      <ul class="clean" style="margin:0">
+        <li>Advertise venue rental as a <strong>tax-exclusive</strong> price; show sales tax only on genuinely taxable lines.</li>
+        <li>List every component on its own line with a taxable / non-taxable flag — never a single bundled number.</li>
+        <li>Conditional fees (cleaning, insurance) shown with their agreed treatment once confirmed; mark "optional" where that is true.</li>
+        <li>Rate changes are made in one place (the CRM tax table) with an effective date; never hard-coded into quotes.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">B · Contracts &amp; agreements</h3>
+      <ul class="clean" style="margin:0">
+        <li>Include a sales-tax clause stating tax is added only to taxable items at the rate in effect on the event date (wording in §09).</li>
+        <li>State that deposits are refundable/non-refundable and how a retained deposit is treated.</li>
+        <li>State that customer-hired third-party vendors are responsible for their own taxes and compliance.</li>
+        <li>For any bundled package, itemize the components in the agreement so the non-taxable room rental is distinguishable.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">C · Invoices &amp; payment collection</h3>
+      <ul class="clean" style="margin:0">
+        <li>Separate non-taxable subtotal, taxable subtotal, and tax; round tax to the cent on the taxable subtotal (not per line).</li>
+        <li>On deposits/partial payments, allocate across taxable and non-taxable lines; collect tax on the taxable portion as it is billed.</li>
+        <li>Refunds and credit notes reverse the original tax proportionally.</li>
+        <li>Final balance reconciles invoice, payments received, tax collected, and deposits held/returned.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">D · Accounting &amp; compliance</h3>
+      <ul class="clean" style="margin:0">
+        <li>Record collected tax in a <strong>Sales Tax Payable</strong> liability account — never as revenue.</li>
+        <li>Keep revenue, tax collected, reservation deposits, and refundable security deposits in separate ledger accounts.</li>
+        <li>Reconcile CRM tax reports to the general ledger before each CDTFA return.</li>
+        <li>Retain quotes, contracts, invoices, exemption/resale certificates and purchase invoices for owned TPP for at least 4 years.</li>
+        <li>Assign filing/remittance to a named role; assign monthly review/approval to the accountant.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">E · Customer communication</h3>
+      <p style="margin:0">Use plain language: "California sales tax applies only to taxable items such as beverages sold at our bar and certain equipment rentals. The venue rental itself is not subject to sales tax. Any vendors you hire directly bill and handle their own taxes." Never imply every fee is taxed.</p>
+    </div>
+    <div class="card pad">
+      <h3 style="font-size:15px; margin-bottom:6px;">F · Policy approval checklist</h3>
+      <ul class="clean" style="margin:0">
+        <li>☐ Purchase-tax status of owned TPP confirmed (accountant).</li>
+        <li>☐ Cleaning / insurance / coordinator fee treatment confirmed with CPA or CDTFA.</li>
+        <li>☐ Bar ABC license &amp; seller's permit confirmed active.</li>
+        <li>☐ Contract &amp; invoice templates updated and legal-reviewed.</li>
+        <li>☐ CRM configured &amp; tested (§08 CRM specs).</li>
+        <li>☐ Management sign-off recorded with effective date.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 CONTRACT WORDING ============ -->
+<section id="contract" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">09</span>
+    <h2>Recommended Contract &amp; Customer Wording</h2>
+    <p class="lede">Draft language for legal review — not a substitute for it.</p>
+  </div>
+  <div class="grid2">
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:8px;">Sales-tax clause (agreement)</h4>
+      <p class="small" style="font-style:italic; margin:0;">"California sales tax is applied only to taxable items (for example, beverages sold by the Venue's bar and certain equipment rentals), at the combined rate in effect for the Venue's location on the event date (currently 10.000% in San Jose). The Venue's rental of the event space is not subject to sales tax. Taxes on goods or services you arrange directly with third-party vendors are the responsibility of those vendors."</p>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:8px;">Deposit &amp; cancellation clause</h4>
+      <p class="small" style="font-style:italic; margin:0;">"The reservation deposit is applied to your balance and is [non-]refundable. A separate refundable damage/security deposit of $[___] is held and returned after the event, less any documented damages; it is not a payment for goods and is not taxed unless applied to a taxable charge. A cancellation fee, if retained, represents liquidated damages, not payment for goods or services."</p>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:8px;">Third-party vendor clause</h4>
+      <p class="small" style="font-style:italic; margin:0;">"Vendors you hire directly (caterers, DJs, florists, rental companies, photographers) contract with and invoice you directly and are solely responsible for collecting and remitting any applicable sales tax on their charges."</p>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; margin-bottom:8px;">Bar / alcohol note</h4>
+      <p class="small" style="font-style:italic; margin:0;">"Beverages served by the Venue bar are sold by the Venue under its ABC license. Prices [include / are exclusive of] California sales tax as posted."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 CRM ============ -->
+<section id="crm" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">10</span>
+    <h2>Web &amp; Mobile CRM Implementation Specs</h2>
+    <p class="lede">Turns the findings into build requirements for the Cams web CRM and mobile app. Tax behaviour must be identical across both. Priorities: <span class="conf l">CRITICAL</span> <span class="conf m">HIGH</span> <span class="conf h">MED/LOW</span>.</p>
+  </div>
+
+  <div class="bar">CRM TAX REQUIREMENTS <span class="lite">problem → behavior → acceptance test</span></div>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th style="min-width:150px;">Requirement</th><th style="min-width:200px;">Problem / proposed behavior</th><th style="min-width:200px;">Acceptance test</th><th class="c">Priority</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">1 · Configurable rate + effective date</td><td class="why">One tax-rate table (rate, jurisdiction, effective-from). Quotes use the rate for the event date. Example: 10.000% from 2026-04-01.</td><td class="why">Event dated 2026-03-31 uses 9.375%; 2026-04-01 uses 10.000%. No rate hard-coded in a quote.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">2 · Per-item taxability flag</td><td class="why">Every product/fee carries a taxable/non-taxable/conditional attribute defaulted from the matrix in §04.</td><td class="why">Adding "Venue rental" defaults to non-taxable; "Bar sales" to taxable.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">3 · Split subtotals</td><td class="why">Quote/invoice shows non-taxable subtotal, taxable subtotal, and tax separately.</td><td class="why">Scenario B renders $4,845 non-taxable, $1,800 taxable, $180 tax.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">4 · Bundled-package handling</td><td class="why">A package expands into its component lines, each with its own flag; tax computed on components, not the bundle.</td><td class="why">A $6,495 package yields $0 or $105 tax depending on equipment flags, never 10% of $6,495.</td><td class="c"><span class="conf m">HIGH</span></td></tr>
+        <tr><td class="lbl">5 · Automatic calc where legal</td><td class="why">Tax auto-computes on taxable subtotal; non-taxable lines excluded automatically.</td><td class="why">Toggling a line's flag updates the tax instantly and identically on web + mobile.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">6 · Authorized override + audit</td><td class="why">Manual tax override requires a permissioned role and writes who/when/why to an audit log.</td><td class="why">A coordinator cannot override tax; a manager can, and the change is logged.</td><td class="c"><span class="conf m">HIGH</span></td></tr>
+        <tr><td class="lbl">7 · Deposits / partial / refunds</td><td class="why">Deposits allocate across taxable/non-taxable lines; refunds reverse tax proportionally; refundable security deposit is a non-taxable liability line.</td><td class="why">50% deposit on Scenario B allocates tax only to the bar portion; a $500 damage deposit shows untaxed.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">8 · Separate tax vs. revenue tracking</td><td class="why">Collected tax posts to Sales Tax Payable, not revenue.</td><td class="why">A paid invoice increases revenue by net and liability by tax, never revenue by gross.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+        <tr><td class="lbl">9 · Quote→agreement→invoice consistency</td><td class="why">Tax flags and rate carry unchanged through the lifecycle.</td><td class="why">Converting a quote to an invoice reproduces identical tax lines.</td><td class="c"><span class="conf m">HIGH</span></td></tr>
+        <tr><td class="lbl">10 · Tax reports</td><td class="why">Report of tax collected, adjustments, refunds, and estimated liability by period/jurisdiction for CDTFA filing.</td><td class="why">A period report ties to the sum of invoice tax lines and to the GL.</td><td class="c"><span class="conf m">HIGH</span></td></tr>
+        <tr><td class="lbl">11 · Access control + change history</td><td class="why">Only named roles edit tax settings; all changes versioned.</td><td class="why">Rate-table edit records user + timestamp + old/new value.</td><td class="c"><span class="conf h">MED</span></td></tr>
+        <tr><td class="lbl">12 · Double-tax / partial-payment guards</td><td class="why">Tests prevent tax being applied twice or re-taxing an already-taxed deposit.</td><td class="why">Paying a balance after a taxed deposit does not re-charge tax on the deposit amount.</td><td class="c"><span class="conf l">CRIT</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="height:14px"></div>
+  <div class="callout warn"><p style="margin:0"><strong>Parity test is non-negotiable.</strong> The web CRM and the mobile app must return byte-identical tax figures for the same quote. Add a shared test fixture (Scenarios A–F + bar) run against both clients in CI.</p></div>
+</section>
+
+<!-- ============ 11 RISK & ROADMAP ============ -->
+<section id="risk" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">11</span>
+    <h2>Risk Register &amp; Implementation Roadmap</h2>
+  </div>
+
+  <div class="bar">RISK REGISTER</div>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th style="min-width:180px;">Risk</th><th class="c">Likelihood</th><th class="c">Impact</th><th style="min-width:180px;">Preventive control</th><th style="min-width:120px;">Owner</th><th class="c">Timeline</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">Charging tax on non-taxable room rental</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Default room line to non-taxable; audit live quotes.</td><td>Accountant</td><td class="c">Wk 1</td></tr>
+        <tr><td class="lbl">Not collecting tax on bar sales</td><td class="c"><span class="pill tax">High</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Flag all bar items taxable; confirm ABC + permit.</td><td>Management</td><td class="c">Wk 1</td></tr>
+        <tr><td class="lbl">No use tax paid on owned equipment</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Audit purchase invoices; accrue use tax if unpaid.</td><td>Accountant/CPA</td><td class="c">Wk 1–3</td></tr>
+        <tr><td class="lbl">Taxing mandatory fees incorrectly</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill con">Med</span></td><td class="why">Make fees optional/separately stated; CDTFA ruling.</td><td>CPA</td><td class="c">Wk 2–4</td></tr>
+        <tr><td class="lbl">Misclassifying bundled packages</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill con">Med</span></td><td class="why">CRM expands packages to flagged components.</td><td>CRM Admin</td><td class="c">Wk 3–5</td></tr>
+        <tr><td class="lbl">Mishandling deposits / cancellations</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill con">Med</span></td><td class="why">Deposit allocation logic + untaxed security-deposit line.</td><td>CRM Admin</td><td class="c">Wk 3–5</td></tr>
+        <tr><td class="lbl">Confusing vendor tax duty with ours</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill con">Med</span></td><td class="why">Third-party vendor clause; keep off venue invoice.</td><td>Sales</td><td class="c">Wk 2</td></tr>
+        <tr><td class="lbl">Applying an outdated / wrong rate</td><td class="c"><span class="pill non">Low</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Single effective-dated rate table; address verify.</td><td>CRM Admin</td><td class="c">Wk 1</td></tr>
+        <tr><td class="lbl">Recording collected tax as revenue</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Post tax to Sales Tax Payable; monthly reconcile.</td><td>Accountant</td><td class="c">Wk 1–2</td></tr>
+        <tr><td class="lbl">Web CRM ≠ mobile app calculation</td><td class="c"><span class="pill con">Med</span></td><td class="c"><span class="pill tax">High</span></td><td class="why">Shared tax engine + parity test fixture in CI.</td><td>Engineering</td><td class="c">Wk 4–6</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="height:18px"></div>
+  <div class="bar">PHASED ROADMAP</div>
+  <div class="card pad">
+    <div class="phase"><div class="n">1</div><div class="body"><h4>Verify the facts</h4><div class="meta">Week 1 · Accountant + Management</div><p style="margin:4px 0 0;">Confirm each address's rate, the purchase-tax status of owned TPP, the ABC/seller's-permit status, and the true nature of the insurance fee. Stop taxing the room line immediately.</p></div></div>
+    <div class="phase"><div class="n">2</div><div class="body"><h4>Get professional confirmation</h4><div class="meta">Weeks 2–4 · CPA / CDTFA</div><p style="margin:4px 0 0;">Written confirmation on mandatory cleaning/coordinator fees, photo-booth treatment, cancellation fees, and use-tax exposure.</p></div></div>
+    <div class="phase"><div class="n gold">3</div><div class="body"><h4>Approve policy &amp; update documents</h4><div class="meta">Weeks 3–5 · Management + Legal</div><p style="margin:4px 0 0;">Sign off the policy; update quote/contract/invoice templates and customer wording.</p></div></div>
+    <div class="phase"><div class="n">4</div><div class="body"><h4>Configure &amp; test the CRM</h4><div class="meta">Weeks 4–6 · Engineering + CRM Admin</div><p style="margin:4px 0 0;">Build the rate table, taxability flags, split subtotals, deposit logic, reports, audit log; run the A–F parity fixture on web + mobile.</p></div></div>
+    <div class="phase"><div class="n">5</div><div class="body"><h4>Train &amp; monitor</h4><div class="meta">Week 6+ · All staff</div><p style="margin:4px 0 0;">Train sales on the new quote layout; monitor the first filing cycle; reconcile monthly.</p></div></div>
+  </div>
+  <p class="small muted" style="margin-top:8px;">Timelines are indicative effort/sequence, not legal deadlines. Phase 4 depends on Phases 1–3.</p>
+</section>
+
+<!-- ============ 12 DECISIONS ============ -->
+<section id="decisions" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">12</span>
+    <h2>Management Decision Panel</h2>
+    <p class="lede">Each decision has a recommended option, the reason, the risk of delay, and who owns it.</p>
+  </div>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th style="min-width:180px;">Decision</th><th style="min-width:180px;">Recommended option</th><th style="min-width:170px;">Why</th><th style="min-width:150px;">Risk if delayed</th><th class="c">Owner</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">Did we pay CA tax on owned TPP?</td><td class="why">Audit purchase invoices; where unpaid, accrue &amp; pay use tax, then rent tax-free to customers.</td><td class="why">Determines whether equipment rentals are taxable to customers.</td><td class="why">Back use-tax + interest exposure.</td><td class="c">Accountant</td></tr>
+        <tr><td class="lbl">Cleaning / security / insurance: mandatory or optional?</td><td class="why">Make optional &amp; separately stated where feasible; treat insurance as premium pass-through.</td><td class="why">Optional separately stated services are generally non-taxable.</td><td class="why">Fees wrongly taxed or wrongly exempt.</td><td class="c">Management</td></tr>
+        <tr><td class="lbl">Bar licensing &amp; tax</td><td class="why">Confirm ABC license + seller's permit; tax all bar sales.</td><td class="why">Bar sales are clearly taxable TPP.</td><td class="why">Under-collection penalties; ABC risk.</td><td class="c">Management</td></tr>
+        <tr><td class="lbl">One policy for both venues?</td><td class="why">Yes — same jurisdiction &amp; rules; one approved policy.</td><td class="why">Consistency, simpler CRM config.</td><td class="why">Divergent, error-prone practices.</td><td class="c">Management</td></tr>
+        <tr><td class="lbl">Authorize CRM tax changes?</td><td class="why">Approve §08 build before charging under the new policy.</td><td class="why">Prevents mis-calculation at scale.</td><td class="why">Systematic errors across every quote.</td><td class="c">Management/Eng</td></tr>
+        <tr><td class="lbl">Reconcile working figures vs. rate card</td><td class="why">Adopt itemized ($3,000/$4,000 + separate fees) layout.</td><td class="why">Itemizing isolates the non-taxable room rental.</td><td class="why">Bundled price risks taxing the whole amount.</td><td class="c">Management</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 13 SOURCES ============ -->
+<section id="sources" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">13</span>
+    <h2>Source Register</h2>
+    <p class="lede">Primary CDTFA guidance first, then rate notices and market references. CDTFA pages were read via web search; the finance team should open each link to confirm wording before relying on it.</p>
+  </div>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th style="min-width:210px;">Source</th><th style="min-width:110px;">Agency</th><th style="min-width:230px;">What it establishes</th><th class="c">Confidence</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">Tax Guide for Venue Rental Businesses — Industry Topics<br><span class="small mono">cdtfa.ca.gov/industry/venue-rental-businesses/industry-topics.htm</span></td><td>CDTFA</td><td class="why">Core framework: taxable vs. non-taxable venue charges, mandatory vs. optional services, cleaning, setup/teardown labor, equipment paid-at-purchase rule, security/parking exception.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Tax Guide for Caterers — Industry Topics<br><span class="small mono">cdtfa.ca.gov/industry/caterers/industry-topics.htm</span></td><td>CDTFA</td><td class="why">Caterer is retailer of food; tables/tableware used to serve = caterer is consumer; separately stated security/parking not taxed.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Tax Guide for Event Planners — Industry Topics<br><span class="small mono">cdtfa.ca.gov/industry/event-planners/industry-topics.htm</span></td><td>CDTFA</td><td class="why">True-object test; planner/producer often consumer of TPP used; services to produce events may be non-taxable.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Publication 22 — Dining &amp; Beverage Industry<br><span class="small mono">cdtfa.ca.gov/formspubs/pub22.pdf</span></td><td>CDTFA</td><td class="why">Food/beverage taxability incl. alcoholic beverages; tax-included pricing rules.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Publication 46 — Leasing Tangible Personal Property<br><span class="small mono">cdtfa.ca.gov/formspubs/pub46.pdf</span></td><td>CDTFA</td><td class="why">Leases as continuing sales; pay-tax-at-purchase vs. tax-on-rental-receipts election (Reg. 1660).</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Regulation 1660 (leases) &amp; 1501 (service/true object)<br><span class="small mono">cdtfa.ca.gov/lawguides</span></td><td>Cal. Code Regs. Title 18</td><td class="why">Legal basis for TPP-lease taxation and the service-vs-sale test.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">New Sales &amp; Use Tax Rates Effective April 1, 2026 (Notice L-1022)<br><span class="small mono">cdtfa.ca.gov/formspubs/L1022.pdf</span></td><td>CDTFA</td><td class="why">City of San Jose combined rate 9.375% → 10.000%, effective 2026-04-01.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">California City &amp; County Sales &amp; Use Tax Rates (address lookup)<br><span class="small mono">cdtfa.ca.gov/taxes-and-fees/sales-use-tax-rates.htm</span></td><td>CDTFA</td><td class="why">Authoritative per-address rate — confirm each venue address.</td><td class="c"><span class="conf h">Primary</span></td></tr>
+        <tr><td class="lbl">Market pricing references (venues, rentals, booths, cleaning, security, A/V, insurance)</td><td>Various (public)</td><td class="why">Public San Jose/Bay Area rate cards &amp; advertised prices, checked 2026-10-19 — comparison only; see §07.</td><td class="c"><span class="conf m">Secondary</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small muted" style="margin-top:8px;">Market reference URLs (checked 2026-10-19): peerspace.com, tagvenue.com, icelebrateevents.com, rocketjumpers.com, ianchinphotography.com (The Movement Booth), weddingwire.com (Magic Tymes), tidy.com, eventcleanupservice.com, surefiresecurity.com, hiresecuritynow.com, djbayarea.org, bayareaevent.net, geico.com/event-insurance, theeventhelper.com, specialeventinsurance.com, actinsurance.com.</p>
+</section>
+
+<!-- ============ 14 CPA QUESTIONS ============ -->
+<section id="cpa" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">14</span>
+    <h2>Questions for Our CPA / Tax Attorney / CDTFA</h2>
+    <p class="lede">The items only a professional or the authority can resolve.</p>
+  </div>
+  <div class="card pad">
+    <ol class="clean" style="margin:0">
+      <li>Is a <strong>mandatory cleaning fee</strong> taxable when the only thing leased is the room (real property), and the venue's tables/linens are tax-paid at purchase?</li>
+      <li>How should a <strong>mandatory "coordinator"/admin fee</strong> be treated when the package includes both the non-taxable room and taxable equipment?</li>
+      <li>For venue-owned <strong>tables, chairs, linens, A/V, LED and photo-booth equipment</strong> — confirm whether CA tax was paid at purchase, and the correct remedy (use-tax accrual) if not.</li>
+      <li>Is the <strong>digital-only photo booth with attendant</strong> a taxable TPP rental or a non-taxable photography service? Does delivering any prints change it?</li>
+      <li>Is a retained <strong>cancellation fee</strong> taxable consideration or non-taxable liquidated damages?</li>
+      <li>Confirm the exact <strong>combined rate for each venue address</strong> (10.000% vs. any higher straddle-ZIP rate).</li>
+      <li>Is the <strong>$125 "insurance" charge</strong> a true premium pass-through (non-taxable) or an in-house admin charge (potentially taxable)?</li>
+      <li>Does the venue need to <strong>register for a seller's permit / ABC license</strong> for bar sales, and how should tax-included drink pricing be disclosed?</li>
+      <li>Treatment of <strong>credit-card surcharges</strong> added to mixed taxable/non-taxable invoices.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 15 ACTION SHEET ============ -->
+<section id="action" class="anchor">
+  <div class="sec-head">
+    <span class="sec-num">15</span>
+    <h2>One-Page Management Action Sheet</h2>
+  </div>
+  <div class="grid2">
+    <div class="card pad">
+      <h4 style="font-size:14px; color:var(--non-fg); margin-bottom:6px;">✔ Do immediately</h4>
+      <ul class="clean" style="margin:0">
+        <li>Stop adding sales tax to the bare room/courtyard rental line.</li>
+        <li>Collect &amp; remit sales tax on all bar/alcohol sales.</li>
+        <li>Confirm the 10.000% rate for each exact venue address.</li>
+        <li>Record collected tax in Sales Tax Payable, not revenue.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; color:var(--tax-fg); margin-bottom:6px;">✖ Stop until verified</h4>
+      <ul class="clean" style="margin:0">
+        <li>Applying one blanket tax to a bundled package total.</li>
+        <li>Treating cleaning/coordinator fees as automatically taxable or automatically exempt.</li>
+        <li>Renting owned equipment to customers before confirming purchase-tax status.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; color:var(--con-fg); margin-bottom:6px;">⚑ Review first</h4>
+      <ul class="clean" style="margin:0">
+        <li>Cleaning fee ($480), coordinator/admin fees, and the $125 insurance charge.</li>
+        <li>Purchase-tax status of all owned TPP.</li>
+        <li>Photo-booth and cancellation-fee treatment.</li>
+      </ul>
+    </div>
+    <div class="card pad">
+      <h4 style="font-size:14px; color:var(--navy); margin-bottom:6px;">⚙ CRM changes</h4>
+      <ul class="clean" style="margin:0">
+        <li>Effective-dated rate table; per-item taxability flags.</li>
+        <li>Split taxable/non-taxable subtotals; package expansion.</li>
+        <li>Deposit allocation, audit log, tax reports, web/mobile parity test.</li>
+      </ul>
+    </div>
+  </div>
+  <div style="height:14px"></div>
+  <div class="callout">
+    <h4>Management must approve before charging under the new policy</h4>
+    <p style="margin:0">(1) The written tax policy; (2) the fee structure (mandatory vs. optional); (3) the use-tax treatment of owned equipment; (4) the updated contract/invoice templates; and (5) the CRM tax configuration — each signed off with an effective date.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div><strong style="color:#fff;">Proposed Sales Tax Policy</strong> · Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard · San Jose, CA · prepared 19 October 2026</div>
+    <div>This document is research and a proposal for management review. It is <strong style="color:#fff;">not legal or tax advice</strong> and does not create an approved company policy. Classifications marked conditional or unresolved must be confirmed with a qualified California tax professional or the CDTFA before implementation. Verified rate: 10.000% (San Jose, eff. 2026-04-01, CDTFA Notice L-1022). Market prices checked 2026-10-19 and are pre-tax unless a vendor states otherwise.</div>
+  </div>
+</footer>
+
+</body>
+</html>
