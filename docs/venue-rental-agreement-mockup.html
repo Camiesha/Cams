@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rental Agreement Mockup</title>
+<meta name="description" content="Redesigned, print-ready rental agreement mock-ups for Crown Prince Event Hall and Alvin Studio & Courtyard — management-review and client-facing views. Proposed draft, not approved for client use.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Two branded contracts on letter-size sheets. Toggle Management (annotated) <-> Client (clean). Print-ready. */
+  :root{
+    --cph-navy:#22314d; --cph-navy2:#1b2740; --cph-gold:#b8912f; --cph-cream:#f3efe4;
+    --acd-navy:#20304a; --acd-gold:#c69a46; --acd-cream:#f4f1ea;
+    --paper:#ffffff; --app:#e9ecf1; --ink:#23272e; --ink-2:#444b55; --muted:#6b7280;
+    --line:#d7dbe2; --line-2:#e7eaef; --fieldline:#9aa3af;
+    --mdr:#b4232a; --mdr-bg:#fbecec; --ver:#9a6b0e; --ver-bg:#f8f0db; --ccr:#5e4b86; --ccr-bg:#efeaf7; --add:#2b6a52; --add-bg:#e5f1ec;
+    --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --app:#0f1217; color-scheme:dark; } }
+  :root[data-theme="dark"]{ --app:#0f1217; color-scheme:dark; }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--app);color:var(--ink);font-family:var(--body);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ---- control bar (screen only) ---- */
+  .bar{position:sticky;top:0;z-index:30;background:#12161c;color:#eef1f6;padding:10px max(14px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  .bar .t{font-weight:700;font-size:13px}
+  .bar .t span{color:#b9c2d0;font-weight:500}
+  .bar .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .toggle{display:inline-flex;border:1px solid #39424f;border-radius:999px;overflow:hidden}
+  .toggle button{background:transparent;color:#c3cad6;border:0;padding:6px 12px;font:600 12px var(--body);cursor:pointer}
+  .toggle button.on{background:var(--cph-gold);color:#1b2740}
+  .bar a.jump{color:#b9c2d0;font-size:12px;text-decoration:none;border:1px solid #39424f;border-radius:7px;padding:5px 9px}
+  .bar a.jump:hover{background:#1c232c}
+  .viewnote{background:var(--mdr-bg);color:var(--mdr);border-bottom:1px solid var(--mdr);text-align:center;font-size:12px;font-weight:700;padding:7px}
+  body.client .viewnote.mgmt{display:none}
+  .viewnote.client{display:none;background:var(--ver-bg);color:var(--ver);border-color:var(--ver)}
+  body.client .viewnote.client{display:block}
+
+  /* ---- sheet (letter page) ---- */
+  .stage{padding:20px max(14px,env(safe-area-inset-left,0px)) 40px}
+  .sheet{background:var(--paper);color:#23272e;width:8.5in;max-width:100%;min-height:11in;margin:0 auto 18px;padding:0.62in 0.66in 0.72in;box-shadow:0 2px 6px rgba(20,30,50,.12),0 12px 34px rgba(20,30,50,.12);position:relative;border-radius:2px}
+  .sheet.cph{--brand:var(--cph-navy);--brandgold:var(--cph-gold);--brandcream:var(--cph-cream)}
+  .sheet.acd{--brand:var(--acd-navy);--brandgold:var(--acd-gold);--brandcream:var(--acd-cream)}
+
+  /* running header / footer */
+  .mast{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--brandgold);padding-bottom:9px;margin-bottom:3px}
+  .mast .logo .name{font-family:var(--serif);font-weight:700;font-size:21px;color:var(--brand);line-height:1;letter-spacing:.5px}
+  .mast .logo .sub{font-family:var(--serif);font-size:11px;letter-spacing:3px;color:var(--brandgold);text-transform:uppercase;margin-top:2px}
+  .mast .doctitle{text-align:right;font-family:var(--serif);font-weight:700;color:var(--brandgold);font-size:16px;line-height:1.15;max-width:3.1in}
+  .mast .doctitle small{display:block;font-family:var(--body);font-weight:500;font-size:9.5px;letter-spacing:.3px;color:var(--muted);margin-top:4px}
+  .contact{font-size:9.5px;color:var(--muted);margin:5px 0 12px}
+  .foot{position:absolute;left:0.66in;right:0.66in;bottom:0.34in;border-top:1px solid var(--line-2);padding-top:5px;display:flex;justify-content:space-between;font-size:8.5px;color:var(--muted)}
+  .pno::after{counter-increment:pg;content:"Page " counter(pg)}
+
+  h2.party{font-size:11px;color:var(--ink-2);font-weight:500;margin:0 0 12px;line-height:1.45}
+  .clause{margin:0 0 9px;break-inside:avoid}
+  .clause h3{font-family:var(--serif);font-weight:700;font-size:13.5px;color:var(--brand);margin:0 0 2px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line-2);padding-bottom:2px}
+  .clause h3 .init{font-family:var(--body);font-size:8.5px;letter-spacing:.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+  .clause p{margin:4px 0;font-size:11px;line-height:1.46}
+  .clause ul{margin:3px 0;padding-left:15px} .clause li{font-size:10.5px;margin:1.5px 0}
+  .initbox{display:inline-block;width:40px;border-bottom:1px solid var(--fieldline);margin-left:4px;height:11px;vertical-align:baseline}
+
+  /* event-detail grid */
+  .band{background:var(--brandcream);border:1px solid var(--line);border-radius:3px;padding:9px 11px;margin:0 0 12px}
+  .band .bt{font-family:var(--body);font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--brand);margin:0 0 7px}
+  .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 14px}
+  .f{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .f.col2{grid-column:span 2} .f.col3{grid-column:span 3}
+  .f label{font-size:8.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .fline{border-bottom:1px solid var(--fieldline);min-height:15px}
+  .cb{display:inline-block;width:10px;height:10px;border:1px solid var(--brand);border-radius:2px;margin-right:3px;vertical-align:-1px}
+  .ck{font-size:10.5px;margin-right:12px;white-space:nowrap}
+
+  /* pricing table */
+  table.pay{width:100%;border-collapse:collapse;font-size:10.5px;margin:4px 0}
+  table.pay td{border:1px solid var(--line);padding:5px 8px}
+  table.pay td.lab{background:var(--brandcream);width:58%}
+  table.pay td.amt{text-align:right;font-variant-numeric:tabular-nums}
+  table.pay tr.em td{font-weight:700;background:#faf7ef}
+  .paysel{font-size:10px;margin:7px 0 2px}
+
+  /* signatures */
+  .sig{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:16px}
+  .sig .line{border-bottom:1px solid var(--ink);height:26px}
+  .sig .lbl{font-size:9px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+  /* annotations (management view) */
+  .anno{display:inline-block;font-family:var(--mono);font-size:8.5px;font-weight:600;padding:1px 5px;border-radius:4px;border:1px solid;margin:0 2px;vertical-align:baseline;line-height:1.5}
+  .a-mdr{color:var(--mdr);background:var(--mdr-bg);border-color:var(--mdr)}
+  .a-ver{color:var(--ver);background:var(--ver-bg);border-color:var(--ver)}
+  .a-ccr{color:var(--ccr);background:var(--ccr-bg);border-color:var(--ccr)}
+  .a-add{color:var(--add);background:var(--add-bg);border-color:var(--add)}
+  .note{border-left:3px solid var(--mdr);background:var(--mdr-bg);color:#5c1a1f;padding:5px 9px;margin:5px 0;font-size:9.5px;border-radius:0 4px 4px 0}
+  .note.add{border-color:var(--add);background:var(--add-bg);color:#1e4a39}
+  .ph{font-family:var(--mono);font-size:.92em;background:var(--ver-bg);color:var(--ver);padding:0 3px;border-radius:3px}
+  body.client .anno{display:none}
+  body.client .note{display:none}
+  body.client .recadd{display:none}         /* recommended-addition sections hidden in client view */
+  .recadd{outline:1.5px dashed var(--add);outline-offset:3px;background:linear-gradient(0deg,rgba(43,106,82,.04),rgba(43,106,82,.04))}
+
+  /* explainer sections (screen report-style, hidden in print) */
+  .doc{max-width:8.5in;margin:0 auto 18px;background:var(--paper);border-radius:8px;padding:18px 20px;box-shadow:0 2px 6px rgba(20,30,50,.1)}
+  .doc h2{font-family:var(--serif);font-size:20px;margin:0 0 4px;color:#22314d}
+  .doc h3{font-size:14px;margin:14px 0 5px}
+  .doc .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+  .doc table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:600px}
+  .doc thead th{background:#22314d;color:#fff;text-align:left;padding:6px 9px;font-size:11px}
+  .doc td,.doc th{border-top:1px solid var(--line-2);padding:6px 9px;vertical-align:top;text-align:left}
+  .doc ul.tick{list-style:none;padding:0;margin:6px 0} .doc ul.tick li{padding:2px 0 2px 18px;position:relative;font-size:12px}
+  .doc ul.tick li::before{content:"";position:absolute;left:2px;top:8px;width:7px;height:7px;border-radius:2px;background:var(--cph-gold)}
+  .legendrow{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+
+  @media(max-width:900px){ .fgrid{grid-template-columns:1fr 1fr} }
+  @media(max-width:620px){ .fgrid{grid-template-columns:1fr} .sig{grid-template-columns:1fr} .sheet{padding:16px 14px 44px} }
+
+  @media print{
+    :root{--app:#fff}
+    body{background:#fff;counter-reset:pg}
+    .bar,.viewnote,.screen-only{display:none!important}
+    .stage{padding:0}
+    .sheet{box-shadow:none;margin:0;width:auto;min-height:auto;border-radius:0;padding:0.5in 0.55in 0.7in;page-break-after:always}
+    .doc{display:none}
+    @page{size:letter;margin:0}
+  }
+</style>
+</head>
+<body class="mgmt">
+
+<div class="bar screen-only">
+  <div class="t">Redesigned Rental Agreement — Mock-up <span>· CPH &amp; ACD · proposed draft</span></div>
+  <div class="controls">
+    <span style="font-size:11px;color:#b9c2d0">View:</span>
+    <div class="toggle" role="group" aria-label="View">
+      <button id="bMgmt" class="on" onclick="setView('mgmt')">Management (annotated)</button>
+      <button id="bClient" onclick="setView('client')">Client-facing (clean)</button>
+    </div>
+    <a class="jump" href="#cph">CPH</a><a class="jump" href="#acd">ACD</a><a class="jump" href="#notes">Notes</a>
+  </div>
+</div>
+<div class="viewnote mgmt">MANAGEMENT REVIEW MOCK-UP — annotations visible · PROPOSED DRAFT — NOT APPROVED FOR CLIENT USE. To print the clean version, switch to Client-facing then use your browser's Print.</div>
+<div class="viewnote client">PROPOSED CLIENT-FACING LAYOUT — review annotations hidden · placeholders remain for unapproved figures · NOT APPROVED, NOT FOR CLIENT RELEASE until management &amp; California counsel sign off.</div>
+
+<div class="stage">
+
+<!-- ============================ CPH AGREEMENT ============================ -->
+<div class="sheet cph" id="cph" style="counter-reset:pg">
+  <div class="mast">
+    <div class="logo"><div class="name">Crown Prince</div><div class="sub">Event Hall</div></div>
+    <div class="doctitle">Rental Agreement<small>Booking ref: <span class="ph">[CPH-____]</span></small></div>
+  </div>
+  <div class="contact">1654 Burdette Dr, San Jose, CA 95121 · (408) 408-1654 · crownprincehall@gmail.com</div>
+  <h2 class="party">This Agreement is entered into by and between <b>Crown Prince Hall Corporation</b> (CA Entity No. B20260164272), d/b/a Crown Prince Event Hall (“Venue”), and the undersigned client (“Client”) as of the signature date below. This Agreement gives Client permission to use the Venue for the event described below. It is not a lease and creates no tenancy.</h2>
+
+  <div class="band">
+    <div class="bt">Event Details</div>
+    <div class="fgrid">
+      <div class="f col2"><label>Event date</label><div class="fline"></div></div>
+      <div class="f"><label>Event type</label><div class="fline"></div></div>
+      <div class="f"><label>Set-up</label><div class="fline"></div></div>
+      <div class="f"><label>Event time</label><div class="fline"></div></div>
+      <div class="f"><label>Load-out</label><div class="fline"></div></div>
+      <div class="f col2"><label>Client name</label><div class="fline"></div></div>
+      <div class="f"><label>Phone</label><div class="fline"></div></div>
+      <div class="f col2"><label>Email</label><div class="fline"></div></div>
+      <div class="f"><label>Expected guests</label><div class="fline"></div></div>
+      <div class="f"><label>Legal occupancy</label><div class="fline"></div></div>
+      <div class="f"><label>Music / amplified sound ends by</label><div class="fline"></div></div>
+      <div class="f"><label>Alcohol</label><div class="fline"><span class="ck"><span class="cb"></span>No</span><span class="ck"><span class="cb"></span>Yes</span></div></div>
+      <div class="f col3"><label>Approved areas</label><div class="fline"><span class="ck"><span class="cb"></span>Indoor only</span><span class="ck"><span class="cb"></span>Other: ____________</span></div></div>
+    </div>
+  </div>
+
+  <div class="clause"><h3>1. Assumption of Risk <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Client understands that events may involve dancing, food, alcohol if approved, vendors, entertainment, equipment, loading, sound, lighting and social activity. Client voluntarily assumes the ordinary risks connected to the event, Client’s guests and Client’s vendors, and is responsible for supervising minors.</p></div>
+
+  <div class="clause"><h3>2. Release of Liability <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>To the fullest extent permitted by law, Client releases Venue, its owners, managers, employees, agents, contractors, landlord and affiliates from claims arising from the event — including claims Client does not know about at signing. Client waives California Civil Code § 1542, which reads: “A general release does not extend to claims that the creditor or releasing party does not know or suspect to exist in his or her favor at the time of executing the release and that, if known by him or her, would have materially affected his or her settlement with the debtor or released party.” This release does not apply to gross negligence or willful misconduct by Venue, or to any right that cannot be waived by law. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — confirm §1542 waiver &amp; release scope]</span></p></div>
+
+  <div class="clause"><h3>3. Indemnification <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Client will defend and indemnify Venue, its representatives and its landlord from claims, losses, damages, injuries, fines, costs and attorney fees caused by Client, guests, vendors, invitees or Client’s breach of this Agreement. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — indemnity scope]</span></p></div>
+
+  <div class="clause"><h3>4. Compliance with Laws and Venue Policies <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <ul>
+      <li>No smoking or vaping indoors; permitted only in the designated outdoor area. No cannabis anywhere on the property.</li>
+      <li>No illegal drugs, weapons, fighting, harassment, unsafe conduct or blocked exits.</li>
+      <li>No gambling, betting or wagering anywhere on the property, including activities involving large amounts of cash.</li>
+      <li>No firecrackers, fireworks, sparklers or pyrotechnics. No open flames, candles, fog, haze, glitter or confetti unless Venue approves in writing. Any false-alarm or emergency-response fee is charged to Client.</li>
+      <li>No pets or animals except service animals required by law.</li>
+      <li>Do not tamper with alarms, cameras, smoke detectors, sprinklers, climate controls, AV, security devices or fire equipment.</li>
+      <li>Nothing may be nailed, screwed, stapled, taped or glued to walls, ceilings, floors or fixtures without written approval.</li>
+    </ul></div>
+
+  <div class="clause"><h3>5. Alcohol Policy <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Alcohol is allowed only with Venue’s written approval. Venue does not sell, furnish or serve alcohol unless a signed add-on says otherwise. Client is responsible for lawful service — no service to minors or visibly intoxicated persons, and licensed or authorized servers where required. Drinking is allowed only within designated, approved venue/courtyard areas, never in the parking lot.</p>
+    <ul>
+      <li>Alcohol may not be sold. No cash bar, no donations or suggested contributions for drinks, and no ticket or admission price that includes drinks — unless Client’s caterer holds a valid California ABC catering license for the event date and gives Venue a copy at least 10 days before the event. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — ABC pathway]</span></li>
+      <li>Where alcohol is served, Venue requires licensed security of one guard per 75 guests, with a minimum of two guards (unless another ratio is stated). <span class="anno a-ver">[VERIFY WITH SOURCE DOCUMENT — confirm ratio is approved business rule]</span></li>
+      <li>If alcohol rules are violated, Venue may stop service or end the event without refund.</li>
+    </ul></div>
+
+  <div class="clause"><h3>6. Food, Vendors, and Production</h3>
+    <p>Food, catering, food trucks, DJs, performers, rentals, décor, production and outside equipment must be disclosed and approved before the event. Vendors must follow health, fire, sanitation, permit, insurance, loading, power and noise rules.</p>
+    <ul>
+      <li>Caterers and food trucks must hold a current Santa Clara County health permit for the event date and give Venue a copy at least 10 days before the event.</li>
+      <li>Every vendor must carry liability insurance and provide certificates at least 30 days before the event. Client is responsible for its vendors.</li>
+      <li>Venue does not accept, store or secure deliveries. <span class="anno a-ver">[VERIFY WITH SOURCE DOCUMENT — confirm this matches actual operations]</span></li>
+    </ul></div>
+
+  <div class="clause"><h3>7. Access, Capacity, Noise, and Overtime</h3>
+    <ul>
+      <li>Your booked time includes load-in, setup, event, cleanup, breakdown and load-out. Your booking includes a 6-hour event window plus 2 complimentary setup hours before it. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — align contract wording with the rate card / website “2 complimentary setup hours”]</span></li>
+      <li>No early access or late stay without written approval. Overtime is billed at <span class="ph">[$____ ]</span> per hour or any part thereof; if no rate is stated, overtime is billed at 1.5× the hourly rental rate. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — supply overtime rate, increment &amp; grace period; confirm the 1.5× fallback is approved]</span></li>
+      <li>Guest count may not exceed legal occupancy or Venue-approved capacity, whichever is lower.</li>
+      <li>Music and amplified sound must stay indoors with doors closed and end at the time in Event Details, or by 12:00 a.m. if none is listed. Outdoor amplified sound requires written approval. City of San Jose noise rules apply; any fine charged to Venue because of the event is Client’s responsibility.</li>
+    </ul></div>
+
+  <div class="clause"><h3>8. Damages</h3>
+    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from the security deposit and will send Client an itemized statement within 14 days after the event. The deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property.</p></div>
+
+  <div class="clause"><h3>9. Right to Terminate Event for Safety and Compliance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Venue, security, police, fire officials or authorities may deny entry, remove persons, stop alcohol service, reduce sound, close areas, suspend or end the event if needed for safety, compliance, property protection, non-payment, illegal activity, intoxication, violence, damage, capacity issues or material breach. If ended for breach, no refund is owed. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — distinguish immediate safety action from curable breach; proportionality of “no refund”]</span></p></div>
+
+  <div class="clause"><h3>10. Photo / Video Release</h3>
+    <p>Any marketing use is limited to non-identifying images of room setups, décor and general atmosphere. Venue will not publish any image that identifies a guest, family member or staff member without that person’s written consent.</p>
+    <p><span class="ck"><span class="cb"></span>I authorize Venue to use event photos/video for marketing.</span> <span class="ck"><span class="cb"></span>I do <b>NOT</b> authorize marketing use.</span><br>If neither box is checked, Venue will not use images for marketing. This choice does not restrict security footage, incident documentation or legally required records.</p></div>
+
+  <div class="clause"><h3>11. Quote, Payment, Cancellation &amp; Refund <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the $1,000 reservation payment. Changes require Venue’s written approval.</p>
+    <p><b>Deposit structure.</b> The $1,000 reservation payment is held separately from rental charges and is not applied toward them; once Client pays the full rental amount and agreed fees, the same $1,000 converts into the refundable security deposit (no second deposit), returned within 14 days after the event less documented deductions under Section 8. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — choose one model: (A) convert, as shown, or (B) a separate non-refundable booking retainer + separate refundable security deposit. The source template currently contains BOTH; do not keep both.]</span></p>
+    <p><b>Two-week reservation refund.</b> If Client cancels in writing within 14 days after paying the reservation payment, the reservation payment is refunded in full, processed within 14 days. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED]</span> <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — this preserves the current client-facing promise; confirm wording &amp; how the 14 days is counted]</span></p>
+    <p>The rental balance is due <span class="ph">[14 / 30]</span> days before the event unless another date is stated below. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — resolve 14-day (contract) vs 30-day (operational) deadline; reminders at 30/15/10/5 days]</span> Late or failed payment may cancel the booking. Overdue amounts: <span class="ph">[flat late fee — pending]</span>. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — replace the 1%/month interest clause; a flat late fee is not automatically enforceable]</span> A returned check or transfer incurs $25 for the first instance and $35 after. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — remove the “Client agrees not to dispute any charge” clause; add a dispute-first process]</span></p>
+    <p><b>Cancellation.</b> Cancellation must be in writing and takes effect when Venue receives it. For payments other than the reservation payment: 180 days or more before the event, Venue retains <span class="ph">[__%]</span> and refunds the remainder within 30 days; fewer than 180 days before, Venue retains <span class="ph">[__%]</span>. The reservation payment is governed by the rescheduling-credit terms and is not retained again here; Venue may not recover the same loss twice. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — set defensible percentages under Civ. Code §1671; the current “keep everything inside 180 days” is the highest enforceability risk]</span> <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — percentages]</span></p>
+    <p><b>Rescheduling.</b> If Client cancels, Venue may retain the $1,000 as a credit toward rescheduling; a replacement booking must be confirmed in writing within one year. A request alone is not a completed booking; further changes do not restart the deadline. Unused credit is forfeited after one year, to the extent permitted by law.</p>
+
+    <table class="pay">
+      <tr><td class="lab">Venue Rent Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Cleaning Fee</td><td class="amt">$ 480.00</td></tr>
+      <tr><td class="lab">Insurance Fee</td><td class="amt">$ 125.00</td></tr>
+      <tr><td class="lab">Security: $ ____ / hr × ____ hrs</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Package Add-Ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Discounts</td><td class="amt">$ (<span class="ph">[____]</span>)</td></tr>
+      <tr class="em"><td class="lab">Reservation payment — due upon booking</td><td class="amt">$ 1,000.00</td></tr>
+      <tr><td class="lab">Security deposit — $1,000 converted after full payment; refundable 14 days after event</td><td class="amt">$ 1,000.00</td></tr>
+      <tr class="em"><td class="lab">Balance due before event — due <span class="ph">[14/30]</span> days before unless stated</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+    </table>
+    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+3% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — 3% surcharge wording/disclosure; debit excluded]</span><br>Make checks payable to: <b>Crown Prince Hall Corporation</b> (CA Entity No. B20260164272). The 3% fee applies to credit cards only, not debit cards.</div></div>
+
+  <div class="clause"><h3>12. Insurance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Client must carry event liability insurance of at least $1,000,000 per occurrence and $2,000,000 in the aggregate for the rental period, plus host liquor liability of $1,000,000 if alcohol will be served. Crown Prince Hall Corporation, d/b/a Crown Prince Event Hall, and its landlord must be named additional insureds. A certificate of insurance is due at least 30 days before the event. Venue may hold access to the building until the certificate is received, and doing so is not a cancellation by Venue. These limits are minimums and do not limit Client’s liability under Section 3.</p></div>
+
+  <div class="clause"><h3>13. Accessibility (California Civil Code § 1938)</h3>
+    <p>Disclosure required by Civil Code § 1938 — check one: <span class="anno a-ver">[VERIFY WITH SOURCE DOCUMENT — select only after the actual CASp status of 1654 Burdette Dr is confirmed]</span></p>
+    <p><span class="ck"><span class="cb"></span>The premises have <b>not</b> been inspected by a Certified Access Specialist (CASp).</span><br>
+    <span class="ck"><span class="cb"></span>The premises <b>have</b> been inspected by a CASp and were determined to meet all applicable construction-related accessibility standards.</span><br>
+    <span class="ck"><span class="cb"></span>The premises <b>have</b> been inspected by a CASp and were <b>not</b> determined to meet them.</span></p>
+    <p style="font-size:9.5px;color:#555">A CASp can inspect the premises to determine compliance with construction-related accessibility standards. State law does not require a CASp inspection, but the owner/lessor may not prohibit the lessee from obtaining one; the parties agree on timing, fee and repair-cost arrangements. Client must keep accessible entrances, routes, restrooms and parking clear and is responsible for any barrier created by Client’s own layout, décor or equipment.</p></div>
+
+  <div class="clause"><h3>14. Force Majeure</h3>
+    <p>Either party may terminate without liability if a circumstance beyond its control — war, government regulation, natural disaster, civil disorder or curtailment of transportation — makes it illegal or impossible to provide or use the facilities, on written notice delivered as soon as reasonably practical and no later than 10 days after learning of the basis. The primary remedy is a credit or reschedule; the reservation payment is <span class="ph">[refundable / non-refundable — pending]</span>; additional payments are eligible for refund. If Venue cancels for a reason not caused by Client, Client receives a full refund of amounts paid and help finding an alternative date or venue. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — reservation-payment treatment on force majeure]</span></p></div>
+
+  <div class="clause"><h3>15. General</h3>
+    <p>California law applies. Before filing suit, the parties will attempt mediation in Santa Clara County, costs shared. Any lawsuit must be filed in Santa Clara County Superior Court. The prevailing party may recover reasonable attorney fees and costs. This Agreement and the signed quote are the entire agreement; changes must be in writing and signed by both. If any part cannot be enforced, the rest still applies. Venue’s total responsibility is limited to the amount Client has paid, except for liability that cannot be limited by law. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — liability limitation]</span></p>
+    <p>Client has read this Agreement, has had the chance to ask questions, understands it gives up legal rights, and signs freely. The signer is at least 18 years old (21 if alcohol will be served) and, if signing for a company, is personally responsible for amounts owed.</p>
+    <div class="sig">
+      <div><div class="line"></div><div class="lbl">Client signature &amp; date</div></div>
+      <div><div class="line"></div><div class="lbl">Venue representative &amp; date</div></div>
+      <div><div class="line"></div><div class="lbl">Printed name</div></div>
+      <div><div class="line"></div><div class="lbl">Printed name &amp; title</div></div>
+    </div></div>
+
+  <div class="foot"><span>Crown Prince Hall Corporation · d/b/a Crown Prince Event Hall</span><span>1654 Burdette Dr, San Jose, CA 95121</span><span class="pno"></span></div>
+</div>
+
+<!-- ============================ ACD AGREEMENT ============================ -->
+<div class="sheet acd" id="acd" style="counter-reset:pg">
+  <div class="mast">
+    <div class="logo"><div class="name" style="font-style:italic">Alvin</div><div class="sub">Studio &amp; Courtyard</div></div>
+    <div class="doctitle">Client Waiver &amp; Venue Rental Agreement<small>Booking ref: <span class="ph">[ACD-____]</span></small></div>
+  </div>
+  <div class="contact">2470 Alvin Ave., Ste. 80, San Jose, CA 95121 · 408-408-1654 · info@tangointime.com <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — confirm contact email / payment email belongs to the ACD entity]</span></div>
+  <h2 class="party">This Agreement is entered into by and between <b><span class="ph">[Legal Entity Name]</span></b>, d/b/a Alvin Studio &amp; Courtyard (“Venue”), and the undersigned client (“Client”) as of the signature date below. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — name the ACD contracting entity]</span> <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — entity &amp; payee]</span></h2>
+
+  <div class="band">
+    <div class="bt">Event Details</div>
+    <div class="fgrid">
+      <div class="f col2"><label>Event date</label><div class="fline"></div></div>
+      <div class="f"><label>Event type</label><div class="fline"></div></div>
+      <div class="f"><label>Set-up</label><div class="fline"></div></div>
+      <div class="f"><label>Event time</label><div class="fline"></div></div>
+      <div class="f"><label>Load-out</label><div class="fline"></div></div>
+      <div class="f col2"><label>Client name</label><div class="fline"></div></div>
+      <div class="f"><label>Phone</label><div class="fline"></div></div>
+      <div class="f col2"><label>Email</label><div class="fline"></div></div>
+      <div class="f"><label>Expected guests</label><div class="fline"></div></div>
+      <div class="f col3"><label>Approved areas</label><div class="fline"><span class="ck"><span class="cb"></span>Indoor only</span><span class="ck"><span class="cb"></span>Courtyard included</span><span class="ck"><span class="cb"></span>Other: ________</span></div></div>
+    </div>
+  </div>
+
+  <div class="clause"><h3>1. Assumption of Risk</h3><p>Client understands that events may involve dancing, food, alcohol if approved, vendors, entertainment, equipment, loading, sound, lighting and social activity. Client voluntarily assumes the ordinary risks connected to the event, Client’s guests and Client’s vendors.</p></div>
+
+  <div class="clause"><h3>2. Release of Liability</h3><p>To the fullest extent permitted by law, Client releases Venue, its owners, managers, employees, agents, contractors, landlord and affiliates from claims arising from the event, except rights that cannot be waived by law. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — consider adding the §1542 waiver and the gross-negligence/willful carve-out used in the CPH agreement]</span></p></div>
+
+  <div class="clause"><h3>3. Indemnification</h3><p>Client will defend and indemnify Venue and its representatives from claims, losses, damages, injuries, fines, costs and attorney fees caused by Client, guests, vendors, invitees or Client’s breach of this Agreement.</p></div>
+
+  <div class="clause"><h3>4. Compliance with Laws and Venue Policies <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <ul>
+      <li>No smoking or vaping except in a written-approved area.</li>
+      <li>No illegal drugs, weapons, fighting, harassment, unsafe conduct or blocked exits.</li>
+      <li>No gambling, betting or wagering anywhere on the property.</li>
+      <li>No firecrackers, fireworks, sparklers or pyrotechnics. No open flames, candles, fog, haze, glitter or confetti unless Venue approves in writing.</li>
+      <li>No pets or animals except service animals required by law.</li>
+      <li>Do not tamper with alarms, cameras, smoke detectors, sprinklers, climate controls, AV, security devices or fire equipment.</li>
+    </ul></div>
+
+  <div class="clause"><h3>5. Alcohol Policy <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Alcohol is allowed only with Venue’s written approval. Venue does not sell, furnish or serve alcohol unless a signed add-on says otherwise. Client is responsible for lawful service — no service to minors or visibly intoxicated persons, and licensed or authorized servers where required. Open alcoholic beverages are permitted only within designated, approved venue/courtyard areas and are prohibited in the parking lot and all other areas.</p>
+    <ul>
+      <li>Venue may require approved security, bartender, caterer, insurance, permits or vendor certificates. If alcohol rules are violated, Venue may stop service or end the event without refund.</li>
+      <li><span class="recadd">Where alcohol is served, licensed security of <span class="ph">[ratio]</span> is required; no sale/cash bar/ticketed drinks unless the caterer holds a valid California ABC catering license (copy to Venue at least 10 days before). <span class="anno a-add">[RECOMMENDED ADDITION — not in the current ACD agreement; mirrors CPH]</span> <span class="anno a-mdr">[MANAGEMENT DECISION — set ACD guard ratio]</span> <span class="anno a-ccr">[COUNSEL — ABC pathway]</span></span></li>
+    </ul></div>
+
+  <div class="clause"><h3>6. Food, Vendors, and Production</h3>
+    <p>Food, catering, food trucks, DJs, performers, rentals, décor, production and outside equipment must be disclosed and approved before the event. Vendors must follow health, fire, sanitation, permit, insurance, loading, power and noise rules.</p>
+    <p class="recadd" style="font-size:10.5px"><span class="anno a-add">[RECOMMENDED ADDITION — not in current ACD agreement]</span> Caterers/food trucks must hold a current Santa Clara County health permit (copy at least 10 days before); every vendor must carry liability insurance and provide a certificate at least 30 days before. Client is responsible for its vendors.</p></div>
+
+  <div class="clause"><h3>7. Access, Capacity, Noise, and Overtime</h3>
+    <ul>
+      <li>Your booked time includes load-in, setup, event, cleanup, breakdown and load-out.</li>
+      <li>No early access or late stay without written approval. Overtime is billed at <span class="ph">[$____]</span> per <span class="ph">[hour]</span>. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — supply ACD overtime rate &amp; increment]</span></li>
+      <li>Guest count may not exceed legal occupancy or Venue-approved capacity, whichever is lower. Indoor up to 100; courtyard adds up to <span class="ph">[+__]</span>. <span class="anno a-ver">[VERIFY — confirm combined occupant load with the fire authority before advertising]</span></li>
+      <li>Courtyard use and outdoor amplified sound require written approval and may be reduced, stopped or restricted; a cutoff time of <span class="ph">[time]</span> applies. Weather contingency / indoor backup: <span class="ph">[terms]</span>. <span class="anno a-add">[RECOMMENDED ADDITION — courtyard/weather/cutoff terms]</span></li>
+    </ul></div>
+
+  <div class="clause"><h3>8. Damages</h3>
+    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from the security deposit <span class="recadd">and will send an itemized statement within 14 days after the event; the deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property. <span class="anno a-add">[RECOMMENDED ADDITION — itemized-statement &amp; deposit-return language from CPH]</span></span>.</p></div>
+
+  <div class="clause"><h3>9. Right to Terminate Event for Safety and Compliance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Venue, security, police, fire officials or authorities may deny entry, remove persons, stop alcohol service, reduce sound, close areas, suspend or end the event for safety, compliance, property protection, non-payment, illegal activity, intoxication, violence, damage, capacity issues or material breach. If ended for breach, no refund is owed. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — proportionality of “no refund”]</span></p></div>
+
+  <div class="clause"><h3>10. Photo / Video Release</h3>
+    <p><span class="ck"><span class="cb"></span>I authorize Venue to use event photos/video for marketing.</span> <span class="ck"><span class="cb"></span>I do <b>NOT</b> authorize marketing use.</span><br>If neither box is checked, Venue will not use images for marketing. This does not restrict security footage, incident documentation or legally required records. <span class="anno a-add">[RECOMMENDED ADDITION — add CPH’s “non-identifying images only / written consent for identifiable guests” wording]</span></p></div>
+
+  <div class="clause"><h3>11. Quote, Payment, Cancellation &amp; Refund <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the <span class="ph">[$1,000 / $500]</span> reservation payment. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — the ACD agreement says $1,000; the assignment brief says $500. Confirm one.]</span> Changes require Venue’s written approval.</p>
+    <p><b>Deposit structure.</b> The reservation payment is held separately from rental charges and is not applied toward them; once Client pays the full rental amount and agreed fees, the same amount converts into the refundable security deposit (no second deposit), returned within 14 days after the event, less documented deductions, with an itemized statement. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — confirm this convert model (Version A) is the single model for both venues, or switch to a separate retainer + deposit]</span></p>
+    <p><b>Two-week reservation refund.</b> <span class="recadd">If Client cancels in writing within 14 days after paying the reservation payment, it is refunded in full within 14 days. <span class="anno a-add">[RECOMMENDED ADDITION — preserves the client-facing promise]</span> <span class="anno a-ccr">[COUNSEL]</span></span></p>
+    <p><b>Cancellation.</b> For payments other than the reservation payment: 180 days or more before the event — full refund; 90–179 days — 50% refund; fewer than 90 days — no refund. Refunds are due within 30 days. Retention is subject to law and may not duplicate recovery for the same loss. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — confirm schedule under §1671]</span> <span class="anno a-mdr">[MANAGEMENT DECISION — this 3-step differs from CPH’s 2-step; decide whether to harmonize]</span></p>
+    <p><b>Rescheduling.</b> Venue may retain the reservation payment as a credit toward rescheduling; a replacement booking must be confirmed in writing within one year. A request alone is not a completed booking; unused credit is forfeited after one year, to the extent permitted by law.</p>
+
+    <table class="pay">
+      <tr><td class="lab">Venue Rent Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Cleaning Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Security: $ ____ / hr × ____ hrs</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Courtyard add-on <span class="ck"><span class="cb"></span>included</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Package Add-Ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Discounts</td><td class="amt">$ (<span class="ph">[____]</span>)</td></tr>
+      <tr class="em"><td class="lab">Reservation payment — due upon booking</td><td class="amt">$ <span class="ph">[1,000/500]</span></td></tr>
+      <tr><td class="lab">Security deposit — converted after full payment; refundable 14 days after event</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr class="em"><td class="lab">Balance due before event — due by</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+    </table>
+    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+<span class="ph">[__]</span>% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[COUNSEL — set/surcharge wording]</span><br>Make checks payable to: <span class="ph">[Legal Entity Name]</span> · Zelle / payment email: info@tangointime.com <span class="anno a-mdr">[MANAGEMENT DECISION — route to the named ACD entity’s account]</span></div></div>
+
+  <div class="clause recadd"><h3>12. Insurance <span class="anno a-add">[RECOMMENDED ADDITION — the current ACD agreement has no insurance section]</span></h3>
+    <p>Client must carry event liability insurance of at least <span class="ph">[limits]</span>, plus host liquor liability of <span class="ph">[limit]</span> if alcohol is served; <span class="ph">[ACD entity]</span> and its landlord named additional insureds; certificate due at least 30 days before. <span class="anno a-mdr">[MANAGEMENT DECISION — set ACD limits; do not auto-copy CPH]</span></p></div>
+
+  <div class="clause recadd"><h3>13. Accessibility (Civil Code § 1938) <span class="anno a-add">[RECOMMENDED ADDITION — missing from current ACD agreement; §1938 disclosure is mandatory]</span></h3>
+    <p>Check one, only after the CASp status of 2470 Alvin Ave., Ste. 80 is verified: <span class="anno a-ver">[VERIFY]</span><br>
+    <span class="ck"><span class="cb"></span>Not inspected by a CASp.</span> <span class="ck"><span class="cb"></span>Inspected — meets standards.</span> <span class="ck"><span class="cb"></span>Inspected — does not meet.</span></p></div>
+
+  <div class="clause recadd"><h3>14. Force Majeure &amp; Venue-Initiated Cancellation <span class="anno a-add">[RECOMMENDED ADDITION — missing from current ACD agreement]</span></h3>
+    <p>If a circumstance beyond either party’s control makes it illegal or impossible to provide or use the facilities, either party may terminate on written notice within 10 days of learning of the basis; primary remedy is credit/reschedule. If Venue cancels for a reason not caused by Client, Client receives a full refund and help finding an alternative. <span class="anno a-ccr">[COUNSEL]</span></p></div>
+
+  <div class="clause recadd"><h3>15. General <span class="anno a-add">[RECOMMENDED ADDITION — missing governing-law / dispute terms in current ACD agreement]</span></h3>
+    <p>California law applies; mediation in Santa Clara County before suit; venue Santa Clara County Superior Court; prevailing party may recover attorney fees; entire agreement; severability; Venue’s total responsibility limited to amounts paid except where not limited by law. <span class="anno a-ccr">[COUNSEL]</span></p></div>
+
+  <div class="clause"><h3>16. Acknowledgment &amp; Signatures <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
+    <p>Client confirms they have read and understand this Agreement, including the waiver, release, indemnity, payment terms and Venue rules, and is responsible for guests, invitees, vendors and service providers. The signer is at least 18 (21 if alcohol will be served).</p>
+    <div class="sig">
+      <div><div class="line"></div><div class="lbl">Client signature &amp; date</div></div>
+      <div><div class="line"></div><div class="lbl">Venue representative &amp; date</div></div>
+      <div><div class="line"></div><div class="lbl">Printed name</div></div>
+      <div><div class="line"></div><div class="lbl">Printed name &amp; title</div></div>
+    </div></div>
+
+  <div class="foot"><span><span class="ph">[Legal Entity Name]</span> · d/b/a Alvin Studio &amp; Courtyard</span><span>2470 Alvin Ave., Ste. 80, San Jose, CA 95121</span><span class="pno"></span></div>
+</div>
+
+<!-- ============================ NOTES / EXPLAINER (screen only) ============================ -->
+<div class="doc screen-only" id="notes">
+  <h2>How to read these mock-ups</h2>
+  <p style="font-size:12.5px;color:#444">Two agreements above, each on letter-size sheets ready to print. Use the toggle at the top: <b>Management</b> shows the review annotations; <b>Client-facing</b> hides them (and hides the recommended-addition blocks) to preview the clean layout. Placeholders <span class="ph">[like this]</span> remain in both views until approved. <b>Nothing here is approved or enforceable.</b></p>
+  <div class="legendrow">
+    <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED]</span>
+    <span class="anno a-ver">[VERIFY WITH SOURCE DOCUMENT]</span>
+    <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW]</span>
+    <span class="anno a-add">[RECOMMENDED ADDITION]</span>
+  </div>
+
+  <h3>Page-by-page layout</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>Area</th><th>What it contains</th></tr></thead>
+    <tbody>
+      <tr><td>Masthead</td><td>Venue wordmark, document title, booking reference, address/contact line, parties paragraph.</td></tr>
+      <tr><td>Event details band</td><td>Form fields: date, set-up/event/load-out, client/phone/email, type, guests, occupancy, alcohol, music cutoff, approved areas (ACD adds a Courtyard checkbox).</td></tr>
+      <tr><td>Clauses 1–10</td><td>Risk, release, indemnity, compliance, alcohol, vendors, access/overtime, damages, termination, photo — numbered headings, initial boxes and checkboxes where the source uses them.</td></tr>
+      <tr><td>Quote &amp; payment</td><td>Itemized pricing table (rent, cleaning, insurance, security, add-ons, discounts, reservation payment, security deposit, balance), payment-type checkboxes, payee line.</td></tr>
+      <tr><td>Cancellation / refund / rescheduling</td><td>Separated sub-headings with the two-week refund, graduated cancellation and one-year rescheduling credit.</td></tr>
+      <tr><td>Insurance · Accessibility · Force majeure · General</td><td>CPH carries all four; ACD shows them as recommended additions (missing from its current agreement).</td></tr>
+      <tr><td>Signatures</td><td>Client &amp; venue-representative signature, date, printed name (and title).</td></tr>
+      <tr><td>Running footer</td><td>Legal entity, address, page number — repeated on every sheet.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Carried over unchanged (from the source agreements)</h3>
+  <ul class="tick">
+    <li>CPH: parties/entity &amp; no-tenancy; §§1–4 risk, release (incl. §1542), indemnity, compliance; §6 vendor permits/COI; §8 damages &amp; 14-day itemized statement; §9 termination; §10 photo opt-in/out; §12 insurance $1M/$2M + host liquor; §13 CASp statement text; §15 governing law/mediation/fees.</li>
+    <li>ACD: §§1–4; §5 alcohol base; §6 vendor approval; §7 courtyard-approval &amp; capacity rule; §8 damages base; §9 termination; §10 photo; §11 convert deposit model, 3-step cancellation, one-year rescheduling credit.</li>
+  </ul>
+
+  <h3>Revised, with reasons</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>Change</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td>Removed duplicated/truncated clauses; single clean numbering</td><td>Source PDFs repeat §§5–11 and truncate words — unusable as issued</td></tr>
+      <tr><td>CPH deposit section shows ONE model with a decision flag</td><td>Source contains both the convert model and the separate-retainer model; combining them is barred</td></tr>
+      <tr><td>Added a labeled two-week reservation-refund clause</td><td>Preserves the existing client-facing promise, absent from both written agreements</td></tr>
+      <tr><td>Overtime, balance deadline, surcharge, interest left as flagged placeholders</td><td>Not to be invented; pending management/counsel</td></tr>
+      <tr><td>ACD: insurance, accessibility, force majeure, general added as recommended additions</td><td>Missing from ACD’s current agreement; not silently copied from CPH — flagged for decision</td></tr>
+      <tr><td>ACD entity, payee and deposit amount shown as placeholders/flags</td><td>Entity blank in source; deposit $1,000 (agreement) vs $500 (brief) conflict</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Missing information &amp; management decisions before finalization</h3>
+  <ul class="tick">
+    <li>Deposit model (convert vs separate); two-week-refund wording; cancellation percentages; 14-vs-30-day balance deadline; overtime rate &amp; grace (each venue); ACD entity &amp; payee; ACD deposit amount ($1,000/$500); ACD insurance limits &amp; guard ratio; CASp status for each premises; card-surcharge wording; replacement of the 1%/month interest and no-dispute clauses. (Full register: companion <span class="mono">venue-policy-redesign-package</span>, D8–D9.)</li>
+  </ul>
+
+  <h3>Consistency check</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>Check</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Agreement ↔ pricing table ↔ payment terms</td><td>Consistent within each mock-up; amounts are placeholders pending approval</td></tr>
+      <tr><td>Deposit-return (14 days) vs cancellation-refund (30 days) deadlines</td><td>Kept distinct — OK</td></tr>
+      <tr><td>CPH vs ACD details kept separate</td><td>Yes — separate branded agreements; no CPH figures copied into ACD</td></tr>
+      <tr><td>Agreement ↔ two-week promise</td><td>Open — promise inserted as a flagged clause, not yet reconciled with the deposit model</td></tr>
+      <tr><td>CPH cancellation (2-step) vs ACD (3-step)</td><td>Open — different by source; harmonizing is a management decision</td></tr>
+      <tr><td>Quote/invoice ↔ agreement precedence</td><td>Agreement controls over conflicting quote terms; rebuild the quote after the deposit-model decision</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:11.5px;color:#7c231d;background:#fbecec;border:1px dashed #b4232a;border-radius:8px;padding:10px"><b>Proposed draft — not approved, not legally reviewed, not for client release.</b> Existing bookings keep their current terms; any approved changes apply only to new bookings after an effective date set by management.</p>
+</div>
+
+</div><!-- /stage -->
+
+<script>
+  function setView(v){
+    document.body.classList.toggle('client', v==='client');
+    document.body.classList.toggle('mgmt', v!=='client');
+    document.getElementById('bMgmt').classList.toggle('on', v!=='client');
+    document.getElementById('bClient').classList.toggle('on', v==='client');
+    try{ localStorage.setItem('agr-view', v); }catch(e){}
+  }
+  try{ var s=localStorage.getItem('agr-view'); if(s) setView(s); }catch(e){}
+</script>
+</body>
+</html>
