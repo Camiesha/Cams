@@ -131,7 +131,9 @@
   /* real template logos & header design */
   .brandlogo{height:62px;width:auto;display:block}
   .sheet.acd .brandlogo{height:48px}
-  .sheet.cph .mast{background:var(--cph-cream);padding:13px 15px;border-radius:3px;border-bottom:3px solid var(--cph-gold);align-items:center}
+  .sheet.cph .mast{background:var(--cph-cream);margin:-0.62in -0.66in 12px;padding:20px 0.66in 14px;border-radius:0;border-bottom:3px solid var(--cph-gold);align-items:center}
+  @media(max-width:620px){ .sheet.cph .mast{margin:-16px -14px 12px;padding:14px 14px 12px} }
+  @media print{ .sheet.cph .mast{margin:-0.5in -0.55in 12px;padding:0.3in 0.55in 12px} }
   .sheet.cph .doctitle{color:var(--cph-gold)}
   .sheet.acd .mast{align-items:center;border-bottom:2px solid var(--acd-gold)}
   .sheet.acd .doctitle{color:var(--acd-navy)}
@@ -256,7 +258,7 @@
     </ul></div>
 
   <div class="clause"><h3>8. Damages</h3>
-    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from the security deposit and will send Client an itemized statement within 14 days after the event. The deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property.</p></div>
+    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from any security deposit held or invoice the Client for them, and will send Client an itemized statement within 14 days after the event. Any security deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — the initial reservation deposit is credited to rent and is NOT a security deposit; confirm whether a separate refundable security/damage deposit is collected, and if so its amount and return timing]</span></p></div>
 
   <div class="clause"><h3>9. Right to Terminate Event for Safety and Compliance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
     <p>Venue, security, police, fire officials or authorities may deny entry, remove persons, stop alcohol service, reduce sound, close areas, suspend or end the event if needed for safety, compliance, property protection, non-payment, illegal activity, intoxication, violence, damage, capacity issues or material breach. If ended for breach, no refund is owed. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — distinguish immediate safety action from curable breach; proportionality of “no refund”]</span></p></div>
@@ -266,25 +268,32 @@
     <p><span class="ck"><span class="cb"></span>I authorize Venue to use event photos/video for marketing.</span> <span class="ck"><span class="cb"></span>I do <b>NOT</b> authorize marketing use.</span><br>If neither box is checked, Venue will not use images for marketing. This choice does not restrict security footage, incident documentation or legally required records.</p></div>
 
   <div class="clause"><h3>11. Quote, Payment, Cancellation &amp; Refund <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
-    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the $1,000 reservation payment. Changes require Venue’s written approval.</p>
-    <p><b>Deposit structure.</b> The $1,000 reservation payment is held separately from rental charges and is not applied toward them; once Client pays the full rental amount and agreed fees, the same $1,000 converts into the refundable security deposit (no second deposit), returned within 14 days after the event less documented deductions under Section 8. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — choose one model: (A) convert, as shown, or (B) a separate non-refundable booking retainer + separate refundable security deposit. The source template currently contains BOTH; do not keep both.]</span></p>
-    <p><b>Two-week reservation refund.</b> If Client cancels in writing within 14 days after paying the reservation payment, the reservation payment is refunded in full, processed within 14 days. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED]</span> <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — this preserves the current client-facing promise; confirm wording &amp; how the 14 days is counted]</span></p>
-    <p>The rental balance is due <span class="ph">[14 / 30]</span> days before the event unless another date is stated below. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — resolve 14-day (contract) vs 30-day (operational) deadline; reminders at 30/15/10/5 days]</span> Late or failed payment may cancel the booking. Overdue amounts: <span class="ph">[flat late fee — pending]</span>. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — replace the 1%/month interest clause; a flat late fee is not automatically enforceable]</span> A returned check or transfer incurs $25 for the first instance and $35 after. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — remove the “Client agrees not to dispute any charge” clause; add a dispute-first process]</span></p>
-    <p><b>Cancellation.</b> Cancellation must be in writing and takes effect when Venue receives it. For payments other than the reservation payment: 180 days or more before the event, Venue retains <span class="ph">[__%]</span> and refunds the remainder within 30 days; fewer than 180 days before, Venue retains <span class="ph">[__%]</span>. The reservation payment is governed by the rescheduling-credit terms and is not retained again here; Venue may not recover the same loss twice. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — set defensible percentages under Civ. Code §1671; the current “keep everything inside 180 days” is the highest enforceability risk]</span> <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — percentages]</span></p>
-    <p><b>Rescheduling.</b> If Client cancels, Venue may retain the $1,000 as a credit toward rescheduling; a replacement booking must be confirmed in writing within one year. A request alone is not a completed booking; further changes do not restart the deadline. Unused credit is forfeited after one year, to the extent permitted by law.</p>
+    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the initial reservation deposit of <b>$1,000</b>. Changes require Venue’s written approval.</p>
+    <p><b>Initial reservation deposit — credited to rent.</b> The $1,000 deposit secures your event date and is <b>credited toward the total rental amount</b> in the approved quotation. It is not an additional charge; it is deducted from the total due in the payment summary below. It is not a security deposit and does not convert into one.</p>
+    <p><b>Cancellation of the reservation deposit.</b> Cancellation must be in writing and takes effect when Venue receives it. The 14-day period begins on the date the deposit is paid.</p>
+    <ul>
+      <li><b>Within the first 14 calendar days:</b> full refund of the $1,000 deposit — <b>$1,000 refunded</b>.</li>
+      <li><b>After the first 14 calendar days:</b> 20% of the deposit is refunded (<b>$200</b>) and Venue retains 80% (<b>$800</b>), subject to the final approved agreement and applicable law. <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — deposit retention as liquidated damages, Civ. Code §1671]</span></li>
+    </ul>
+    <p><b>Additional payments.</b> The treatment on cancellation of any payments beyond the initial reservation deposit (rental installments and fees) is not set in this draft. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span> <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED]</span></p>
+    <p><b>Refund processing &amp; accounting.</b> Refund timing is not stated as a binding deadline until approved <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span>. Every cancellation is reviewed individually to confirm payments received, refunds already issued, remaining refund obligations and amounts retained; retained amounts are not automatically classified as profit.</p>
+    <p><b>Rescheduling / date change.</b> Terms not set in this draft. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span></p>
+    <p>Late or failed payment may cancel the booking. Overdue amounts: <span class="ph">[flat late fee — not set]</span>. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span> <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — replace the 1%/month interest clause]</span> A returned check or transfer incurs $25 for the first instance and $35 after. <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — remove the “no-dispute” clause; add a dispute-first process]</span></p>
 
     <table class="pay">
-      <tr><td class="lab">Venue Rent Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr><td class="lab">Cleaning Fee</td><td class="amt">$ 480.00</td></tr>
-      <tr><td class="lab">Insurance Fee</td><td class="amt">$ 125.00</td></tr>
-      <tr><td class="lab">Security: $ ____ / hr × ____ hrs</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr><td class="lab">Package Add-Ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Quoted venue rental</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Cleaning fee</td><td class="amt">$ 480.00</td></tr>
+      <tr><td class="lab">Security: $ ____ / hr × ____ hrs <span class="anno a-ver">[VERIFY WITH SOURCE DOCUMENT — security-fee basis]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Package add-ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Other approved fees <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
       <tr><td class="lab">Discounts</td><td class="amt">$ (<span class="ph">[____]</span>)</td></tr>
-      <tr class="em"><td class="lab">Reservation payment — due upon booking</td><td class="amt">$ 1,000.00</td></tr>
-      <tr><td class="lab">Security deposit — $1,000 converted after full payment; refundable 14 days after event</td><td class="amt">$ 1,000.00</td></tr>
-      <tr class="em"><td class="lab">Balance due before event — due <span class="ph">[14/30]</span> days before unless stated</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Applicable CA sales tax (taxable items only) <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — per approved tax policy]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr class="em"><td class="lab">Quoted rental total</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Less: initial reservation deposit paid (credited to rental)</td><td class="amt">– $ 1,000.00</td></tr>
+      <tr class="em"><td class="lab">Remaining balance due — by <span class="ph">[date]</span> <span class="anno a-mdr">[MGMT CONFIRM]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
     </table>
-    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+3% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — 3% surcharge wording/disclosure; debit excluded]</span><br>Make checks payable to: <b>Crown Prince Hall Corporation</b> (CA Entity No. B20260164272). The 3% fee applies to credit cards only, not debit cards.</div></div>
+    <p style="font-size:9px;color:#666;margin:3px 0 0"><b>Illustrative example (sample booking — shows the math only, not a quote):</b> venue rent $5,190 + cleaning $480 + security $40/hr × 4 hrs ($160) − discount $2,595 = quoted total $3,235 (plus any applicable tax); less $1,000 reservation deposit credited = remaining balance $2,235.</p>
+    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+3% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — 3% surcharge wording/disclosure; debit excluded]</span><br>Make checks payable to: <b>Crown Prince Hall Corporation</b> (CA Entity No. B20260164272). The 3% fee applies to credit cards only, not debit cards.</div></div>
 
   <div class="clause"><h3>12. Insurance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
     <p>Client must carry event liability insurance of at least $1,000,000 per occurrence and $2,000,000 in the aggregate for the rental period, plus host liquor liability of $1,000,000 if alcohol will be served. Crown Prince Hall Corporation, d/b/a Crown Prince Event Hall, and its landlord must be named additional insureds. A certificate of insurance is due at least 30 days before the event. Venue may hold access to the building until the certificate is received, and doing so is not a cancellation by Venue. These limits are minimums and do not limit Client’s liability under Section 3.</p></div>
@@ -294,7 +303,8 @@
     <p><span class="ck"><span class="cb"></span>The premises have <b>not</b> been inspected by a Certified Access Specialist (CASp).</span><br>
     <span class="ck"><span class="cb"></span>The premises <b>have</b> been inspected by a CASp and were determined to meet all applicable construction-related accessibility standards.</span><br>
     <span class="ck"><span class="cb"></span>The premises <b>have</b> been inspected by a CASp and were <b>not</b> determined to meet them.</span></p>
-    <p style="font-size:9.5px;color:#555">A CASp can inspect the premises to determine compliance with construction-related accessibility standards. State law does not require a CASp inspection, but the owner/lessor may not prohibit the lessee from obtaining one; the parties agree on timing, fee and repair-cost arrangements. Client must keep accessible entrances, routes, restrooms and parking clear and is responsible for any barrier created by Client’s own layout, décor or equipment.</p></div>
+    <p style="font-size:9px;color:#555">A Certified Access Specialist (CASp) can inspect the subject premises and determine whether the subject premises comply with all of the applicable construction-related accessibility standards under state law. Although state law does not require a CASp inspection of the subject premises, the commercial property owner or lessor may not prohibit a lessee or tenant from obtaining a CASp inspection of the subject premises for the occupancy or potential occupancy of the lessee or tenant, if requested by the lessee or tenant. The parties shall mutually agree on the arrangements for the time and manner of the CASp inspection, the payment of the fee for the CASp inspection, and the cost of making any repairs necessary to correct violations of construction-related accessibility standards within the premises.</p>
+    <p style="font-size:9px;color:#555">Client must keep accessible entrances, routes, restrooms and parking clear, and is responsible for guest accommodation requests and for any barrier created by Client’s own layout, décor or equipment.</p></div>
 
   <div class="clause"><h3>14. Force Majeure</h3>
     <p>Either party may terminate without liability if a circumstance beyond its control — war, government regulation, natural disaster, civil disorder or curtailment of transportation — makes it illegal or impossible to provide or use the facilities, on written notice delivered as soon as reasonably practical and no later than 10 days after learning of the basis. The primary remedy is a credit or reschedule; the reservation payment is <span class="ph">[refundable / non-refundable — pending]</span>; additional payments are eligible for refund. If Venue cancels for a reason not caused by Client, Client receives a full refund of amounts paid and help finding an alternative date or venue. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — reservation-payment treatment on force majeure]</span></p></div>
@@ -373,7 +383,7 @@
     </ul></div>
 
   <div class="clause"><h3>8. Damages</h3>
-    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from the security deposit <span class="recadd">and will send an itemized statement within 14 days after the event; the deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property. <span class="anno a-add">[RECOMMENDED ADDITION — itemized-statement &amp; deposit-return language from CPH]</span></span>.</p></div>
+    <p>Client is responsible for damage, stains, spills, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges, fines and property loss caused by Client, guests, vendors or invitees. Venue may deduct documented amounts from any security deposit held or invoice the Client, <span class="recadd">and will send an itemized statement within 14 days after the event; any security deposit is security only and does not limit what Client owes. Venue is not responsible for lost or stolen property. <span class="anno a-add">[RECOMMENDED ADDITION — itemized-statement &amp; deposit-return language from CPH]</span></span> <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — the $500 reservation deposit is credited to rent and is NOT a security deposit; confirm whether a separate security/damage deposit is collected]</span>.</p></div>
 
   <div class="clause"><h3>9. Right to Terminate Event for Safety and Compliance <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
     <p>Venue, security, police, fire officials or authorities may deny entry, remove persons, stop alcohol service, reduce sound, close areas, suspend or end the event for safety, compliance, property protection, non-payment, illegal activity, intoxication, violence, damage, capacity issues or material breach. If ended for breach, no refund is owed. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — proportionality of “no refund”]</span></p></div>
@@ -382,24 +392,31 @@
     <p><span class="ck"><span class="cb"></span>I authorize Venue to use event photos/video for marketing.</span> <span class="ck"><span class="cb"></span>I do <b>NOT</b> authorize marketing use.</span><br>If neither box is checked, Venue will not use images for marketing. This does not restrict security footage, incident documentation or legally required records. <span class="anno a-add">[RECOMMENDED ADDITION — add CPH’s “non-identifying images only / written consent for identifiable guests” wording]</span></p></div>
 
   <div class="clause"><h3>11. Quote, Payment, Cancellation &amp; Refund <span class="init">CLIENT INITIALS <span class="initbox"></span></span></h3>
-    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the <span class="ph">[$1,000 / $500]</span> reservation payment. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — the ACD agreement says $1,000; the assignment brief says $500. Confirm one.]</span> Changes require Venue’s written approval.</p>
-    <p><b>Deposit structure.</b> The reservation payment is held separately from rental charges and is not applied toward them; once Client pays the full rental amount and agreed fees, the same amount converts into the refundable security deposit (no second deposit), returned within 14 days after the event, less documented deductions, with an itemized statement. <span class="anno a-mdr">[MANAGEMENT DECISION REQUIRED — confirm this convert model (Version A) is the single model for both venues, or switch to a separate retainer + deposit]</span></p>
-    <p><b>Two-week reservation refund.</b> <span class="recadd">If Client cancels in writing within 14 days after paying the reservation payment, it is refunded in full within 14 days. <span class="anno a-add">[RECOMMENDED ADDITION — preserves the client-facing promise]</span> <span class="anno a-ccr">[COUNSEL]</span></span></p>
-    <p><b>Cancellation.</b> For payments other than the reservation payment: 180 days or more before the event — full refund; 90–179 days — 50% refund; fewer than 90 days — no refund. Refunds are due within 30 days. Retention is subject to law and may not duplicate recovery for the same loss. <span class="anno a-ccr">[CALIFORNIA COUNSEL REVIEW — confirm schedule under §1671]</span> <span class="anno a-mdr">[MANAGEMENT DECISION — this 3-step differs from CPH’s 2-step; decide whether to harmonize]</span></p>
-    <p><b>Rescheduling.</b> Venue may retain the reservation payment as a credit toward rescheduling; a replacement booking must be confirmed in writing within one year. A request alone is not a completed booking; unused credit is forfeited after one year, to the extent permitted by law.</p>
+    <p>The signed quote, invoice or booking summary is incorporated into this Agreement. A booking is confirmed only after Venue receives the signed Agreement and the initial reservation deposit of <b>$500</b>. Changes require Venue’s written approval.</p>
+    <p><b>Initial reservation deposit — credited to rent.</b> The $500 deposit secures your event date and is <b>credited toward the total rental amount</b> in the approved quotation. It is not an additional charge; it is deducted from the total due in the payment summary below. It is not a security deposit and does not convert into one.</p>
+    <p><b>Cancellation of the reservation deposit.</b> Cancellation must be in writing and takes effect when Venue receives it. The 14-day period begins on the date the deposit is paid.</p>
+    <ul>
+      <li><b>Within the first 14 calendar days:</b> full refund of the $500 deposit — <b>$500 refunded</b>.</li>
+      <li><b>After the first 14 calendar days:</b> 20% of the deposit is refunded (<b>$100</b>) and Venue retains 80% (<b>$400</b>), subject to the final approved agreement and applicable law. <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — deposit retention as liquidated damages, Civ. Code §1671]</span></li>
+    </ul>
+    <p><b>Additional payments.</b> The treatment on cancellation of any payments beyond the initial reservation deposit is not set in this draft. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span> <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED]</span></p>
+    <p><b>Refund processing &amp; accounting.</b> Refund timing is not stated as a binding deadline until approved <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span>. Every cancellation is reviewed individually to confirm payments received, refunds already issued, remaining refund obligations and amounts retained; retained amounts are not automatically classified as profit.</p>
+    <p><b>Rescheduling / date change.</b> Terms not set in this draft. <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED]</span></p>
 
     <table class="pay">
-      <tr><td class="lab">Venue Rent Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr><td class="lab">Cleaning Fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Quoted venue rental</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Cleaning fee</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
       <tr><td class="lab">Security: $ ____ / hr × ____ hrs</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr><td class="lab">Courtyard add-on <span class="ck"><span class="cb"></span>included</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr><td class="lab">Package Add-Ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Courtyard add-on <span class="ck"><span class="cb"></span>included</span> <span class="ph">[fee]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Package add-ons <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Other approved fees <span class="ph">[list]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
       <tr><td class="lab">Discounts</td><td class="amt">$ (<span class="ph">[____]</span>)</td></tr>
-      <tr class="em"><td class="lab">Reservation payment — due upon booking</td><td class="amt">$ <span class="ph">[1,000/500]</span></td></tr>
-      <tr><td class="lab">Security deposit — converted after full payment; refundable 14 days after event</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
-      <tr class="em"><td class="lab">Balance due before event — due by</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Applicable CA sales tax (taxable items only) <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — per approved tax policy]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr class="em"><td class="lab">Quoted rental total</td><td class="amt">$ <span class="ph">[____]</span></td></tr>
+      <tr><td class="lab">Less: initial reservation deposit paid (credited to rental)</td><td class="amt">– $ 500.00</td></tr>
+      <tr class="em"><td class="lab">Remaining balance due — by <span class="ph">[date]</span> <span class="anno a-mdr">[MGMT CONFIRM]</span></td><td class="amt">$ <span class="ph">[____]</span></td></tr>
     </table>
-    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+<span class="ph">[__]</span>% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[COUNSEL — set/surcharge wording]</span><br>Make checks payable to: <span class="ph">[Legal Entity Name]</span> · Zelle / payment email: info@tangointime.com <span class="anno a-mdr">[MANAGEMENT DECISION — route to the named ACD entity’s account]</span></div></div>
+    <div class="paysel"><b>Select payment type:</b> <span class="ck"><span class="cb"></span>Cash</span><span class="ck"><span class="cb"></span>Check</span><span class="ck"><span class="cb"></span>Zelle</span><span class="ck"><span class="cb"></span>Credit Card (+<span class="ph">[__]</span>% fee)</span><span class="ck"><span class="cb"></span>Other: ______</span> <span class="anno a-ccr">[CALIFORNIA LEGAL COUNSEL REVIEW REQUIRED — surcharge wording]</span><br>Make checks payable to: <span class="ph">[Legal Entity Name]</span> <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — name the ACD entity]</span> · Zelle / payment email: info@tangointime.com <span class="anno a-mdr">[MANAGEMENT CONFIRMATION REQUIRED — route to the ACD entity’s account]</span></div></div>
 
   <div class="clause recadd"><h3>12. Insurance <span class="anno a-add">[RECOMMENDED ADDITION — the current ACD agreement has no insurance section]</span></h3>
     <p>Client must carry event liability insurance of at least <span class="ph">[limits]</span>, plus host liquor liability of <span class="ph">[limit]</span> if alcohol is served; <span class="ph">[ACD entity]</span> and its landlord named additional insureds; certificate due at least 30 days before. <span class="anno a-mdr">[MANAGEMENT DECISION — set ACD limits; do not auto-copy CPH]</span></p></div>
@@ -475,6 +492,43 @@
   <ul class="tick">
     <li>Deposit model (convert vs separate); two-week-refund wording; cancellation percentages; 14-vs-30-day balance deadline; overtime rate &amp; grace (each venue); ACD entity &amp; payee; ACD deposit amount ($1,000/$500); ACD insurance limits &amp; guard ratio; CASp status for each premises; card-surcharge wording; replacement of the 1%/month interest and no-dispute clauses. (Full register: companion <span class="mono">venue-policy-redesign-package</span>, D8–D9.)</li>
   </ul>
+
+  <h3>Finalized deposit &amp; cancellation policy (applied to both agreements)</h3>
+  <p style="font-size:12px;color:#444">Initial reservation deposit: <b>CPH $1,000 · ACD $500</b>, credited toward the rental total (not an additional charge). Cancel in writing <b>within 14 calendar days of paying</b> → full refund. Cancel <b>after 14 days</b> → 20% refunded, 80% retained (subject to the final agreement and law). The old deposit-conversion / security-deposit model is removed. Refund treatment of payments beyond the deposit, refund timing, and rescheduling are flagged for management/counsel — not invented.</p>
+
+  <h3>Scenario test</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>Scenario</th><th>CPH ($1,000)</th><th>ACD ($500)</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Pays deposit, proceeds with booking</td><td>$1,000 credited to rental; balance = quoted total − $1,000</td><td>$500 credited; balance = total − $500</td><td>Deposit is not an extra charge</td></tr>
+      <tr><td>Cancels on day 7</td><td>$1,000 refunded</td><td>$500 refunded</td><td>Within 14-day window</td></tr>
+      <tr><td>Cancels on day 14</td><td>$1,000 refunded</td><td>$500 refunded</td><td>Day 14 is within the window</td></tr>
+      <tr><td>Cancels on day 15</td><td>$200 refund / $800 retained</td><td>$100 refund / $400 retained</td><td>20% / 80%</td></tr>
+      <tr><td>Has paid additional amounts beyond the deposit</td><td colspan="2">Deposit handled as above; refund of the additional amounts is <b>not set</b></td><td>[MANAGEMENT CONFIRMATION REQUIRED] + [CA COUNSEL]</td></tr>
+      <tr><td>Disputes a cancellation refund</td><td colspan="2">Reviewed individually; a dispute-first process should replace the no-dispute clause</td><td>[CA COUNSEL]</td></tr>
+      <tr><td>Venue cancels / terminates</td><td>No-fault venue cancellation: full refund + help relocating (CPH §14). Ended for client breach: “no refund” — under review</td><td>Venue-cancellation / force-majeure remedy is a recommended addition for ACD</td><td>[CA COUNSEL — proportionality]</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Management decision register</h3>
+  <div class="twrap"><table>
+    <thead><tr><th>ID</th><th>Decision needed</th><th>Owner</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>M-1</td><td>Refund treatment of payments beyond the reservation deposit</td><td>Management · CA counsel</td><td>Policy is silent; needed for cancellations with installments</td></tr>
+      <tr><td>M-2</td><td>Refund processing timeline</td><td>Management</td><td>No binding deadline set</td></tr>
+      <tr><td>M-3</td><td>Rescheduling / date-change terms</td><td>Management</td><td>Old credit model removed; replacement not set</td></tr>
+      <tr><td>M-4</td><td>Whether a separate security/damage deposit is collected (amount, return)</td><td>Management</td><td>Reservation deposit is now credited to rent, not security</td></tr>
+      <tr><td>M-5</td><td>20% / 80% retention enforceability</td><td>CA counsel</td><td>Liquidated damages, Civ. Code §1671</td></tr>
+      <tr><td>M-6</td><td>Late fee (replace 1%/month interest); no-dispute clause</td><td>Management · CA counsel</td><td>Usury / enforceability</td></tr>
+      <tr><td>M-7</td><td>Card surcharge wording; debit exclusion</td><td>CA counsel · Accounting</td><td>Compliance</td></tr>
+      <tr><td>M-8</td><td>ACD legal contracting entity &amp; payment recipient</td><td>Management · CA counsel</td><td>Blank in the ACD agreement</td></tr>
+      <tr><td>M-9</td><td>ACD pricing model &amp; amounts</td><td>Management</td><td>Advertised vs supplied conflict</td></tr>
+      <tr><td>M-10</td><td>Overtime rate &amp; grace (each venue)</td><td>Management</td><td>Blank in both</td></tr>
+      <tr><td>M-11</td><td>CASp status for each premises</td><td>Management · owner · counsel</td><td>§1938 disclosure</td></tr>
+      <tr><td>M-12</td><td>ACD insurance limits, guard ratio, courtyard capacity / weather / outdoor sound</td><td>Management · broker · fire authority</td><td>Missing from ACD</td></tr>
+      <tr><td>M-13</td><td>Applicable sales tax per charge</td><td>Accounting · CDTFA</td><td>Tax policy / current rate</td></tr>
+    </tbody>
+  </table></div>
 
   <h3>Consistency check</h3>
   <div class="twrap"><table>
