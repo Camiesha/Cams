@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Policy Change Summary</title>
+<meta name="description" content="Proposed revised deposit & cancellation policy for CPH and ACD, with a current-vs-proposed comparison, competitor sources, and the decisions needing sign-off.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --green:#2F5D4A;--green-deep:#244A3B;--green-soft:#5B8A75;--cream:#F6F3EC;--paper:#fff;--panel-2:#FBF9F4;
+    --ink:#262B29;--ink-2:#4A524E;--muted:#7C847F;--line:#E2DDD2;--line-2:#ECE7DB;
+    --new-bg:#E4EEE8;--new-ink:#234a3a;--old-bg:#F6E9E2;--old-ink:#7a3b23;
+    --red:#A3322B;--amber:#9A6B0E;
+    --sv:"Fraunces",Georgia,serif;--bd:"Inter",system-ui,sans-serif;--mo:"IBM Plex Mono",monospace;
+    --sh:0 1px 2px rgba(36,74,59,.06),0 6px 18px rgba(36,74,59,.07);
+  }
+  @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--cream:#111613;--paper:#171d1a;--panel-2:#1c2420;--ink:#e9efea;--ink-2:#c3ccc6;--muted:#8c968f;--line:#2b352f;--line-2:#242d28;--green:#4E8A70;--green-soft:#6fa88e;--new-bg:#15291f;--new-ink:#a9e0c3;--old-bg:#32211a;--old-ink:#e7b79c;color-scheme:dark}}
+  :root[data-theme="dark"]{--cream:#111613;--paper:#171d1a;--panel-2:#1c2420;--ink:#e9efea;--ink-2:#c3ccc6;--muted:#8c968f;--line:#2b352f;--line-2:#242d28;--green:#4E8A70;--green-soft:#6fa88e;--new-bg:#15291f;--new-ink:#a9e0c3;--old-bg:#32211a;--old-ink:#e7b79c;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--bd);font-size:14px;line-height:1.55}
+  .wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  a{color:var(--green)} h1,h2,h3{font-family:var(--sv);font-weight:600;text-wrap:balance;line-height:1.16}
+  .mono{font-family:var(--mo)}
+  header.cov{background:linear-gradient(158deg,var(--green),var(--green-deep));color:#fff}
+  header.cov .wrap{padding-block:34px 28px}
+  .cov .eyebrow{font-family:var(--mo);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#cfe3d8;margin:0 0 10px}
+  .cov h1{color:#fff;margin:0;font-size:clamp(24px,4.6vw,36px)} .cov p{color:#d8e8df;margin:10px 0 0;max-width:68ch;font-size:15px}
+  .banner{background:#F6E4E1;color:#7C231D;border-block:1px solid #A3322B;text-align:center;font-weight:700;font-size:12px}
+  .banner .wrap{padding-block:8px}
+  section{padding-block:26px;border-top:1px solid var(--line-2)}
+  .sec-h{display:flex;gap:11px;align-items:baseline;margin:0 0 4px}
+  .sec-h .no{font-family:var(--mo);font-size:12.5px;color:var(--green);font-weight:600}
+  .sec-h h2{font-size:clamp(18px,2.8vw,24px);margin:0}
+  .lede{color:var(--ink-2);max-width:76ch;margin:4px 0 16px;font-size:13.6px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px;box-shadow:var(--sh)}
+  .grid{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}@media(max-width:620px){.g2{grid-template-columns:1fr}}
+  .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh);background:var(--paper)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:720px}
+  thead th{background:var(--green);color:#fff;text-align:left;padding:8px 10px;font-size:11.5px;vertical-align:bottom}
+  td,tbody th{border-top:1px solid var(--line-2);padding:8px 10px;vertical-align:top;text-align:left}
+  tbody th{background:var(--panel-2);font-weight:700;font-size:12px}
+  td.old{background:var(--old-bg);color:var(--old-ink)} td.new{background:var(--new-bg);color:var(--new-ink);font-weight:600}
+  .chip{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid}
+  .c-new{background:var(--new-bg);color:var(--new-ink);border-color:var(--green)}
+  .c-old{background:var(--old-bg);color:var(--old-ink);border-color:#b06a44}
+  .c-mdr{background:#F6E4E1;color:#7C231D;border-color:#A3322B} .c-ccr{background:#ECE7F4;color:#443363;border-color:#5E4B86}
+  ul.tick{list-style:none;padding:0;margin:6px 0}ul.tick li{padding:3px 0 3px 20px;position:relative;font-size:13px}
+  ul.tick li::before{content:"";position:absolute;left:3px;top:9px;width:8px;height:8px;border-radius:2px;background:var(--green-soft)}
+  .note{border-left:4px solid var(--amber);background:var(--panel-2);padding:9px 12px;border-radius:0 10px 10px 0;margin:12px 0;font-size:12.6px}
+  .scrollhint{font-size:11px;color:var(--muted);margin:0 0 4px;display:none}@media(max-width:720px){.scrollhint{display:block}}
+  .src{font-size:11.5px;color:var(--muted)}
+  footer{background:var(--green);color:#d8e8df}footer .wrap{padding-block:18px}footer b{color:#fff}
+</style>
+</head>
+<body>
+<header class="cov">
+  <div class="wrap">
+    <p class="eyebrow">Deposit &amp; Cancellation Policy — Change Summary</p>
+    <h1>Policy Change Summary — CPH &amp; ACD</h1>
+    <p>The proposed revised deposit and cancellation policy for Crown Prince Event Hall and Alvin Studio &amp; Courtyard, a side-by-side comparison of the current versus proposed terms, the competitor practices and sources that informed it, and the decisions still needing sign-off.</p>
+  </div>
+</header>
+<div class="banner"><div class="wrap">PROPOSED DRAFT — FOR MANAGEMENT REVIEW AND CALIFORNIA LEGAL COUNSEL REVIEW — NOT APPROVED FOR CLIENT USE</div></div>
+
+<!-- 1 PROPOSED POLICY -->
+<section id="s1"><div class="wrap">
+  <div class="sec-h"><span class="no">1</span><h2>Proposed revised policy</h2></div>
+  <p class="lede">The complete revised wording is built into the two rental agreements (companion <span class="mono">crown-prince-rental-agreement</span> and <span class="mono">alvin-studio-rental-agreement</span>). The core terms:</p>
+  <div class="grid g2">
+    <div class="card"><h3>Initial reservation deposit</h3><ul class="tick">
+      <li><b>CPH $1,000 · ACD $500</b>, required to secure the date.</li>
+      <li><b>Credited toward the rental total</b> in the approved quotation — not an additional charge; deducted in the payment summary.</li>
+      <li>It is <b>not</b> a security deposit and does not convert into one.</li>
+    </ul></div>
+    <div class="card"><h3>Cancellation of the deposit</h3><ul class="tick">
+      <li><b>Within 14 calendar days</b> of paying (in writing) → <b>full refund</b> (CPH $1,000; ACD $500).</li>
+      <li><b>After 14 days</b> → <b>20% refunded, 80% retained</b> (CPH $200/$800; ACD $100/$400), subject to the final agreement and law.</li>
+      <li>Each cancellation reviewed individually; retained amounts are not automatically classified as profit.</li>
+    </ul></div>
+  </div>
+  <div class="note"><b>Deliberately not decided here:</b> the refund treatment of payments beyond the deposit, the refund processing deadline, and rescheduling terms are left for management and California counsel — no schedule is invented.</div>
+</div></section>
+
+<!-- 2 CURRENT vs PROPOSED -->
+<section id="s2"><div class="wrap">
+  <div class="sec-h"><span class="no">2</span><h2>Current vs proposed — the key changes</h2></div>
+  <p class="lede"><span class="chip c-old">LAST (current)</span> is what the existing agreements say; <span class="chip c-new">NEW (proposed)</span> is the finalized policy. The right column gives the reason for each change.</p>
+  <p class="scrollhint">Scroll table sideways →</p>
+  <div class="twrap"><table>
+    <thead><tr><th>Area</th><th>Current (last)</th><th>Proposed (new)</th><th>Why it changed</th></tr></thead>
+    <tbody>
+      <tr><th>Deposit amounts</th><td class="old">CPH $1,000; ACD stated $1,000 in its agreement (brief said $500) — conflicting</td><td class="new">CPH $1,000; ACD $500 — fixed per venue</td><td>Removes the ACD amount conflict; each venue has one confirmed figure</td></tr>
+      <tr><th>What the deposit is</th><td class="old">Held separately; <b>not</b> applied to rent; later <b>converts</b> into a refundable security deposit</td><td class="new">Credited toward the rental total; <b>not</b> a security deposit; no conversion</td><td>Simpler and honest — the client isn't charged twice and accounting is clean; removes the ambiguous four-in-one role</td></tr>
+      <tr><th>Early cancellation</th><td class="old">No written full-refund window in the contract (a two-week refund was only a verbal promise)</td><td class="new">Full refund if cancelled in writing within 14 calendar days of paying</td><td>Puts the client-facing promise in writing and gives a clear, fair exit</td></tr>
+      <tr><th>Later cancellation (deposit)</th><td class="old">CPH: keep retainer + 50% / keep all inside 180 days. ACD: full / 50% / none at 180 / 90 / &lt;90 days</td><td class="new">After 14 days: 20% refunded, 80% retained — one simple rule for both</td><td>One consistent, explainable rule; the steep "keep everything" terms are replaced <span class="chip c-ccr">⚖ counsel: §1671</span></td></tr>
+      <tr><th>Security deposit</th><td class="old">The same $1,000 becomes the security/damage deposit after full payment</td><td class="new">No automatic security deposit; whether a separate one is collected is a management decision</td><td>The deposit now funds rent, so it can't also be the damage deposit</td></tr>
+      <tr><th>Rescheduling</th><td class="old">Retain deposit as a 1-year rescheduling credit; forfeit if unused</td><td class="new">Rescheduling terms not set — flagged for management</td><td>The old credit model conflicts with the new simple refund rule; replacement is a decision, not invented</td></tr>
+      <tr><th>Payment summary</th><td class="old">Lists reservation deposit AND a converted security deposit (same money shown twice)</td><td class="new">Quoted rental total → <b>less</b> deposit credited → remaining balance, plus fees, tax line, due date</td><td>Shows the deposit as a credit; no double-listing; clearer for the client and accounting</td></tr>
+      <tr><th>Balance deadline</th><td class="old">14 days before the event (contract) vs 30 days (operations) — conflicting</td><td class="new">One stated deadline + reminders at 30/15/10/5 days <span class="chip c-mdr">decision</span></td><td>Resolves the 14-vs-30-day contradiction</td></tr>
+      <tr><th>Additional payments / refund timing</th><td class="old">Fixed % schedules baked in</td><td class="new">Left open for management + counsel — not invented</td><td>Avoids presenting unapproved or possibly-unenforceable terms as final</td></tr>
+      <tr><th>Accounting</th><td class="old">Not addressed</td><td class="new">Each cancellation reviewed individually; retained amounts not auto-booked as profit</td><td>Supports clean reconciliation</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">The companion rental-agreement mock-up also has a <b>Management ⇄ Client view toggle</b> that hides the review annotations to preview the clean client layout.</p>
+</div></section>
+
+<!-- 3 COMPETITOR BASIS -->
+<section id="s3"><div class="wrap">
+  <div class="sec-h"><span class="no">3</span><h2>Competitor practices &amp; sources incorporated</h2></div>
+  <p class="lede">Competitor terms are third-party / unverified (venues publish prices more readily than contract terms). They informed the <b>structure</b> of the new policy — a refundable window plus partial retention — not the exact percentages, which are the venues' own finalized choice.</p>
+  <p class="scrollhint">Scroll table sideways →</p>
+  <div class="twrap"><table>
+    <thead><tr><th>Best practice</th><th>Where observed (evidence)</th><th>How it shaped the new policy</th></tr></thead>
+    <tbody>
+      <tr><th>Refundable date-hold deposit with a clear refund condition</th><td>San Jose Clubhouse — $500 date-hold, "fully refundable if contract is not broken" — <a href="https://wedding-spot.com/venue/11162/San-Jose-Clubhouse">Wedding Spot</a> (3P)</td><td>Supports the 14-day <b>full-refund</b> window</td></tr>
+      <tr><th>Deposit amount in the $500–$1,500 range</th><td>Woman's Club $1,500; Clubhouse $500 — <a href="https://www.wedding-spot.com/venue/124/the-san-jose-womans-club/">Wedding Spot</a> (3P)</td><td>CPH $1,000 / ACD $500 sit within the local range</td></tr>
+      <tr><th>Graduated / partial retention after a window, not "keep everything"</th><td>Marketplace tiers — Peerspace 100/50/0% at 7d/24h; Giggster 50% &gt;48h — <a href="https://intercom.help/peerspace-108cf19aff8e/en/articles/10119471">Peerspace</a> · <a href="https://help.giggster.com/en/articles/757862-what-is-the-cancellation-and-refund-policy-for-renters-and-hosts">Giggster</a> (platform policy)</td><td>Supports a <b>partial</b> post-window refund (the 20%/80% split is the venue's own decision, not a copied figure)</td></tr>
+      <tr><th>Deposit credited toward the total</th><td>Common date-hold practice; no private hall publishes a conversion-to-security-deposit model</td><td>Supports crediting the deposit to rent and dropping the conversion model</td></tr>
+    </tbody>
+  </table></div>
+  <p class="src">Full sourced matrix with direct URLs and access dates: companion <span class="mono">competitor-policy-comparison-report</span>. No competitor cancellation percentage was copied; private halls don't publish one.</p>
+</div></section>
+
+<!-- 4 DECISIONS -->
+<section id="s4"><div class="wrap">
+  <div class="sec-h"><span class="no">4</span><h2>Items needing management decision or legal review</h2></div>
+  <div class="grid g2">
+    <div class="card"><h3>Management confirmation</h3><ul class="tick">
+      <li>Refund treatment of payments beyond the deposit</li>
+      <li>Refund processing deadline; reminder schedule</li>
+      <li>Rescheduling / date-change terms</li>
+      <li>Whether a separate security/damage deposit is collected (amount, return)</li>
+      <li>ACD legal entity &amp; payment recipient; ACD pricing model &amp; amounts</li>
+      <li>Overtime rate &amp; grace (each venue); balance deadline (14 vs 30)</li>
+      <li>CASp status for each premises; applicable sales tax per charge</li>
+      <li>ACD insurance limits, guard ratio, courtyard capacity / weather / outdoor sound</li>
+    </ul></div>
+    <div class="card"><h3>California legal counsel review</h3><ul class="tick">
+      <li>20% / 80% retention as liquidated damages (Civ. Code §1671)</li>
+      <li>Release / §1542 waiver / indemnification scope; liability limitation</li>
+      <li>Replace the 1%/month interest; remove the no-dispute clause</li>
+      <li>Credit-card surcharge wording; debit exclusion</li>
+      <li>Alcohol / ABC (ACD BYO); "no refund if ended for breach" proportionality</li>
+      <li>CASp §1938 disclosure wording; force-majeure remedy</li>
+    </ul></div>
+  </div>
+  <div class="note"><b>Do not treat any of this as approved or enforceable.</b> Existing bookings keep their current terms; the new policy applies only to bookings made after an approved effective date. Full registers: companion <span class="mono">venue-policy-redesign-package</span> (D8–D9) and the agreements' appendix.</div>
+</div></section>
+
+<footer><div class="wrap">
+  <p style="margin:0 0 3px"><b>Crown Prince Hall Corporation</b> — Deposit &amp; Cancellation Policy Change Summary (CPH &amp; ACD)</p>
+  <p style="margin:0;font-size:12px">San Jose, CA · October 2026 · PROPOSED DRAFT — NOT APPROVED FOR CLIENT USE. Competitor terms are third-party/unverified; the 20%/80% split is the venues' own decision, flagged for counsel; nothing is presented as legally compliant.</p>
+</div></footer>
+</body>
+</html>
