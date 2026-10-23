@@ -1,0 +1,446 @@
+<title>Follow-up Status Override</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#F7F5EF; --panel:#FFFFFF; --sand:#EEE8DA; --line:#DDD6C6; --line-soft:#EAE4D6;
+    --ink:#1E231F; --ink-2:#4C534C; --muted:#7A7F76;
+    --green:#2E5B45; --green-soft:#E3EEE6; --green-ink:#1F4634;
+    --amber-soft:#FBEFC9; --amber-ink:#7A5A05;
+    --red-soft:#FADADA; --red-ink:#9A2E2E;
+    --blue-soft:#DCEBF7; --blue-ink:#25537A;
+    --grey-soft:#ECEAE3; --grey-ink:#5B605A;
+    --shadow:0 1px 2px rgba(30,35,31,.06), 0 6px 18px rgba(30,35,31,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#171A17; --panel:#1F231F; --sand:#262B26; --line:#363C36; --line-soft:#2C312C;
+      --ink:#ECE9E0; --ink-2:#C4C2B8; --muted:#8E938B;
+      --green:#7FB598; --green-soft:#223529; --green-ink:#B9DDC6;
+      --amber-soft:#3B3116; --amber-ink:#EBCB6A;
+      --red-soft:#3F2323; --red-ink:#F0A0A0;
+      --blue-soft:#1F2F3E; --blue-ink:#9CC6EA;
+      --grey-soft:#2C302C; --grey-ink:#B5B9B1;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#171A17; --panel:#1F231F; --sand:#262B26; --line:#363C36; --line-soft:#2C312C;
+    --ink:#ECE9E0; --ink-2:#C4C2B8; --muted:#8E938B;
+    --green:#7FB598; --green-soft:#223529; --green-ink:#B9DDC6;
+    --amber-soft:#3B3116; --amber-ink:#EBCB6A;
+    --red-soft:#3F2323; --red-ink:#F0A0A0;
+    --blue-soft:#1F2F3E; --blue-ink:#9CC6EA;
+    --grey-soft:#2C302C; --grey-ink:#B5B9B1;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .page{max-width:880px;margin:0 auto;padding:40px 24px 72px}
+  h1,h2,h3{font-family:"EB Garamond",Georgia,"Times New Roman",serif;font-weight:500;line-height:1.15;text-wrap:balance;margin:0}
+  h1{font-size:2.6rem;letter-spacing:-.01em}
+  h2{font-size:1.65rem;margin-bottom:6px}
+  h3{font-size:1.2rem;font-weight:600}
+  p{margin:0 0 12px;max-width:66ch}
+  .lede{font-size:1.15rem;color:var(--ink-2);max-width:60ch}
+  .eyebrow{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .crumb{font-family:"EB Garamond",Georgia,serif;font-size:.95rem;color:var(--muted)}
+  .crumb b{color:var(--ink-2);font-weight:500}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.82em}
+
+  header.doc{padding-bottom:26px;border-bottom:1px solid var(--line);margin-bottom:38px;display:grid;gap:12px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.9rem;color:var(--muted)}
+  .meta span b{color:var(--ink-2);font-weight:600}
+
+  section{margin:0 0 44px}
+  .sec-head{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;margin-bottom:16px}
+  .num{font-family:"EB Garamond",Georgia,serif;font-size:1.5rem;color:var(--green);border:1px solid var(--line);border-radius:6px;width:44px;height:44px;display:grid;place-items:center;background:var(--panel)}
+  .sec-head .sub{color:var(--muted);font-size:.95rem;margin:0}
+
+  ul.plain{margin:0 0 12px;padding-left:20px;max-width:66ch}
+  ul.plain li{margin-bottom:6px}
+
+  .callout{border-left:3px solid var(--green);background:var(--green-soft);color:var(--green-ink);padding:14px 18px;border-radius:0 8px 8px 0;margin:18px 0;max-width:72ch}
+  .callout p{color:inherit;margin:0;max-width:none}
+  .callout .eyebrow{color:inherit;opacity:.8;display:block;margin-bottom:4px}
+  .callout.warn{border-color:var(--amber-ink);background:var(--amber-soft);color:var(--amber-ink)}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;font-size:.82rem;font-weight:600;line-height:1.5;white-space:nowrap;font-family:"EB Garamond",Georgia,serif;font-size:.92rem}
+  .pill.blue{background:var(--blue-soft);color:var(--blue-ink)}
+  .pill.green{background:var(--green-soft);color:var(--green-ink)}
+  .pill.amber{background:var(--amber-soft);color:var(--amber-ink)}
+  .pill.red{background:var(--red-soft);color:var(--red-ink)}
+  .pill.grey{background:var(--grey-soft);color:var(--grey-ink)}
+  .pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .pill .caret{font-size:.75em;opacity:.7}
+
+  .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:18px 0}
+  .opt{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:10px;align-content:start}
+  .opt h3{font-size:1.15rem}
+  .opt .tag{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .opt p{font-size:.97rem;margin:0}
+  .opt.rec{border-color:var(--green);box-shadow:var(--shadow);position:relative}
+  .opt.rec .tag{color:var(--green)}
+  .field{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 12px;font-weight:600;font-size:.95rem}
+  .field .caret{color:var(--muted);font-size:.8em}
+  .statuslist{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+
+  .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:18px 0}
+  .col{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel)}
+  .col .head{padding:12px 18px;font-family:"EB Garamond",Georgia,serif;font-size:1.05rem;font-weight:600;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .col.before .head{background:var(--grey-soft);color:var(--grey-ink)}
+  .col.after .head{background:var(--green-soft);color:var(--green-ink)}
+  .steps{list-style:none;margin:0;padding:14px 18px;display:grid;gap:0}
+  .steps li{padding:10px 12px;border:1px solid var(--line-soft);border-radius:6px;font-size:.95rem;background:var(--paper)}
+  .steps li + li{margin-top:22px;position:relative}
+  .steps li + li::before{content:"";position:absolute;left:50%;top:-22px;height:22px;border-left:1.5px solid var(--line)}
+  .steps li + li::after{content:"";position:absolute;left:calc(50% - 4px);top:-6px;width:6px;height:6px;border-right:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:rotate(45deg)}
+  .steps li.bad{border-color:var(--red-soft);color:var(--red-ink);background:var(--red-soft)}
+  .steps li.good{border-color:var(--green-soft);color:var(--green-ink);background:var(--green-soft);font-weight:600}
+  .steps li.split{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0;border:0;background:none}
+  .steps li.split span{padding:10px 12px;border:1px solid var(--line-soft);border-radius:6px;background:var(--paper)}
+
+  .flow{display:grid;grid-template-columns:1fr;gap:0;max-width:560px;margin:18px auto 6px;padding:22px 20px;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  .node{padding:12px 16px;border:1px solid var(--line);border-radius:6px;background:var(--paper);text-align:center;font-weight:600;font-size:.97rem}
+  .node.sys{font-weight:500;color:var(--ink-2)}
+  .arrow{height:26px;position:relative}
+  .arrow::before{content:"";position:absolute;left:50%;top:0;height:100%;border-left:1.5px solid var(--line)}
+  .arrow::after{content:"";position:absolute;left:calc(50% - 4px);bottom:1px;width:7px;height:7px;border-right:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:rotate(45deg)}
+  .decision{padding:12px 16px;border:1.5px solid var(--green);border-radius:6px;text-align:center;font-family:"EB Garamond",Georgia,serif;font-size:1.15rem;font-weight:600;color:var(--green-ink);background:var(--green-soft)}
+  .branches{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .branch{display:grid}
+  .branch .lbl{text-align:center;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;padding:4px 0}
+  .branch.yes .lbl{color:var(--green)}
+  .branch.no .lbl{color:var(--amber-ink)}
+  .branch .node{font-weight:500}
+  .join{height:26px;position:relative}
+  .join::before{content:"";position:absolute;left:25%;right:25%;top:0;border-top:1.5px solid var(--line)}
+  .join::after{content:"";position:absolute;left:50%;top:0;height:100%;border-left:1.5px solid var(--line)}
+  .join .tip{position:absolute;left:calc(50% - 4px);bottom:1px;width:7px;height:7px;border-right:1.5px solid var(--line);border-bottom:1.5px solid var(--line);transform:rotate(45deg)}
+  .node.final{background:var(--green);color:#fff;border-color:var(--green)}
+  :root[data-theme="dark"] .node.final{color:#0f1a14}
+  @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .node.final{color:#0f1a14}}
+  .flow-cap{text-align:center;color:var(--muted);font-size:.88rem;margin:0}
+
+  .outcomes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:16px 0 20px}
+  .outcomes div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:.95rem;display:flex;gap:10px;align-items:flex-start}
+  .outcomes .tick{color:var(--green);font-weight:700;flex:none}
+
+  .unchanged{background:var(--sand);border-radius:10px;padding:18px 22px;margin:16px 0}
+  .unchanged .eyebrow{display:block;margin-bottom:8px}
+  .unchanged ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 20px;font-size:.95rem}
+  .unchanged li::before{content:"–";color:var(--muted);margin-right:8px}
+
+  .crm{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);margin:18px 0 10px}
+  .crm .bar{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap}
+  .crm .bar .title{font-family:"EB Garamond",Georgia,serif;font-size:1.3rem;font-weight:600}
+  .crm .bar .crumb{display:block;font-size:.85rem}
+  .crm .bar .btn{background:var(--green);color:#fff;border-radius:6px;padding:6px 14px;font-weight:600;font-size:.9rem;font-family:"EB Garamond",Georgia,serif}
+  .tablewrap{overflow-x:auto}
+  table.leads{width:100%;border-collapse:collapse;min-width:680px;font-size:.93rem}
+  table.leads th{background:var(--sand);text-align:left;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:700;padding:12px 14px;border-bottom:1px solid var(--line)}
+  table.leads td{padding:14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.leads tr:last-child td{border-bottom:0}
+  table.leads .name{font-family:"EB Garamond",Georgia,serif;font-size:1.05rem;font-weight:500}
+  table.leads .code{display:block;color:var(--muted);margin-bottom:2px}
+  table.leads .sub{color:var(--muted);font-size:.86rem;display:block}
+  table.leads .fu{display:grid;gap:5px;justify-items:start}
+  .fu .src{font-size:.78rem;color:var(--muted);display:inline-flex;align-items:center;gap:5px}
+  .fu .src .dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
+  .fu .src.manual{color:var(--amber-ink)}
+  .fu .src.manual .dot{background:var(--amber-ink)}
+  .fu .pill.edit{border:1px dashed var(--green);background:var(--panel);color:var(--green-ink);cursor:default}
+  .menu{margin:6px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);padding:6px;display:grid;gap:2px;width:220px;font-size:.9rem}
+  .menu div{padding:6px 10px;border-radius:5px}
+  .menu div.on{background:var(--green-soft);color:var(--green-ink);font-weight:600}
+  .menu .hdr{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 10px 4px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.88rem;color:var(--muted);margin:8px 2px 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend .dot{width:8px;height:8px;border-radius:50%}
+  .note{font-size:.9rem;color:var(--muted);margin-top:14px}
+
+  .takeaway{margin-top:56px;padding:30px 28px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center}
+  .takeaway .eyebrow{display:block;margin-bottom:10px}
+  .takeaway h2{font-size:2rem;font-style:italic;font-weight:500}
+  footer{margin-top:28px;font-size:.85rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media (max-width:600px){
+    h1{font-size:2.1rem}
+    .page{padding:28px 16px 56px}
+    .branches{grid-template-columns:1fr}
+    .join::before{display:none}
+  }
+  @media print{
+    body{background:#fff}
+    .page{max-width:none;padding:0}
+    section{break-inside:avoid}
+  }
+</style>
+
+<div class="page">
+  <header class="doc">
+    <div class="crumb"><b>CRM</b> › Leads · Improvement Proposal</div>
+    <h1>Follow-up Status: accurate by default, correctable when needed</h1>
+    <p class="lede">The Follow-up column updates itself from system activity, but it does not always match what actually happened with the customer. This proposal keeps the automation and adds a simple manual correction for authorized users.</p>
+    <div class="meta">
+      <span>Prepared for: <b>CRM / IT team</b></span>
+      <span>Area: <b>CRM › Leads › Follow-up column</b></span>
+      <span>Date: <b>5 September 2026</b></span>
+      <span>Type: <b>Improvement suggestion</b></span>
+    </div>
+  </header>
+
+  <!-- 1 PROBLEM -->
+  <section id="problem">
+    <div class="sec-head">
+      <div class="num">1</div>
+      <div><h2>Problem</h2><p class="sub">The automated Follow-up status is not always right.</p></div>
+    </div>
+    <p>The Follow-up column is currently fully automated. Its value changes based on the follow-up and contact activity the system records. In practice the automated status often lags behind, or misses, the real conversation with the customer.</p>
+    <ul class="plain">
+      <li>A follow-up has already been completed, but the status does not update.</li>
+      <li>The customer was reached through another channel (phone, walk-in, personal text), and the system did not see it.</li>
+      <li>The status shown is out of date compared to the latest interaction.</li>
+      <li>When the status is wrong, users have limited ability to correct it.</li>
+    </ul>
+    <div class="callout warn">
+      <span class="eyebrow">Result today</span>
+      <p>The Leads list cannot be fully relied on when deciding which customers still need a follow-up. Advisors end up double-checking notes and history to confirm what the column should already tell them.</p>
+    </div>
+  </section>
+
+  <!-- 2 WHY IT MATTERS -->
+  <section id="why">
+    <div class="sec-head">
+      <div class="num">2</div>
+      <div><h2>Why it matters</h2><p class="sub">Follow-up is where inquiries turn into bookings.</p></div>
+    </div>
+    <p>Leads arrive from two web apps plus phone and text, with a one-hour response target. The Follow-up column is the one place the team looks to see who still needs attention. When it is inaccurate, three things happen:</p>
+    <ul class="plain">
+      <li><strong>Customers get missed.</strong> A lead that shows as followed up may never have been reached.</li>
+      <li><strong>Customers get contacted twice.</strong> A lead that shows as needing follow-up may already have been handled by phone.</li>
+      <li><strong>Reviews take longer.</strong> Managers cannot trust the list at a glance and must verify each row.</li>
+    </ul>
+    <p>A small correction feature restores trust in the column without changing how leads flow through the CRM.</p>
+  </section>
+
+  <!-- 3 SUGGESTED IMPROVEMENT -->
+  <section id="suggestion">
+    <div class="sec-head">
+      <div class="num">3</div>
+      <div><h2>Suggested improvement</h2><p class="sub">Two possible ways to manage the Follow-up status. One is recommended.</p></div>
+    </div>
+
+    <div class="options">
+      <div class="opt">
+        <span class="tag">Option 1</span>
+        <h3>Manual update</h3>
+        <p>Authorized users set the Follow-up status themselves, based on the actual interaction with the customer.</p>
+        <div><span class="field">Needs Follow-up <span class="caret">▾</span></span></div>
+        <div class="statuslist">
+          <span class="pill amber">Needs Follow-up</span>
+          <span class="pill green">Followed Up</span>
+          <span class="pill blue">Contacted</span>
+          <span class="pill grey">No Response</span>
+          <span class="pill blue">Waiting for Customer</span>
+          <span class="pill green">Completed</span>
+        </div>
+        <p style="color:var(--muted);font-size:.9rem">Simple and always accurate to what the advisor knows, but the team loses the time-saving automation.</p>
+      </div>
+
+      <div class="opt rec">
+        <span class="tag">Option 2 · Recommended</span>
+        <h3>Automatic + manual correction</h3>
+        <p>Keep the existing automatic updates. When the automated status is wrong, an authorized user corrects it manually.</p>
+        <div><span class="field">Followed Up <span class="caret">▾</span></span> <span class="pill amber" style="vertical-align:middle">Manually updated</span></div>
+        <p style="color:var(--muted);font-size:.9rem">The CRM stays automated where it works, and the team has control where it does not.</p>
+      </div>
+    </div>
+
+    <h3 style="margin:26px 0 8px">Recommended approach: automatic by default, manual override</h3>
+    <p>The system keeps updating the Follow-up status automatically from customer contact and activity. If that status is incorrect, an authorized user can change it directly in the Leads list.</p>
+
+    <div class="callout">
+      <span class="eyebrow">Important rule</span>
+      <p><strong>A manual correction must not be immediately overwritten by the next automated update.</strong> Once a user has corrected the status, the system should keep that value until the user changes it again, or until a clearly new customer interaction occurs.</p>
+    </div>
+
+    <p>Where helpful, the column can show a small indicator of how the value was set, for example <em>Followed Up · Manually updated</em> or <em>Needs Follow-up · Automatic</em>. This keeps the column transparent without adding clutter.</p>
+  </section>
+
+  <!-- 4 CURRENT VS PROPOSED -->
+  <section id="compare">
+    <div class="sec-head">
+      <div class="num">4</div>
+      <div><h2>Current vs proposed</h2><p class="sub">What changes for the person reading the Leads list.</p></div>
+    </div>
+
+    <div class="compare">
+      <div class="col before">
+        <div class="head"><span>Before</span><span class="pill grey">Automated only</span></div>
+        <ol class="steps">
+          <li>System detects follow-up or contact activity</li>
+          <li>Follow-up status updates automatically</li>
+          <li class="bad">Status may not reflect what actually happened</li>
+          <li class="bad">User has limited ability to correct it</li>
+        </ol>
+      </div>
+      <div class="col after">
+        <div class="head"><span>After</span><span class="pill green">Automatic + override</span></div>
+        <ol class="steps">
+          <li>System detects follow-up or contact activity</li>
+          <li>Follow-up status updates automatically</li>
+          <li>User reviews the status</li>
+          <li class="split"><span><strong>Correct</strong> → keep</span><span><strong>Incorrect</strong> → manually update</span></li>
+          <li class="good">Accurate Follow-up status, retained</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 EXPECTED USER FLOW -->
+  <section id="flow">
+    <div class="sec-head">
+      <div class="num">5</div>
+      <div><h2>Expected user flow</h2><p class="sub">Nothing changes until the status is wrong.</p></div>
+    </div>
+
+    <div class="flow" role="img" aria-label="Flow: customer contacted, CRM detects activity, status updates automatically, then a decision: if correct keep status, if not an authorized user edits it; either way the correct status is retained.">
+      <div class="node">Customer contacted</div>
+      <div class="arrow"></div>
+      <div class="node sys">CRM detects follow-up activity</div>
+      <div class="arrow"></div>
+      <div class="node sys">Follow-up status updates automatically</div>
+      <div class="arrow"></div>
+      <div class="decision">Is the status correct?</div>
+      <div class="arrow"></div>
+      <div class="branches">
+        <div class="branch yes"><span class="lbl">Yes</span><div class="node">Keep status</div></div>
+        <div class="branch no"><span class="lbl">No</span><div class="node">Authorized user edits status</div></div>
+      </div>
+      <div class="join"><span class="tip"></span></div>
+      <div class="node final">Correct status is retained</div>
+    </div>
+    <p class="flow-cap">The manual edit is the only new step, and it is used only when needed.</p>
+  </section>
+
+  <!-- 6 EXPECTED OUTCOME -->
+  <section id="outcome">
+    <div class="sec-head">
+      <div class="num">6</div>
+      <div><h2>Expected outcome</h2><p class="sub">A Follow-up column the team can trust at a glance.</p></div>
+    </div>
+
+    <div class="outcomes">
+      <div><span class="tick">✓</span><span>More accurate follow-up information</span></div>
+      <div><span class="tick">✓</span><span>Less reliance on incorrect automated statuses</span></div>
+      <div><span class="tick">✓</span><span>Ability to correct errors on the spot</span></div>
+      <div><span class="tick">✓</span><span>Better visibility of customers who still need follow-up</span></div>
+      <div><span class="tick">✓</span><span>Faster, more reliable review of the Leads list</span></div>
+      <div><span class="tick">✓</span><span>Existing automation retained where it works</span></div>
+    </div>
+
+    <div class="unchanged">
+      <span class="eyebrow">Stays exactly as it is today</span>
+      <ul>
+        <li>Lead assignment</li>
+        <li>SLA / response timing</li>
+        <li>Lead status (Contacted, Qualified…)</li>
+        <li>Pipeline</li>
+        <li>Customer records</li>
+        <li>Communication history</li>
+        <li>Existing follow-up automation</li>
+        <li>Warm / Cold scoring</li>
+      </ul>
+    </div>
+    <p>This request is limited to making the <strong>Follow-up column</strong> more accurate and manageable. No other part of the CRM needs to change.</p>
+  </section>
+
+  <!-- 7 UI EXAMPLE -->
+  <section id="ui">
+    <div class="sec-head">
+      <div class="num">7</div>
+      <div><h2>UI example</h2><p class="sub">How the Follow-up column could look in the Leads list. Sample data only.</p></div>
+    </div>
+
+    <div class="crm">
+      <div class="bar">
+        <div><span class="crumb">CRM › Leads</span><span class="title">Leads</span></div>
+        <span class="btn">+ New Lead</span>
+      </div>
+      <div class="tablewrap">
+        <table class="leads">
+          <thead>
+            <tr><th>Name</th><th>Event</th><th>Status</th><th>Assigned</th><th>Follow-up</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="code mono">26.09.41</span><span class="name">M. Okafor</span></td>
+              <td>Oct 3, 2027<span class="sub">Wedding · 80 guests</span></td>
+              <td><span class="pill blue"><span class="dot"></span>New</span></td>
+              <td>Cams</td>
+              <td><div class="fu">
+                <span class="pill amber">Needs Follow-up <span class="caret">▾</span></span>
+                <span class="src"><span class="dot"></span>Automatic</span>
+              </div></td>
+            </tr>
+            <tr>
+              <td><span class="code mono">26.09.40</span><span class="name">L. Tran</span></td>
+              <td>Jun 14, 2027<span class="sub">Corporate dinner · 120 guests</span></td>
+              <td><span class="pill blue"><span class="dot"></span>Contacted</span></td>
+              <td>Leon</td>
+              <td><div class="fu">
+                <span class="pill green">Followed Up ✓ <span class="caret">▾</span></span>
+                <span class="src manual"><span class="dot"></span>Manually updated · Leon, today 11:20</span>
+              </div></td>
+            </tr>
+            <tr>
+              <td><span class="code mono">26.09.39</span><span class="name">Reyes Family</span></td>
+              <td>Mar 21, 2027<span class="sub">Quinceañera · 150 guests</span></td>
+              <td><span class="pill blue"><span class="dot"></span>Qualified</span></td>
+              <td>Vince</td>
+              <td><div class="fu">
+                <span class="pill blue">Waiting for Customer <span class="caret">▾</span></span>
+                <span class="src"><span class="dot"></span>Automatic</span>
+              </div></td>
+            </tr>
+            <tr>
+              <td><span class="code mono">26.09.38</span><span class="name">D. Patel</span></td>
+              <td>Nov 8, 2026<span class="sub">Birthday · 45 guests</span></td>
+              <td><span class="pill blue"><span class="dot"></span>New</span></td>
+              <td>Cams</td>
+              <td><div class="fu">
+                <span class="pill edit">No Response <span class="caret">▾</span></span>
+                <div class="menu" aria-label="Follow-up status options">
+                  <div class="hdr">Set Follow-up status</div>
+                  <div>Needs Follow-up</div>
+                  <div>Followed Up</div>
+                  <div>Contacted</div>
+                  <div class="on">No Response ✓</div>
+                  <div>Waiting for Customer</div>
+                  <div>Completed</div>
+                </div>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--muted)"></span>Automatic: set by the system</span>
+      <span><span class="dot" style="background:var(--amber-ink)"></span>Manually updated: corrected by an authorized user, protected from automatic overwrite</span>
+      <span>▾ Editable by authorized users only</span>
+    </div>
+    <p class="note">The last row shows the dropdown open, as an authorized user would see it when correcting a status. Names, dates and codes above are illustrative and do not refer to real leads.</p>
+  </section>
+
+  <div class="takeaway">
+    <span class="eyebrow">Final takeaway</span>
+    <h2>Automatic when it works. Manual correction when it doesn't.</h2>
+  </div>
+
+  <footer>
+    <span>CRM › Leads · Follow-up Status improvement proposal</span>
+    <span>Prepared for review by the CRM / IT team</span>
+  </footer>
+</div>

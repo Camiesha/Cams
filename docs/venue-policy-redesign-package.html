@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Venue Policy Redesign</title>
+<meta name="description" content="Policy review, competitor benchmarking and proposed redesign for Crown Prince Event Hall and Alvin Studio & Courtyard — draft for management and California counsel review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Policy-package document — deep green + cream + charcoal; classification chips; decision placeholders. */
+  :root{
+    --green:#2F5D4A; --green-deep:#244A3B; --green-soft:#5B8A75;
+    --cream:#F6F3EC; --paper:#FFFFFF; --panel-2:#FBF9F4; --panel-3:#EFEBE0;
+    --ink:#262B29; --ink-2:#4A524E; --muted:#7C847F;
+    --line:#E2DDD2; --line-2:#ECE7DB;
+    --red:#A3322B; --red-bg:#F6E4E1; --red-ink:#7C231D;
+    --amber:#9A6B0E; --amber-bg:#F7EEDA; --amber-ink:#704E08;
+    --mod:#6E7A52; --mod-bg:#EEF0E2; --mod-ink:#4E5838;
+    --ok:#2F5D4A; --ok-bg:#E4EEE8; --ok-ink:#234a3a;
+    --blue:#2B5A86; --blue-bg:#E4EDF5; --blue-ink:#1f4260;
+    --purple:#5E4B86; --purple-bg:#ECE7F4; --purple-ink:#443363;
+    --font-display:"Fraunces",Georgia,serif;
+    --font-body:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    --font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+    --shadow:0 1px 2px rgba(36,74,59,.06),0 6px 18px rgba(36,74,59,.07);
+    --radius:12px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --green:#4E8A70; --green-deep:#14231c; --green-soft:#6fa88e;
+      --cream:#111613; --paper:#171d1a; --panel-2:#1c2420; --panel-3:#232c27;
+      --ink:#e9efea; --ink-2:#c3ccc6; --muted:#8c968f;
+      --line:#2b352f; --line-2:#242d28;
+      --red:#f08a82; --red-bg:#3a1e1b; --red-ink:#f3b4ae;
+      --amber:#e0b35e; --amber-bg:#352a13; --amber-ink:#eccf8f;
+      --mod:#a9b885; --mod-bg:#28301d; --mod-ink:#cdd8b0;
+      --ok:#6fc49c; --ok-bg:#15291f; --ok-ink:#a9e0c3;
+      --blue:#7ea9d6; --blue-bg:#15263a; --blue-ink:#aecbe8;
+      --purple:#b29ad8; --purple-bg:#241c38; --purple-ink:#d2c3ec;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.4);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+      --green:#4E8A70; --green-deep:#14231c; --green-soft:#6fa88e;
+      --cream:#111613; --paper:#171d1a; --panel-2:#1c2420; --panel-3:#232c27;
+      --ink:#e9efea; --ink-2:#c3ccc6; --muted:#8c968f;
+      --line:#2b352f; --line-2:#242d28;
+      --red:#f08a82; --red-bg:#3a1e1b; --red-ink:#f3b4ae;
+      --amber:#e0b35e; --amber-bg:#352a13; --amber-ink:#eccf8f;
+      --mod:#a9b885; --mod-bg:#28301d; --mod-ink:#cdd8b0;
+      --ok:#6fc49c; --ok-bg:#15291f; --ok-ink:#a9e0c3;
+      --blue:#7ea9d6; --blue-bg:#15263a; --blue-ink:#aecbe8;
+      --purple:#b29ad8; --purple-bg:#241c38; --purple-ink:#d2c3ec;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.4);
+      color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font-body);font-size:14.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+  a{color:var(--green);text-decoration:none} a:hover{text-decoration:underline}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;text-wrap:balance;line-height:1.16;color:var(--ink)}
+  .mono{font-family:var(--font-mono);font-size:.88em}
+  p{margin:.5em 0}
+
+  nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+  nav.toc .wrap{display:flex;gap:3px;overflow-x:auto;padding-block:7px;scrollbar-width:thin}
+  nav.toc a{flex:0 0 auto;font-size:11.5px;font-weight:600;color:var(--ink-2);padding:5px 8px;border-radius:7px;white-space:nowrap}
+  nav.toc a:hover{background:var(--panel-3);text-decoration:none}
+
+  .cover{background:linear-gradient(158deg,var(--green) 0%,var(--green-deep) 100%);color:#fff}
+  .cover .wrap{padding-block:44px 38px}
+  .cover .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#cfe3d8;margin:0 0 14px}
+  .cover h1{color:#fff;margin:0;font-size:clamp(26px,5vw,40px);letter-spacing:.2px;font-weight:700}
+  .cover .sub{color:#d8e8df;font-size:15.5px;margin:14px 0 0;max-width:64ch}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:20px}
+  .cover .meta span{font-family:var(--font-mono);font-size:11px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);padding:5px 10px;border-radius:999px;color:#eef5f0}
+  .banner{background:var(--red-bg);color:var(--red-ink);border-top:1px solid var(--red);border-bottom:1px solid var(--red);font-weight:700;font-size:12.5px;text-align:center}
+  .banner .wrap{padding-block:9px}
+  .rule{height:3px;background:var(--green-soft)}
+
+  section{padding-block:28px;border-top:1px solid var(--line-2)}
+  .sec-h{display:flex;align-items:baseline;gap:11px;margin:0 0 4px}
+  .sec-h .no{font-family:var(--font-mono);font-size:12.5px;color:var(--green);font-weight:600;flex:0 0 auto}
+  .sec-h h2{font-size:clamp(18px,2.8vw,25px);margin:0}
+  .lede{color:var(--ink-2);max-width:76ch;margin:4px 0 16px;font-size:13.6px}
+
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:880px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:15px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 7px;font-size:15px} .card h4{margin:0 0 5px;font-size:13px;font-family:var(--font-body);font-weight:700}
+  .flat{box-shadow:none;background:var(--panel-2)}
+
+  .kpi{background:var(--paper);border:1px solid var(--line);border-top-width:4px;border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow)}
+  .kpi .n{font-family:var(--font-display);font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px}
+  .kpi.r{border-top-color:var(--red)} .kpi.r .n{color:var(--red)}
+  .kpi.a{border-top-color:var(--amber)} .kpi.a .n{color:var(--amber)}
+  .kpi.g{border-top-color:var(--green)} .kpi.g .n{color:var(--green)}
+  .kpi.b{border-top-color:var(--blue)} .kpi.b .n{color:var(--blue)}
+
+  /* classification + severity chips */
+  .chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.02em;padding:2px 7px;border-radius:999px;border:1px solid transparent;white-space:nowrap;line-height:1.5}
+  .x-r{background:var(--red-bg);color:var(--red-ink);border-color:var(--red)}
+  .x-a{background:var(--amber-bg);color:var(--amber-ink);border-color:var(--amber)}
+  .x-m{background:var(--mod-bg);color:var(--mod-ink);border-color:var(--mod)}
+  .x-g{background:var(--ok-bg);color:var(--ok-ink);border-color:var(--ok)}
+  .x-b{background:var(--blue-bg);color:var(--blue-ink);border-color:var(--blue)}
+  .x-p{background:var(--purple-bg);color:var(--purple-ink);border-color:var(--purple)}
+  .x-o{background:transparent;color:var(--ink-2);border-color:var(--line)}
+
+  .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);background:var(--paper)}
+  table{width:100%;border-collapse:collapse;font-size:12.3px;min-width:640px}
+  table.wide{min-width:900px}
+  thead th{background:var(--green);color:#fff;text-align:left;font-weight:600;font-size:11.5px;padding:8px 10px;vertical-align:bottom}
+  tbody td,tbody th{padding:8px 10px;border-top:1px solid var(--line-2);vertical-align:top;text-align:left}
+  tbody th{font-weight:700;background:var(--panel-2);font-size:12px}
+  tbody tr:nth-child(even) td{background:var(--panel-2)}
+  td.c-r{background:var(--red-bg)!important;color:var(--red-ink);font-weight:700}
+  td.c-a{background:var(--amber-bg)!important;color:var(--amber-ink);font-weight:700}
+  td.c-g{background:var(--ok-bg)!important;color:var(--ok-ink);font-weight:700}
+  tfoot td{font-size:11px;color:var(--muted);padding:8px 10px}
+  .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .note{border-left:4px solid var(--green);background:var(--panel-2);padding:10px 13px;border-radius:0 10px 10px 0;margin:12px 0;font-size:12.8px}
+  .note.r{border-color:var(--red)} .note.a{border-color:var(--amber)} .note.b{border-color:var(--blue)}
+  .decision{border:1px dashed var(--red);background:var(--red-bg);color:var(--red-ink);border-radius:9px;padding:7px 11px;margin:8px 0;font-size:12px;font-weight:600;font-family:var(--font-mono)}
+  .ph{font-family:var(--font-mono);font-size:.92em;background:var(--amber-bg);color:var(--amber-ink);padding:1px 5px;border-radius:4px}
+  ul.tick{list-style:none;padding:0;margin:7px 0}
+  ul.tick li{padding:3px 0 3px 22px;position:relative;font-size:13px}
+  ul.tick li::before{content:"";position:absolute;left:3px;top:9px;width:8px;height:8px;border-radius:2px;background:var(--green-soft)}
+  ol.steps{margin:6px 0;padding-left:20px;font-size:13px} ol.steps li{margin:3px 0}
+  .src{font-size:11px;color:var(--muted)}
+  .disc{font-size:11.5px;color:var(--muted);background:var(--panel-2);border:1px dashed var(--line);border-radius:10px;padding:11px 13px;margin:12px 0}
+  .scrollhint{font-size:11px;color:var(--muted);margin:0 0 4px;display:none}
+  @media(max-width:880px){.scrollhint{display:block}}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+  .policy{counter-reset:none}
+  .policy h3{border-bottom:2px solid var(--green-soft);padding-bottom:4px;margin:20px 0 8px;font-size:16px;color:var(--green)}
+  .policy h4{margin:12px 0 3px;font-size:13.5px;font-family:var(--font-body);font-weight:700}
+  .policy p{font-size:13px;margin:4px 0}
+  .anchor{scroll-margin-top:52px}
+  footer{background:var(--green);color:#d8e8df} footer .wrap{padding-block:20px} footer b{color:#fff}
+</style>
+</head>
+<body>
+
+<header class="cover" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Policy Review · Competitor Benchmark · Proposed Redesign</p>
+    <h1>Event Venue Policy Redesign — CPH &amp; ACD</h1>
+    <p class="sub">A substantive redevelopment of the booking, deposit, cancellation and rental policies for Crown Prince Event Hall and Alvin Studio &amp; Courtyard, both operated by Crown Prince Hall Corporation. Current rules are preserved unless management approves a change; every proposed change is flagged and routed to a decision register.</p>
+    <div class="meta">
+      <span>Prepared for Crown Prince Hall Corporation Management</span>
+      <span>San Jose, California</span>
+      <span>October 2026</span>
+    </div>
+  </div>
+</header>
+<div class="banner"><div class="wrap">PROPOSED DRAFT — FOR MANAGEMENT REVIEW AND CALIFORNIA LEGAL COUNSEL REVIEW — NOT APPROVED FOR CLIENT USE</div></div>
+<div class="rule"></div>
+
+<nav class="toc" aria-label="Contents">
+  <div class="wrap">
+    <a href="#d1">1 · Executive Summary</a>
+    <a href="#d2">2 · Sources</a>
+    <a href="#d3">3 · Gap Analysis</a>
+    <a href="#d4">4 · Competitors</a>
+    <a href="#d5">5 · Proposed Policy</a>
+    <a href="#d6">6 · CPH Schedule</a>
+    <a href="#d7">7 · ACD Schedule</a>
+    <a href="#d8">8 · Decision Register</a>
+    <a href="#d9">9 · Legal Register</a>
+    <a href="#d10">10 · Implementation</a>
+    <a href="#d11">11 · Consistency Audit</a>
+    <a href="#d12">12 · Readiness</a>
+  </div>
+</nav>
+
+<!-- classification legend -->
+<section id="legend" class="anchor">
+  <div class="wrap">
+    <p class="src" style="margin:0 0 6px">Every material provision is classified for internal review:</p>
+    <div class="legend">
+      <span class="chip x-g">Baseline — confirmed existing rule</span>
+      <span class="chip x-b">Recommended addition</span>
+      <span class="chip x-a">Proposed change — needs approval</span>
+      <span class="chip x-p">Legal review required</span>
+      <span class="chip x-o">Information missing</span>
+    </div>
+    <div class="decision">[MANAGEMENT DECISION REQUIRED — DO NOT IMPLEMENT UNTIL APPROVED] marks any amount, deadline or rule not yet confirmed. <span class="ph">[like this]</span> marks a placeholder for a figure or fact the company must supply.</div>
+  </div>
+</section>
+
+<!-- ============ D1 EXEC SUMMARY ============ -->
+<section id="d1" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D1</span><h2>Executive summary</h2></div>
+    <p class="lede">The supplied Crown Prince agreement is internally contradictory: it carries <b>two different deposit-and-cancellation models at once</b>, with duplicated and truncated clauses. A separate client-facing promise (a full refund of the initial deposit within two weeks of paying it) appears in neither model. ACD's agreement, reviewed separately, lacks a named contracting entity. None of this is an editing problem — it is a set of business decisions the company must make before either contract is safe to use.</p>
+
+    <div class="grid g4">
+      <div class="kpi r"><div class="n">3</div><div class="l">Conflicting deposit/cancellation versions (A, B, C)</div></div>
+      <div class="kpi a"><div class="n">6</div><div class="l">Priority management decisions</div></div>
+      <div class="kpi b"><div class="n">2</div><div class="l">Venues under one shared framework</div></div>
+      <div class="kpi g"><div class="n">1</div><div class="l">Client promise to preserve (two-week refund)</div></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card">
+        <h3>Most significant weaknesses</h3>
+        <ul class="tick">
+          <li>The CPH template contains <b>both</b> the "reservation-deposit-converts-to-security-deposit" model (Version A) and the "separate non-refundable retainer + security deposit" model (Version B). They cannot both govern.</li>
+          <li>The <b>two-week deposit-refund promise</b> (Version C) staff have been making is not written in either version, and the written contract (deposit retained as rescheduling credit / non-refundable retainer) can contradict it.</li>
+          <li><b>Balance deadline conflict:</b> the written contract says 14 days before the event; operational practice says 30 days with reminders at 30/15/10/5.</li>
+          <li><b>Overtime rate is blank</b> (a 1.5× fallback is written but no base rate); the <b>no-dispute</b>, 1%/month interest and 3% surcharge clauses need legal review.</li>
+          <li><b>ACD</b> lacks a named contracting entity and its deposit amount is stated inconsistently ($500 here vs $1,000 in its own supplied agreement).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Decisions management must make first</h3>
+        <ol class="steps">
+          <li>Which single deposit model governs — A (convert) or B (separate retainer + deposit)?</li>
+          <li>How the two-week refund promise is honored and written into the contract.</li>
+          <li>14-day vs 30-day final-balance deadline.</li>
+          <li>CPH and ACD deposit amounts ($1,000 / $500 — confirm ACD).</li>
+          <li>Overtime rate and billing increment for each venue.</li>
+          <li>ACD contracting entity and payment recipient.</li>
+        </ol>
+        <p class="src" style="margin-top:6px">Full list and impacts in the Decision Register (D8).</p>
+      </div>
+    </div>
+
+    <div class="note r"><b>Most consequential conflict.</b> Under Version A the $1,000 is a reservation deposit that becomes a refundable security deposit and, on cancellation, a rescheduling credit. Under Version B there are two amounts — a non-refundable booking retainer and a separate refundable security deposit. Under Version C, clients have been told the initial deposit is fully refundable within two weeks. A client could reasonably rely on C while the signed contract says A or B. This must be resolved by management decision (D8-01…D8-04) and reviewed by counsel (D9), not chosen silently here.</div>
+
+    <div class="note b"><b>Proposed standardization.</b> One shared master policy for both venues, with a CPH schedule (D6) and an ACD schedule (D7) carrying the venue-specific amounts, capacity, alcohol handling and courtyard terms. Nothing is transferred from CPH to ACD automatically.</div>
+  </div>
+</section>
+
+<!-- ============ D2 SOURCES ============ -->
+<section id="d2" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D2</span><h2>Source inventory &amp; evidence quality</h2></div>
+    <p class="lede">Materials reviewed for this package, with evidence quality and gaps. Original documents are prioritized over summaries.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Source</th><th>Type / date</th><th>Used for</th><th>Quality / limitation</th></tr></thead>
+        <tbody>
+          <tr><th>Crown Prince Agreement Template (PDF)</th><td>Original CPH rental agreement, uploaded 22 Oct 2026</td><td>CPH clause audit; deposit/cancellation Versions A &amp; B; insurance, alcohol, overtime, CASp, force majeure</td><td class="c-g">Primary source. Confirms entity Crown Prince Hall Corporation (CA Entity B20260164272). Extraction shows heavy clause duplication, truncated words, and both deposit models present — the defects to fix</td></tr>
+          <tr><th>CPH internal rate card</th><td><span class="mono">docs/crown-prince-internal-pricing-rate-card</span></td><td>CPH base rent, fees, setup hours</td><td class="c-g">Confirmed: $3,000/$4,000 base + $480/$125/$240 fees; 2 complimentary setup hours</td></tr>
+          <tr><th>ACD rental agreement &amp; pricing</th><td>Per earlier brief (§04); not re-supplied as a file here</td><td>ACD deposit, cancellation, entity gap</td><td class="c-a">Entity blank; deposit stated $1,000 there vs $500 in this assignment — conflict to confirm. Re-supply the ACD file for a full ACD audit</td></tr>
+          <tr><th>Two-week deposit-refund promise</th><td>Client-facing / operational representation (verbal)</td><td>Version C; cancellation reconciliation</td><td class="c-a">Not in any written agreement reviewed; terms (which venue, how the 2 weeks is counted, notice, processing) unconfirmed</td></tr>
+          <tr><th>Payment schedule &amp; reminders</th><td>Operational practice (30-day balance; reminders 30/15/10/5; 14-day hold)</td><td>Payment deadline conflict</td><td class="c-a">Conflicts with the contract's 14-day balance; the "14-day hold" meaning is unconfirmed</td></tr>
+          <tr><th>Competitor policy comparison report</th><td><span class="mono">docs/competitor-policy-comparison-report.html</span>, 22 Oct 2026</td><td>Benchmark (D4)</td><td class="c-a">All competitor terms third-party / unverified; marketplace &amp; civic terms public</td></tr>
+          <tr><th>CA legal research</th><td>Companion dashboard §6, 22 Oct 2026</td><td>Legal register (D9)</td><td class="c-a">Statutes identified; several cases cited from knowledge — counsel to confirm</td></tr>
+          <tr><th>CRM / DocuSign specs, sales-tax proposal, playbook</th><td>repo <span class="mono">docs/</span></td><td>CRM alignment (§11); tax context</td><td class="c-g">Internal working documents</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note a"><b>Missing / to confirm:</b> the live ACD rental agreement file; the signed-quote template; the written source (if any) of the two-week refund promise and the 30-day balance rule; current approved CPH/ACD pricing, operating hours and security requirements; ACD legal entity and payment recipient; CASp inspection status for each premises. These are marked as information-missing throughout and listed in D12.</div>
+  </div>
+</section>
+
+<!-- ============ D3 GAP ANALYSIS ============ -->
+<section id="d3" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D3</span><h2>Current policy gap analysis</h2></div>
+    <p class="lede">Existing CPH and ACD rules against the proposed provision, with the reason, benefit, whether it preserves or changes a current rule, and approvals needed. "Not found in the materials reviewed" is used where a rule is absent — no policy is invented.</p>
+
+    <h3 style="font-family:var(--font-display);font-size:16px;margin:14px 0 8px;color:var(--green)">3.1 · The deposit &amp; cancellation conflict (A vs B vs C)</h3>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Issue</th><th>Version A (convert)</th><th>Version B (separate retainer)</th><th>Version C (client promise)</th><th>Financial / trust implication</th><th>Recommended resolution</th></tr></thead>
+        <tbody>
+          <tr><th>Initial payment name</th><td>$1,000 reservation deposit</td><td>Booking retainer (amount unstated) + security deposit</td><td>"Initial deposit"</td><td>Clients hear one word; contract uses three</td><td class="c-a">Pick one vocabulary (D8-05); recommend "reservation payment"</td></tr>
+          <tr><th>Credited toward rent?</th><td>No — held separately, then converts</td><td>Retainer non-refundable; not described as credited</td><td>Not specified</td><td>Affects what the client still owes</td><td class="c-a">State explicitly (D8-02)</td></tr>
+          <tr><th>Becomes security deposit?</th><td>Yes — same $1,000 converts after full payment</td><td>No — security deposit is a separate amount</td><td>Not addressed</td><td>Double-role ambiguity; accounting risk</td><td class="c-a">Prefer separate amounts (cleaner accounting)</td></tr>
+          <tr><th>Two-week full refund</th><td>Not present — retained as rescheduling credit</td><td>Not present — retainer non-refundable</td><td>Full refund if cancel within 2 weeks of paying</td><td class="c-r">Direct contradiction with both written versions</td><td class="c-a">Honor the promise explicitly (D8-03); add a written early-cancellation refund window</td></tr>
+          <tr><th>Cancel ≥180 days</th><td>Other payments: keep 50%, refund 50% in 30 days; $1,000 = credit</td><td>Keep retainer + 50% of all other amounts, refund 50% in 30 days</td><td>n/a</td><td>Similar economics, different labels</td><td class="c-a">One schedule (D8-06); counsel on §1671</td></tr>
+          <tr><th>Cancel &lt;180 days</th><td>Keep all other payments; $1,000 = credit</td><td>Keep retainer + all other amounts</td><td>n/a</td><td class="c-r">Keeping 100% inside 180 days is the biggest enforceability risk</td><td class="c-a">Graduate it; counsel (D9)</td></tr>
+          <tr><th>Rescheduling credit</th><td>$1,000 credit, 1-year deadline, forfeit if unused</td><td>Not described (retainer simply non-refundable)</td><td>n/a</td><td>A credit is more client-friendly than forfeiture</td><td class="c-b">Keep the 1-year credit for both</td></tr>
+          <tr><th>Refund deadlines</th><td>50% within 30 days; deposit within 14 days</td><td>Same</td><td>"Two weeks"</td><td>Distinct deadlines must not be blurred</td><td class="c-g">Keep: refunds 30 days, deposit 14 days, reservation-refund 14 days</td></tr>
+          <tr><th>Double recovery</th><td>Explicitly barred ("not retained twice")</td><td>Not explicitly barred</td><td>n/a</td><td>Retainer + % could duplicate loss</td><td class="c-b">Keep the no-double-recovery clause in both</td></tr>
+          <tr><th>Quote conflict</th><td>"These terms control over conflicting quote terms"</td><td>Present</td><td>n/a</td><td>Needed — but quote should not conflict in the first place</td><td class="c-g">Keep precedence clause + align the quote</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="decision">[MANAGEMENT DECISION REQUIRED — DO NOT IMPLEMENT UNTIL APPROVED] Choose Version A or Version B as the single governing model, and decide how Version C (the two-week promise) is written in. Until then neither contract should be issued.</div>
+
+    <h3 style="font-family:var(--font-display);font-size:16px;margin:18px 0 8px;color:var(--green)">3.2 · Other material gaps</h3>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Topic</th><th>Existing CPH</th><th>Existing ACD</th><th>Weakness</th><th>Proposed</th><th>Preserve / change</th><th>Approvals</th></tr></thead>
+        <tbody>
+          <tr><th>Balance deadline</th><td>14 days before (written)</td><td>Not found in materials reviewed</td><td>Contract 14d vs operational 30d</td><td>One stated deadline + reminders 30/15/10/5</td><td class="c-a">Change — resolve conflict</td><td>Mgmt</td></tr>
+          <tr><th>Overtime rate</th><td>Blank; 1.5× fallback written</td><td>Blank</td><td>No base rate = unquotable</td><td>Per-hour rate auto-filled; keep 1.5× fallback; state increment</td><td class="c-a">Change — supply rate</td><td>Mgmt</td></tr>
+          <tr><th>Reservation deposit</th><td>$1,000 (written)</td><td>$500 (this assignment) vs $1,000 (ACD agreement)</td><td>ACD figure inconsistent</td><td>Confirm each venue's amount in its schedule</td><td class="c-a">Confirm</td><td>Mgmt</td></tr>
+          <tr><th>Contracting entity</th><td>Crown Prince Hall Corporation (confirmed)</td><td>Blank</td><td>ACD unenforceable risk</td><td>Name ACD's entity &amp; payee</td><td class="c-a">Change (ACD)</td><td>Mgmt · Legal</td></tr>
+          <tr><th>No-dispute clause</th><td>Present</td><td>n/a</td><td>Likely unenforceable</td><td>Replace with dispute-first process</td><td class="c-a">Change</td><td>Legal</td></tr>
+          <tr><th>1%/mo interest</th><td>Present</td><td>n/a</td><td>Usury risk if read as interest</td><td>Flat reasonable late fee + notice/cure</td><td class="c-a">Change</td><td>Legal · Mgmt</td></tr>
+          <tr><th>3% card surcharge</th><td>Credit only, not debit</td><td>Fee field</td><td>Disclosure/compliance</td><td>Compliant surcharge or cash-discount wording</td><td class="c-a">Change</td><td>Legal · Accounting</td></tr>
+          <tr><th>Guard ratio</th><td>1/75, min 2 when alcohol</td><td>Not found; "security required" advertised</td><td>Confirm operational fit per venue</td><td>Keep for CPH; set ACD ratio</td><td class="c-g">Preserve CPH; confirm ACD</td><td>Mgmt · Ops</td></tr>
+          <tr><th>Insurance</th><td>$1M/$2M + $1M host liquor; COI 30d; additional insureds</td><td>"May require"</td><td>ACD under-specified</td><td>Set fixed ACD thresholds</td><td class="c-g">Preserve CPH; add ACD</td><td>Mgmt · Broker</td></tr>
+          <tr><th>Deliveries</th><td>"Venue does not accept/store/secure deliveries"</td><td>Not found</td><td>Confirm vs actual ops</td><td>Keep only if it matches practice</td><td class="c-a">Confirm</td><td>Ops</td></tr>
+          <tr><th>Setup time</th><td>Rental time "includes setup" (contract) vs 2 complimentary setup hrs (rate card/site)</td><td>Hourly</td><td>Wording mismatch</td><td>Align contract to rate card/site</td><td class="c-a">Change (wording)</td><td>Mgmt</td></tr>
+          <tr><th>CASp disclosure</th><td>3 options, none selected (template)</td><td>Separate premises — status unknown</td><td>Must reflect each premises</td><td>Complete per premises; placeholder until confirmed</td><td class="c-a">Confirm each site</td><td>Mgmt · Owner · Legal</td></tr>
+          <tr><th>Courtyard (ACD)</th><td>n/a</td><td>Courtyard add-on; capacity unverified</td><td>Occupancy + outdoor sound</td><td>Verify occupant load; add courtyard terms</td><td class="c-b">Add (ACD)</td><td>Ops · Fire authority</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D4 COMPETITORS ============ -->
+<section id="d4" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D4</span><h2>Competitor best-practice benchmark</h2></div>
+    <p class="lede">Condensed from the companion competitor report. All competitor terms are third-party / unverified; booking-marketplace and civic policies are public and cited. The principle is extracted and adapted — competitor wording is never copied, and no provision is assumed enforceable because a competitor uses it.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Practice observed</th><th>Where (evidence)</th><th>Why useful</th><th>Suitable for</th><th>Adaptation</th></tr></thead>
+        <tbody>
+          <tr><th>Refundable date-hold deposit $500–$1,500</th><td>San Jose Clubhouse ($500, "fully refundable if contract not broken"), Woman's Club ($1,500). 3P</td><td>Clear, returnable; supports client trust</td><td>Both</td><td>Supports a defined reservation payment + refundable security deposit; informs the two-week promise</td></tr>
+          <tr><th>Graduated cancellation tiers</th><td>Marketplace policies — Peerspace 100%/50%/0% at 7d/24h; Giggster 50% &gt;48h. Platform (official)</td><td>Proportionate; tracks rebooking ability</td><td>Both</td><td>Design our own tiers to CA §1671 — not copy; no private hall publishes a schedule</td></tr>
+          <tr><th>Published overtime $300–$500/hr</th><td>Woman's Club $300/hr; Corinthian, Villa Ragusa $500/hr. 3P</td><td>Concrete, quotable</td><td>Both</td><td>Fill our blank rate per venue</td></tr>
+          <tr><th>Event insurance ~$1M; gated BYO alcohol</th><td>Listings indicate GL insurance at several; BYO gated on licensed server/liquor insurance at ~4. 3P</td><td>Transfers risk; lawful service</td><td>Both</td><td>CPH already meets; add ACD thresholds + gate ACD BYO</td></tr>
+          <tr><th>8-hour blocks; music cutoff 10–11pm</th><td>Woman's Club, City Hall, Clubhouse. 3P</td><td>Clear hours; noise compliance</td><td>Both</td><td>CPH 6-hr is shorter (positioning); add outdoor cutoff</td></tr>
+          <tr><th>Official civic rate transparency</th><td>City Hall Rotunda $400/hr + fees (official, City of San José)</td><td>Transparent hourly pricing</td><td>Reference</td><td>Supports transparent "from" pricing</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="5">Full sourced matrix with direct URLs: companion <span class="mono">competitor-policy-comparison-report</span>. Private banquet halls do not publish cancellation, refund, rescheduling or damage terms, so those are designed to law and our own risk.</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D5 PROPOSED POLICY ============ -->
+<section id="d5" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D5</span><h2>Proposed revised policy (full draft)</h2></div>
+    <div class="banner" style="border-radius:8px;margin:0 0 10px"><div class="wrap" style="padding-block:7px">PROPOSED DRAFT — FOR MANAGEMENT &amp; CALIFORNIA COUNSEL REVIEW — NOT APPROVED FOR CLIENT USE</div></div>
+    <p class="lede">A shared master booking policy for both venues. Venue-specific amounts live in the CPH (D6) and ACD (D7) schedules. Bracketed <span class="ph">[placeholders]</span> and decision flags mark everything not yet confirmed. Classification chips show whether each clause is a baseline rule, a recommended addition, a proposed change, or a legal-review item.</p>
+
+    <div class="policy card">
+      <p style="font-size:12px;color:var(--muted);margin:0 0 4px"><b>Crown Prince Hall Corporation</b> (CA Entity No. B20260164272) — Master Event Booking Policy · Version 0.1 (draft) · Effective date: <span class="ph">[to be set]</span> · Applies to Crown Prince Event Hall and Alvin Studio &amp; Courtyard per the venue schedule attached to each booking.</p>
+
+      <h3>1. Scope &amp; definitions</h3>
+      <p><span class="chip x-b">Recommended</span> This policy forms part of your signed booking agreement together with the signed quote/booking summary and the venue-specific schedule. If they conflict, this policy and the venue schedule control over the quote. <b>Reservation payment:</b> the amount that holds your date. <b>Rental charges:</b> the price of the booking. <b>Security deposit:</b> a separate refundable amount held against damage and unpaid charges. <b>Rescheduling credit:</b> a defined credit if you move your date. These four terms are used consistently and are not interchangeable.</p>
+
+      <h3>2. Reservations &amp; contract formation</h3>
+      <p><span class="chip x-g">Baseline</span> An inquiry or a held date is not a booking. A date is reserved only when the Venue receives your <b>signed agreement and the reservation payment</b>. The Venue may hold a date temporarily for <span class="ph">[hold length — confirm the "14-day hold" meaning]</span>; the hold expires if the agreement and payment are not received. Changes require the Venue's written approval. Electronic signatures and emailed notices are accepted.</p>
+      <div class="decision">[MANAGEMENT DECISION REQUIRED] Confirm what the "14-day hold" is — an availability hold before signing, or an unpaid-booking grace period — and its length.</div>
+
+      <h3>3. Deposits &amp; payment</h3>
+      <p><span class="chip x-a">Proposed change</span> <span class="chip x-p">Legal review</span> The company must adopt <b>one</b> deposit model:</p>
+      <p style="margin-left:10px"><b>Option A (convert):</b> one reservation payment that, after full payment of rental charges, becomes the refundable security deposit; retained as a rescheduling credit on cancellation. <b>Option B (separate):</b> a reservation payment plus a separate refundable security deposit, each accounted for on its own. <b>Recommendation:</b> Option B — cleanest to administer and explain.</p>
+      <div class="decision">[MANAGEMENT DECISION REQUIRED — D8-01] Adopt Option A or Option B. Do not keep both.</div>
+      <p><span class="chip x-g">Baseline</span> Accepted methods: cash, check, Zelle, credit card. Checks payable to <b>Crown Prince Hall Corporation</b> (ACD: <span class="ph">[ACD legal entity]</span>). The final balance is due <span class="ph">[14 or 30]</span> days before the event; reminders are sent at 30, 15, 10 and 5 days before. Receipts are issued for every payment; the reservation payment and security deposit are recorded under separate accounting codes and the security deposit is never treated as rental revenue.</p>
+      <div class="decision">[MANAGEMENT DECISION REQUIRED — D8-07] Resolve 14-day (contract) vs 30-day (operational) balance deadline.</div>
+
+      <h3>4. Cancellation &amp; refunds</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> Cancellation must be in writing and takes effect when the Venue receives it.</p>
+      <p><span class="chip x-a">Proposed change</span> <span class="chip x-p">Legal review</span> <b>Two-week reservation refund (preserves the current client promise):</b> if you cancel in writing within <b>14 days after paying your reservation payment</b>, the reservation payment is refunded in full, processed within 14 days. <span class="ph">[Confirm this applies to both venues and how the 14 days is counted — D8-03.]</span></p>
+      <p><span class="chip x-a">Proposed change</span> After that window, a graduated schedule applies, set to reflect the Venue's actual loss and reviewed by counsel under California law:</p>
+      <ul class="tick" style="margin-left:4px">
+        <li>≥180 days before: refund all rental payments; retain only the reservation payment or a stated reasonable amount. <span class="ph">[%]</span></li>
+        <li>90–179 days: retain a defined percentage of rental payments; refund the rest within 30 days. <span class="ph">[%]</span></li>
+        <li>30–89 days: higher retention; a rescheduling credit offered first. <span class="ph">[%]</span></li>
+        <li>&lt;30 days: committed costs + a reasonable estimate; no stacking a flat amount on a full-payment retention. <span class="ph">[%]</span></li>
+      </ul>
+      <p><span class="chip x-g">Baseline (preserve)</span> The Venue may not recover the same loss twice. The security deposit is returned in every case, less documented deductions. Refunds are processed within 30 days; the security deposit within 14 days.</p>
+      <div class="decision">[MANAGEMENT DECISION REQUIRED — D8-06 · LEGAL] Set the cancellation percentages with counsel. The current "keep everything inside 180 days" term is the highest enforceability risk.</div>
+
+      <h3>5. Rescheduling &amp; postponement</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> You may move your date once to any available date, subject to the new date's pricing, by completing a replacement booking confirmed in writing within <b>one year</b>. A request alone is not a completed booking; further changes do not restart the deadline. Unused credit may be forfeited after one year, to the extent permitted by law. A rescheduling credit is offered before any cash forfeiture.</p>
+
+      <h3>6. Security deposit, damage &amp; cleaning</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> The security deposit is held against damage, missing items, clogged plumbing, excessive cleaning, trash, overtime, unpaid charges and fines caused by you, your guests or vendors. The Venue documents deductions with photos/invoices and sends an itemized statement within 14 days. The deposit is security only and does not cap what you owe. The Venue is not responsible for lost or stolen property.</p>
+
+      <h3>7. Access, event duration &amp; overtime</h3>
+      <p><span class="chip x-g">Baseline</span> Your booked time includes load-in, setup, event, cleanup, breakdown and load-out. <span class="chip x-a">Proposed change</span> <b>CPH:</b> a 6-hour event window plus 2 complimentary setup hours before it (aligning the contract with the rate card and website). No early access or late stay without written approval.</p>
+      <p><span class="chip x-a">Proposed change</span> Overtime is billed at <span class="ph">[$ per hour]</span> per hour or part, after a <span class="ph">[grace, e.g. 15-min]</span> grace period, settled at the final walkthrough; if no rate is stated, the fallback is 1.5× the hourly rental rate.</p>
+      <div class="decision">[MANAGEMENT DECISION REQUIRED — D8-11] Supply the overtime rate and grace period for each venue; verify the 1.5× fallback is approved policy.</div>
+
+      <h3>8. Guest capacity &amp; venue use</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> Guest count may not exceed the lower of legal occupancy and Venue-approved capacity. No smoking/vaping except in the designated outdoor area; no cannabis on the property. No illegal drugs, weapons, fighting, harassment, blocked exits, gambling, fireworks, pyrotechnics, or open flames/candles/fog/haze/glitter/confetti without written approval. No pets except service animals required by law. Nothing attached to walls, ceilings, floors or fixtures without written approval. Keep accessible entrances, routes, restrooms and parking clear. Differentiate Venue rules from requirements imposed by law, permit, landlord or insurer.</p>
+
+      <h3>9. Alcohol</h3>
+      <p><span class="chip x-g">Baseline</span> Alcohol is allowed only with written approval; the Venue does not sell, furnish or serve alcohol unless a signed add-on says otherwise. You are responsible for lawful service — no service to minors or visibly intoxicated persons, licensed/authorized servers where required, drinking only in approved areas, never in the parking lot. No sale, cash bar, donations, or ticketed drinks unless your caterer holds a valid California ABC catering license for the date and gives the Venue a copy at least 10 days before. <span class="chip x-g">Baseline</span> Where alcohol is served, licensed security is required — <b>CPH:</b> one guard per 75 guests, minimum two. <span class="chip x-o">Info missing</span> <b>ACD:</b> <span class="ph">[ratio to confirm]</span>.</p>
+
+      <h3>10. Catering, vendors &amp; production</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> Food, caterers, food trucks, DJs, performers, rentals, décor and production must be disclosed and approved before the event. Caterers/food trucks must hold a current Santa Clara County health permit for the date and give the Venue a copy at least 10 days before. Every vendor must carry liability insurance and provide a certificate at least 30 days before. You are responsible for your vendors. <span class="chip x-a">Confirm</span> "The Venue does not accept, store or secure deliveries" — retain only if it matches actual operations.</p>
+
+      <h3>11. Insurance, liability &amp; indemnification</h3>
+      <p><span class="chip x-g">Baseline (CPH)</span> You must carry event liability insurance of at least $1,000,000 per occurrence / $2,000,000 aggregate, plus $1,000,000 host liquor liability if alcohol is served. Crown Prince Hall Corporation and its landlord must be named additional insureds; a certificate is due at least 30 days before. <span class="chip x-o">Info missing (ACD)</span> ACD limits/additional insureds <span class="ph">[to set]</span>. <span class="chip x-p">Legal review</span> The release (incl. Civil Code §1542 waiver), indemnification and limitation of liability are preserved as drafted but must be narrowed to exclude gross negligence, willful misconduct and non-waivable liability, and confirmed by counsel.</p>
+
+      <h3>12. Safety, compliance &amp; event termination</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> The Venue, security, police, fire officials or authorities may deny entry, remove persons, stop alcohol service, reduce sound, close areas, suspend or end the event for safety, compliance, property protection, non-payment, illegal activity, intoxication, violence, damage, capacity or material breach. <span class="chip x-p">Legal review</span> Distinguish immediate safety interventions from ordinary breaches that can be cured; review the "no refund if ended for breach" term for proportionality.</p>
+
+      <h3>13. Photography, video &amp; privacy</h3>
+      <p><span class="chip x-g">Baseline (preserve)</span> Marketing use is limited to non-identifying images of setups, décor and atmosphere; no image identifying a guest, family member or staff is published without written consent. Opt-in/opt-out is provided; if neither box is checked, the Venue will not use images for marketing. This does not restrict security footage, incident documentation or legally required records.</p>
+
+      <h3>14. Force majeure &amp; venue-initiated cancellation</h3>
+      <p><span class="chip x-g">Baseline</span> If circumstances beyond either party's control make it illegal or impossible to provide or use the facilities, either party may terminate on written notice as soon as practical and no later than 10 days after learning of the basis. <span class="chip x-a">Proposed change</span> The primary remedy is a credit or reschedule; refund treatment of the reservation payment is <span class="ph">[confirm — currently non-refundable]</span>. <span class="chip x-b">Recommended addition</span> If the Venue cancels for a reason that is not your fault, you receive a full refund of all amounts paid and help finding an alternative date or venue.</p>
+
+      <h3>15. Accessibility (Civil Code §1938)</h3>
+      <p><span class="chip x-o">Info missing</span> <span class="chip x-p">Legal review</span> The §1938 CASp disclosure must state the actual inspection status for each premises. <span class="ph">[CPH status — confirm]</span> · <span class="ph">[ACD status — confirm]</span>. Do not select a box without verified information for that premises.</p>
+
+      <h3>16. General &amp; signatures</h3>
+      <p><span class="chip x-g">Baseline</span> California law governs. The parties will attempt mediation in Santa Clara County before suit; any lawsuit is filed in Santa Clara County Superior Court; the prevailing party may recover reasonable attorney fees. Entire-agreement, written-amendments and severability apply. <span class="chip x-p">Legal review</span> The limitation of the Venue's total responsibility to amounts paid is preserved but counsel must confirm. The signer is at least 18 (21 if alcohol is served) and, if signing for a company, is personally responsible for amounts owed. Client acknowledgment and initials fields are retained per section.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D6 CPH SCHEDULE ============ -->
+<section id="d6" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D6</span><h2>CPH-specific schedule</h2></div>
+    <p class="lede">Crown Prince Event Hall. Confirmed figures are from the uploaded agreement and internal rate card; unconfirmed items carry placeholders. No unverified figure is stated as an established rule.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Item</th><th>Value</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><th>Contracting entity / payee</th><td>Crown Prince Hall Corporation (CA Entity No. B20260164272), d/b/a Crown Prince Event Hall; checks payable to same</td><td class="c-g">Baseline (agreement)</td></tr>
+          <tr><th>Address / capacity</th><td>1654 Burdette Dr, San Jose 95121; up to 300 guests, subject to legal occupancy &amp; approved layout</td><td class="c-g">Baseline</td></tr>
+          <tr><th>Reservation payment</th><td>$1,000</td><td class="c-g">Baseline (agreement)</td></tr>
+          <tr><th>Base rent / fees</th><td>$3,000 weekday / $4,000 weekend + cleaning $480, insurance $125, security $240 (= $845)</td><td class="c-g">Baseline (rate card)</td></tr>
+          <tr><th>Event hours / setup</th><td>6-hour window + 2 complimentary setup hours</td><td class="c-a">Confirm (align contract wording)</td></tr>
+          <tr><th>Guest-count tiers</th><td>50–300 tier figures exist; relationship to the $845 fees undefined</td><td class="c-a">Mgmt formula needed</td></tr>
+          <tr><th>Overtime</th><td><span class="ph">[$ /hr]</span>; fallback 1.5× hourly rate; increment <span class="ph">[part-hour]</span></td><td class="c-o">Info missing</td></tr>
+          <tr><th>Security deposit</th><td>Per chosen model (A: $1,000 converted / B: separate amount); returned 14 days, itemized</td><td class="c-a">Depends on D8-01</td></tr>
+          <tr><th>Insurance</th><td>$1M/$2M + $1M host liquor; additional insureds venue + landlord; COI 30 days</td><td class="c-g">Baseline</td></tr>
+          <tr><th>Alcohol / security</th><td>Venue approval; ABC caterer license if sold (copy 10 days prior); 1 guard/75, min 2</td><td class="c-g">Baseline</td></tr>
+          <tr><th>Vendors</th><td>SCC health permit (copy 10 days prior); vendor COI 30 days prior</td><td class="c-g">Baseline</td></tr>
+          <tr><th>Card / late terms</th><td>3% credit surcharge (not debit); 1%/mo interest; $25/$35 NSF; no-dispute clause</td><td class="c-a">Legal review (replace several)</td></tr>
+          <tr><th>CASp status</th><td><span class="ph">[confirm for 1654 Burdette Dr]</span></td><td class="c-o">Info missing</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D7 ACD SCHEDULE ============ -->
+<section id="d7" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D7</span><h2>ACD-specific schedule</h2></div>
+    <p class="lede">Alvin Studio &amp; Courtyard. CPH terms are <b>not</b> copied automatically. Much of ACD's policy detail is missing from the materials and is flagged for the company to supply.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Item</th><th>Value</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><th>Contracting entity / payee</th><td><span class="ph">[ACD legal entity]</span> — blank in supplied agreement; Zelle pointed to a different brand</td><td class="c-r">Info missing / blocker</td></tr>
+          <tr><th>Address / capacity</th><td>2470 Alvin Ave, Suite 80, San Jose 95121; indoor up to 100; courtyard up to +80 <span class="ph">[verify occupant load]</span></td><td class="c-a">Confirm capacity</td></tr>
+          <tr><th>Reservation payment</th><td>$500 (this assignment) vs $1,000 (ACD agreement)</td><td class="c-a">Confirm — conflict</td></tr>
+          <tr><th>Pricing / hours</th><td>Advertised $1,865 wk / $2,665 wknd vs supplied hourly rates — do not reconcile</td><td class="c-a">Confirm model</td></tr>
+          <tr><th>Courtyard</th><td>$1,500 add-on; outdoor amplified sound by approval + cutoff; weather/indoor backup</td><td class="c-b">Add ACD terms</td></tr>
+          <tr><th>Overtime</th><td><span class="ph">[$ /hr]</span> (hourly tiers $200/$300 exist); increment <span class="ph">[ ]</span></td><td class="c-o">Info missing</td></tr>
+          <tr><th>Security deposit</th><td>Per chosen model; return 14 days, itemized</td><td class="c-a">Depends on D8-01</td></tr>
+          <tr><th>Alcohol / BYO</th><td>BYO advertised — gate on licensed server, security, ABC license if sold; guard ratio <span class="ph">[set]</span></td><td class="c-a">Define</td></tr>
+          <tr><th>Insurance</th><td><span class="ph">[set limits / additional insureds / COI deadline]</span></td><td class="c-o">Info missing</td></tr>
+          <tr><th>CASp status</th><td><span class="ph">[confirm for 2470 Alvin Ave]</span></td><td class="c-o">Info missing</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note a"><b>ACD needs its own source review.</b> Re-supply the live ACD rental agreement so its clauses can be audited as thoroughly as CPH's. Until the entity, deposit amount and pricing model are confirmed, ACD's schedule cannot be finalized.</div>
+  </div>
+</section>
+
+<!-- ============ D8 DECISION REGISTER ============ -->
+<section id="d8" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D8</span><h2>Management decision register</h2></div>
+    <p class="lede">Every substantive change requiring approval. Priority decisions (deposit model, refund promise, cancellation schedule, deadlines, deposit amounts, overtime) are listed first.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>ID</th><th>Topic</th><th>Current</th><th>Proposed</th><th>Risk if kept</th><th>Legal?</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">D8-01</td><td>Deposit model</td><td>Both A &amp; B in the template</td><td>Pick one (rec. B, separate)</td><td>Contradictory, unadministrable</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-02</td><td>Deposit credited to rent?</td><td>A: no; B: n/a</td><td>State explicitly</td><td>Client confusion over balance</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-03</td><td>Two-week refund promise</td><td>Verbal only; not written</td><td>Write a 14-day reservation-refund window</td><td>Contradicts the signed contract</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-04</td><td>CPH deposit amount</td><td>$1,000</td><td>Keep $1,000</td><td>—</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-05</td><td>ACD deposit amount</td><td>$500 vs $1,000 (conflict)</td><td>Confirm one</td><td>Wrong quotes</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-06</td><td>Cancellation schedule %</td><td>Keep all &lt;180 days</td><td>Graduated tiers</td><td>Possible unenforceable penalty</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-07</td><td>Balance deadline</td><td>14d (contract) vs 30d (ops)</td><td>One deadline + reminders</td><td>Dispute over due date</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-08</td><td>Rescheduling credit &amp; expiry</td><td>1 year (Version A)</td><td>Keep, apply both venues</td><td>—</td><td>Maybe</td><td>___</td></tr>
+          <tr><td class="mono">D8-09</td><td>Security deposit amount/return</td><td>14-day itemized</td><td>Keep; set ACD amount</td><td>—</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-10</td><td>ACD entity &amp; payee</td><td>Blank</td><td>Name entity; route payment</td><td>Unenforceable; tax/audit</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-11</td><td>Overtime rate &amp; increment</td><td>Blank; 1.5× fallback</td><td>Set $/hr + grace per venue</td><td>Revenue leakage</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-12</td><td>Guard ratio (ACD)</td><td>CPH 1/75; ACD unset</td><td>Set ACD ratio</td><td>Under/over-staffing</td><td>Maybe</td><td>___</td></tr>
+          <tr><td class="mono">D8-13</td><td>Insurance (ACD)</td><td>"May require"</td><td>Fixed thresholds</td><td>Uneven protection</td><td>Maybe</td><td>___</td></tr>
+          <tr><td class="mono">D8-14</td><td>Late terms: interest/NSF</td><td>1%/mo + $25/$35</td><td>Flat late fee + notice/cure</td><td>Usury risk</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-15</td><td>Card surcharge</td><td>3% credit, not debit</td><td>Compliant wording</td><td>Disclosure non-compliance</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-16</td><td>No-dispute clause</td><td>Present</td><td>Remove; dispute-first</td><td>Likely void</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-17</td><td>Setup-time wording (CPH)</td><td>"Includes setup" vs +2 hrs</td><td>Align to +2 complimentary</td><td>Per-booking disputes</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-18</td><td>Deliveries rule</td><td>"Not accepted"</td><td>Confirm vs ops</td><td>Mismatch with practice</td><td>No</td><td>___</td></tr>
+          <tr><td class="mono">D8-19</td><td>Force-majeure retainer</td><td>Non-refundable</td><td>Credit/reschedule primary</td><td>May be challenged</td><td>Yes</td><td>___</td></tr>
+          <tr><td class="mono">D8-20</td><td>CASp disclosures</td><td>None selected</td><td>Confirm per premises</td><td>§1938 non-compliance</td><td>Yes</td><td>___</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D9 LEGAL REGISTER ============ -->
+<section id="d9" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D9</span><h2>Legal review register</h2></div>
+    <p class="lede">Clauses needing California counsel, the question to resolve, and the risk of implementing without review. Authorities are from the companion legal research; this is not legal advice and nothing is represented as enforceable.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Clause</th><th>Question for counsel</th><th>Authority (to confirm)</th><th>Risk if unreviewed</th></tr></thead>
+        <tbody>
+          <tr><th>Cancellation forfeiture</th><td>Are the retained amounts a valid liquidated-damages estimate, esp. "keep all &lt;180 days"?</td><td>Civ. Code §1671(b)/(d); penalty doctrine</td><td>Clause void as a penalty; refunds owed</td></tr>
+          <tr><th>Two-week refund vs contract</th><td>How to reconcile the client promise with the written deposit terms without creating new exposure?</td><td>Contract &amp; advertising/representation principles; §17200</td><td>Misrepresentation / unfair-practice claim</td></tr>
+          <tr><th>No-dispute clause</th><td>Is barring chargebacks enforceable?</td><td>FCBA 15 USC §1666; Reg Z; Civ. Code §3513, §1668; card rules</td><td>Void; regulator/network exposure</td></tr>
+          <tr><th>Card surcharge / debit</th><td>Is the 3% surcharge compliant; debit exemption; disclosure?</td><td>Civ. Code §1748.1; Italian Colors (9th Cir. 2018); SB 478; Durbin</td><td>Non-compliant fee</td></tr>
+          <tr><th>1%/mo interest &amp; NSF</th><td>Usury vs late fee; §1719 NSF limits</td><td>Cal. Const. art. XV; Civ. Code §1719, §1671</td><td>Usurious interest</td></tr>
+          <tr><th>Release / §1542 / indemnity</th><td>Scope limits; carve-outs for gross negligence/willful/statutory</td><td>Civ. Code §1668, §1542; City of Santa Barbara; Tunkl</td><td>Overbroad clause partly void</td></tr>
+          <tr><th>Limitation of liability</th><td>Is "limited to amounts paid" enforceable?</td><td>§1668 limits</td><td>Partially unenforceable</td></tr>
+          <tr><th>Alcohol / ABC (ACD BYO)</th><td>License path; sale-vs-donation; RBS; host liability</td><td>B&amp;P §23000 et seq.; §25602.1; Ennabe</td><td>Unlicensed sale; liability</td></tr>
+          <tr><th>CASp §1938</th><td>Correct disclosure wording per premises</td><td>Civ. Code §1938; ADA; Unruh §51</td><td>Disclosure defect; Unruh exposure</td></tr>
+          <tr><th>Event termination / no refund</th><td>Proportionality of "no refund if ended for breach"</td><td>Penalty/forfeiture principles</td><td>Unenforceable forfeiture</td></tr>
+          <tr><th>Force majeure remedy</th><td>Retainer treatment on FM</td><td>Civ. Code §1511; common-law impracticability</td><td>Challenged clause</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D10 IMPLEMENTATION ============ -->
+<section id="d10" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D10</span><h2>Internal implementation plan</h2></div>
+    <p class="lede">Phased rollout. Client-facing terms (what clients must do) are kept separate from internal staff procedures (how staff administer them). CRM items are recommendations to confirm against the actual configuration, not assumed to exist.</p>
+    <div class="grid g2">
+      <div class="card">
+        <h4>Phased rollout</h4>
+        <ol class="steps">
+          <li><b>Management decisions</b> (D8) — deposit model, refund promise, deadlines, amounts, overtime, ACD entity.</li>
+          <li><b>Legal review</b> (D9) — cancellation, waivers, surcharge, interest, alcohol, CASp.</li>
+          <li><b>Contract &amp; quote updates</b> — rebuild a single clean template (one deposit model, filled fields); align the quote.</li>
+          <li><b>Website &amp; client communication</b> — match policy; publish the two-week refund window.</li>
+          <li><b>CRM configuration</b> — fields, reminders, separate deposit accounting, document gates.</li>
+          <li><b>Staff training</b> — one script for deposits, refunds and the two-week window.</li>
+          <li><b>Effective date &amp; transition</b> — new terms apply to new bookings only; existing bookings keep their terms.</li>
+          <li><b>Consistency audit</b> (D11) before client use.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h4>Recommended CRM fields (confirm against actual config)</h4>
+        <ul class="tick" style="font-size:12.5px">
+          <li>Reservation payment received + <b>two-week refund-eligibility</b> date</li>
+          <li>Signed agreement received; booking-confirmed status</li>
+          <li>Balance due date; reminders 30/15/10/5</li>
+          <li>Security deposit — separate accounting code; never rental revenue</li>
+          <li>Deposit conversion (only if Option A approved)</li>
+          <li>Cancellation request date + policy version; refund calculation</li>
+          <li>Rescheduling credit + 1-year expiry</li>
+          <li>Overtime rate (auto-filled); vendor COI / health-permit / ABC deadlines</li>
+          <li>Exception approvals; client-communication audit trail</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note a"><b>Automation to guard against:</b> any rule that would auto-forfeit a deposit despite the two-week refund promise, or post a security deposit as rental revenue. These must be blocked in the CRM before launch.</div>
+  </div>
+</section>
+
+<!-- ============ D11 CONSISTENCY AUDIT ============ -->
+<section id="d11" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D11</span><h2>Final consistency audit</h2></div>
+    <p class="lede">Status of consistency across the package. This audit <b>does not pass yet</b> — the items below are open pending management and legal decisions, exactly as they should be before client use.</p>
+    <p class="scrollhint">Scroll table sideways →</p>
+    <div class="twrap">
+      <table class="wide">
+        <thead><tr><th>Consistency check</th><th>Status</th><th>Blocking item</th></tr></thead>
+        <tbody>
+          <tr><th>Master policy ↔ CPH schedule ↔ ACD schedule</th><td class="c-a">Open</td><td>Deposit model (D8-01); ACD entity (D8-10)</td></tr>
+          <tr><th>Deposit &amp; refund rules internally</th><td class="c-r">Conflict</td><td>Versions A/B/C unresolved</td></tr>
+          <tr><th>Payment schedule</th><td class="c-a">Open</td><td>14 vs 30 days (D8-07)</td></tr>
+          <tr><th>Cancellation ↔ rescheduling</th><td class="c-a">Open</td><td>Percentages pending counsel (D8-06)</td></tr>
+          <tr><th>Deposit-return vs cancellation-refund deadlines</th><td class="c-g">Distinct (14d vs 30d) — OK</td><td>—</td></tr>
+          <tr><th>Quote / invoice ↔ agreement</th><td class="c-a">Open</td><td>Rebuild quote after D8-01</td></tr>
+          <tr><th>Internal procedures / CRM ↔ contract</th><td class="c-a">Open</td><td>Confirm CRM; block unsafe automation</td></tr>
+          <tr><th>Website / client promises ↔ policy</th><td class="c-r">Conflict</td><td>Two-week promise not yet written</td></tr>
+          <tr><th>CPH vs ACD amounts not confused</th><td class="c-g">Separated by schedule</td><td>Confirm ACD deposit (D8-05)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ D12 READINESS ============ -->
+<section id="d12" class="anchor">
+  <div class="wrap">
+    <div class="sec-h"><span class="no">D12</span><h2>Approval readiness assessment</h2></div>
+    <div class="grid g2">
+      <div class="card"><h4>Ready for management review</h4><ul class="tick" style="font-size:12.5px"><li>This full package (D1–D12)</li><li>The A/B/C conflict analysis and recommended resolutions</li><li>The decision register (D8) and legal register (D9)</li><li>The shared master policy structure with venue schedules</li></ul></div>
+      <div class="card"><h4>Still provisional</h4><ul class="tick" style="font-size:12.5px"><li>Every bracketed figure and percentage</li><li>The proposed policy draft (D5) — not approved, not for client use</li><li>ACD schedule (needs its source file + entity + amounts)</li><li>Competitor terms (third-party) and some legal citations (counsel to confirm)</li></ul></div>
+      <div class="card"><h4>Decide before the contract is finalized</h4><ul class="tick" style="font-size:12.5px"><li>D8-01 deposit model · D8-03 two-week promise · D8-06 cancellation % · D8-07 deadline · D8-05 ACD deposit · D8-11 overtime · D8-10 ACD entity</li></ul></div>
+      <div class="card"><h4>Resolve before client use</h4><ul class="tick" style="font-size:12.5px"><li>All D9 legal items</li><li>Rebuild one clean contract template with a single deposit model and no duplicated/blank fields</li><li>CASp status per premises</li><li>Re-supply the ACD agreement; confirm the 30-day balance and two-week-promise sources</li></ul></div>
+    </div>
+    <div class="note r"><b>Do not treat any part of this as enforceable, approved, or client-ready.</b> It is a proposed draft for management decision and California counsel review. Existing bookings keep their current terms; new terms apply only to bookings made after an approved effective date.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 3px"><b>Crown Prince Hall Corporation</b> — Event Venue Policy Redesign (CPH &amp; ACD)</p>
+    <p style="margin:0;font-size:12px">San Jose, CA · October 2026 · PROPOSED DRAFT — FOR MANAGEMENT AND CALIFORNIA COUNSEL REVIEW — NOT APPROVED FOR CLIENT USE. Current rules preserved unless management approves a change; nothing invented, gaps marked, no clause represented as enforceable.</p>
+    <p style="margin:10px 0 0;font-size:12px"><a href="#top" style="color:#cfe3d8">↑ Top</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

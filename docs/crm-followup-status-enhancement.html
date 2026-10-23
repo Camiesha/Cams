@@ -1,0 +1,604 @@
+<title>Follow-Up Enhancement</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#F6F7F9; --panel:#FFFFFF; --panel-2:#FBFBFC; --line:#E3E6EB; --line-2:#EDF0F3;
+    --ink:#131A26; --ink-2:#3C4658; --muted:#6B7484; --faint:#98A1AF;
+    --accent:#22406B; --accent-ink:#FFFFFF; --accent-soft:#E9EFF7; --accent-text:#22406B;
+    --ok:#1E6E48; --ok-bg:#E6F3EC;
+    --warn:#8A5A00; --warn-bg:#FBF1D9;
+    --info:#1F4F8F; --info-bg:#E6EEF9;
+    --neutral:#59637A; --neutral-bg:#EEF1F5;
+    --danger:#A93A30; --danger-bg:#FBE9E6;
+    --shadow-sm:0 1px 2px rgba(19,26,38,.05), 0 1px 1px rgba(19,26,38,.03);
+    --shadow:0 1px 2px rgba(19,26,38,.05), 0 10px 30px -12px rgba(19,26,38,.14);
+    --shadow-lg:0 2px 4px rgba(19,26,38,.05), 0 24px 48px -20px rgba(19,26,38,.22);
+    --r:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F131A; --panel:#171C25; --panel-2:#1C222C; --line:#2A313D; --line-2:#232A35;
+      --ink:#EDF0F4; --ink-2:#C3CAD5; --muted:#8B94A3; --faint:#667080;
+      --accent:#7FA6DA; --accent-ink:#0F131A; --accent-soft:#1D2A3D; --accent-text:#9DBDE8;
+      --ok:#7DD3A4; --ok-bg:#16301F;
+      --warn:#E8C36A; --warn-bg:#332A12;
+      --info:#8FB6EC; --info-bg:#1A2A44;
+      --neutral:#A8B1C0; --neutral-bg:#252C38;
+      --danger:#F09A90; --danger-bg:#3A2220;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+      --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 24px 48px -20px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F131A; --panel:#171C25; --panel-2:#1C222C; --line:#2A313D; --line-2:#232A35;
+    --ink:#EDF0F4; --ink-2:#C3CAD5; --muted:#8B94A3; --faint:#667080;
+    --accent:#7FA6DA; --accent-ink:#0F131A; --accent-soft:#1D2A3D; --accent-text:#9DBDE8;
+    --ok:#7DD3A4; --ok-bg:#16301F;
+    --warn:#E8C36A; --warn-bg:#332A12;
+    --info:#8FB6EC; --info-bg:#1A2A44;
+    --neutral:#A8B1C0; --neutral-bg:#252C38;
+    --danger:#F09A90; --danger-bg:#3A2220;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -12px rgba(0,0,0,.6);
+    --shadow-lg:0 2px 4px rgba(0,0,0,.4), 0 24px 48px -20px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:"Manrope","IBM Plex Sans",system-ui,sans-serif;margin:0;line-height:1.15;text-wrap:balance;letter-spacing:-.015em}
+  h1{font-size:clamp(2.2rem,4.4vw,3.3rem);font-weight:800}
+  h2{font-size:clamp(1.7rem,2.6vw,2.15rem);font-weight:700}
+  h3{font-size:1.1rem;font-weight:700}
+  p{margin:0}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:.86em;letter-spacing:0}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:16px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Manrope",sans-serif;font-weight:700;font-size:.95rem}
+  .brand .mark{width:22px;height:22px;border-radius:6px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-size:.7rem;font-weight:800}
+  .brand .crumb{color:var(--muted);font-weight:500}
+  .brand .crumb b{color:var(--ink);font-weight:600}
+  .toc{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .toc a{color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:600;padding:5px 9px;border-radius:6px;font-family:"IBM Plex Mono",monospace}
+  .toc a:hover,.toc a:focus-visible{color:var(--ink);background:var(--panel);outline:none;box-shadow:var(--shadow-sm)}
+  @media (max-width:820px){.toc{display:none}}
+
+  /* chapters */
+  section.ch{padding:72px 0;border-bottom:1px solid var(--line)}
+  section.ch:last-of-type{border-bottom:0}
+  .ch-head{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:start;margin-bottom:34px}
+  .ch-num{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);letter-spacing:.06em;padding-top:8px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .ch-num::after{content:"";flex:1;height:1px;background:var(--line)}
+  .ch-head .lede{margin-top:12px;color:var(--ink-2);font-size:1.08rem;max-width:62ch}
+  @media (max-width:720px){.ch-head{grid-template-columns:1fr;gap:10px}.ch-num::after{display:none}}
+
+  /* 01 hero */
+  .hero{padding:88px 0 76px}
+  .hero .kicker{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-text);background:var(--accent-soft);padding:6px 12px;border-radius:999px;margin-bottom:22px}
+  .hero .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .hero h1{max-width:20ch}
+  .hero .sub{font-family:"Manrope",sans-serif;font-size:1.4rem;font-weight:500;color:var(--ink-2);margin-top:16px;letter-spacing:-.01em}
+  .hero .intro{margin-top:26px;font-size:1.08rem;color:var(--ink-2);max-width:64ch}
+  .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:40px;box-shadow:var(--shadow-sm)}
+  .facts div{background:var(--panel);padding:18px 20px}
+  .facts .k{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .facts .v{font-family:"Manrope",sans-serif;font-weight:700;font-size:1.05rem}
+
+  /* 02 */
+  .chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:12px;margin-bottom:34px}
+  .chain .box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow-sm)}
+  .chain .box .k{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+  .chain .box .v{font-family:"Manrope",sans-serif;font-weight:700;font-size:1.05rem}
+  .chain .box.risk{border-color:color-mix(in srgb,var(--danger) 35%,var(--line));background:var(--danger-bg)}
+  .chain .box.risk .v{color:var(--danger)}
+  .chain .box.risk .k{color:var(--danger)}
+  .chain .arr{display:grid;place-items:center;color:var(--faint);font-size:1.3rem}
+  @media (max-width:760px){.chain{grid-template-columns:1fr}.chain .arr{transform:rotate(90deg)}}
+  .scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .scen .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start;box-shadow:var(--shadow-sm)}
+  .scen .card .ix{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--faint)}
+  .scen .card h3{font-size:1rem}
+  .scen .card p{font-size:.93rem;color:var(--ink-2)}
+  .scen .card .shows{margin-top:6px;padding-top:10px;border-top:1px solid var(--line-2);font-size:.82rem;color:var(--muted);display:grid;gap:4px}
+  .scen .card .shows b{color:var(--ink-2);font-weight:600}
+  .risks{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:.9rem;color:var(--muted)}
+  .risks .tag{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink-2);font-weight:500}
+
+  /* badges */
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:600;line-height:1.5;white-space:nowrap}
+  .badge .dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+  .b-ok{background:var(--ok-bg);color:var(--ok)} .b-warn{background:var(--warn-bg);color:var(--warn)} .b-info{background:var(--info-bg);color:var(--info)} .b-neutral{background:var(--neutral-bg);color:var(--neutral)} .b-danger{background:var(--danger-bg);color:var(--danger)} .b-accent{background:var(--accent-soft);color:var(--accent-text)}
+
+  /* 03 */
+  .compare{display:grid;grid-template-columns:2fr 3fr;gap:18px;align-items:stretch}
+  @media (max-width:760px){.compare{grid-template-columns:1fr}}
+  .cmp{border-radius:var(--r);padding:26px 26px 24px;display:grid;gap:14px;align-content:start}
+  .cmp .lbl{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+  .cmp h3{font-size:1.35rem}
+  .cmp ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:.95rem}
+  .cmp li{display:flex;gap:10px;align-items:flex-start}
+  .cmp li .i{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:700;margin-top:3px}
+  .cmp.cur{background:var(--panel-2);border:1px dashed var(--line);color:var(--ink-2)}
+  .cmp.cur .lbl{color:var(--muted)}
+  .cmp.cur li .i{background:var(--neutral-bg);color:var(--neutral)}
+  .cmp.pro{background:var(--panel);border:1px solid var(--accent);box-shadow:var(--shadow-lg);position:relative}
+  .cmp.pro .lbl{color:var(--accent-text)}
+  .cmp.pro li .i{background:var(--ok-bg);color:var(--ok)}
+  .cmp.pro .rec{position:absolute;top:-12px;right:20px;background:var(--accent);color:var(--accent-ink);font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+  .rule{margin-top:22px;border:1px solid var(--line);border-left:3px solid var(--accent);background:var(--panel);border-radius:0 var(--r) var(--r) 0;padding:18px 22px;display:grid;gap:8px;box-shadow:var(--shadow-sm)}
+  .rule .k{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent-text)}
+  .rule p{color:var(--ink-2);font-size:.97rem;max-width:72ch}
+  .rule p b{color:var(--ink)}
+  .rule ol{margin:4px 0 0;padding-left:20px;color:var(--ink-2);font-size:.95rem;display:grid;gap:4px}
+
+  /* 04 flow */
+  .flow{max-width:620px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:32px 28px;box-shadow:var(--shadow)}
+  .fn{padding:13px 18px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);text-align:center;font-weight:600;font-size:.97rem}
+  .fn.sys{font-weight:500;color:var(--ink-2)}
+  .fn.sys::before{content:"CRM";font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;color:var(--faint);display:block;margin-bottom:2px}
+  .fa{height:28px;position:relative}
+  .fa::before{content:"";position:absolute;left:50%;top:0;height:100%;border-left:1.5px solid var(--line)}
+  .fa::after{content:"";position:absolute;left:calc(50% - 4px);bottom:1px;width:7px;height:7px;border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg)}
+  .fq{padding:14px 18px;border:1.5px solid var(--accent);border-radius:8px;text-align:center;font-family:"Manrope",sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent-text);background:var(--accent-soft)}
+  .fbr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .fbr .b{display:grid}
+  .fbr .l{text-align:center;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.12em;font-weight:600;padding:2px 0 6px}
+  .fbr .yes .l{color:var(--ok)} .fbr .no .l{color:var(--warn)}
+  .fbr .no .fn{border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+  .fj{height:28px;position:relative}
+  .fj::before{content:"";position:absolute;left:25%;right:25%;top:0;border-top:1.5px solid var(--line)}
+  .fj::after{content:"";position:absolute;left:50%;top:0;height:100%;border-left:1.5px solid var(--line)}
+  .fj .tip{position:absolute;left:calc(50% - 4px);bottom:1px;width:7px;height:7px;border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg)}
+  .fn.end{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .flow-cap{text-align:center;color:var(--muted);font-size:.9rem;margin-top:16px}
+  @media (max-width:520px){.fbr{grid-template-columns:1fr}.fj::before{display:none}}
+
+  /* 05 table */
+  .app{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);overflow:hidden}
+  .app .bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .app .bar .t{display:flex;align-items:baseline;gap:10px}
+  .app .bar .t .crumb{color:var(--muted);font-size:.82rem}
+  .app .bar .t h4{font-size:1.15rem;font-weight:700}
+  .app .bar .ctl{display:flex;gap:8px;align-items:center}
+  .app .bar .search{border:1px solid var(--line);border-radius:7px;padding:6px 12px;color:var(--faint);font-size:.85rem;min-width:200px}
+  .app .bar .btn{background:var(--accent);color:var(--accent-ink);border-radius:7px;padding:7px 14px;font-weight:600;font-size:.85rem}
+  .tw{overflow-x:auto}
+  table.leads{width:100%;border-collapse:collapse;min-width:820px;font-size:.92rem}
+  .leads th{text-align:left;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:12px 18px;border-bottom:1px solid var(--line);background:var(--panel-2)}
+  .leads td{padding:16px 18px;border-bottom:1px solid var(--line-2);vertical-align:top}
+  .leads tr:last-child td{border-bottom:0}
+  .leads tr.active td{background:var(--accent-soft)}
+  .leads .lead b{display:block;font-weight:600;font-size:.98rem}
+  .leads .lead .code{color:var(--faint);font-size:.76rem}
+  .leads .ev b{display:block;font-weight:500}
+  .leads .ev span{color:var(--muted);font-size:.85rem}
+  .leads .as{white-space:nowrap}
+  .leads .as .av{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--neutral-bg);color:var(--neutral);font-size:.68rem;font-weight:700;margin-right:8px;vertical-align:middle}
+  .fu{display:grid;gap:6px;justify-items:start;min-width:250px}
+  .fu .sel{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 8px 5px 6px;box-shadow:var(--shadow-sm)}
+  .fu .sel .car{color:var(--faint);font-size:.7rem;padding-right:2px}
+  .fu .src{font-size:.78rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px;line-height:1.4}
+  .fu .src .ic{width:15px;height:15px;border-radius:4px;display:inline-grid;place-items:center;font-size:.72rem;font-weight:600;flex:none;margin-right:2px}
+  .fu .src.auto .ic{background:var(--neutral-bg);color:var(--neutral)}
+  .fu .src.man{color:var(--warn)}
+  .fu .src.man .ic{background:var(--warn-bg);color:var(--warn)}
+  .fu .src .sep{color:var(--faint)}
+  .fu .sel.open{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .dd{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow-lg);padding:6px;width:232px;display:grid;gap:1px;font-size:.9rem;margin-top:2px}
+  .dd .h{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:8px 10px 6px;font-weight:600}
+  .dd .o{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:6px;color:var(--ink-2)}
+  .dd .o.on{background:var(--accent-soft);color:var(--accent-text);font-weight:600}
+  .dd .o.hov{background:var(--panel-2);color:var(--ink)}
+  .dd .o .dot{width:8px;height:8px;border-radius:50%}
+  .dd .ft{margin-top:4px;padding:8px 10px 6px;border-top:1px solid var(--line-2);font-size:.75rem;color:var(--muted);line-height:1.45}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:14px;font-size:.86rem;color:var(--muted);padding:0 4px}
+  .legend>span{display:inline-flex;align-items:center;gap:8px}.legend .ic{width:15px;height:15px;border-radius:4px;display:inline-grid;place-items:center;font-size:.72rem;font-weight:600}.legend .ic.a{background:var(--neutral-bg);color:var(--neutral)}.legend .ic.m{background:var(--warn-bg);color:var(--warn)}
+
+  /* 06 override */
+  .ov{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+  @media (max-width:820px){.ov{grid-template-columns:1fr}}
+  .steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:26px}
+  @media (max-width:640px){.steps4{grid-template-columns:repeat(2,1fr)}}
+  .steps4 div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-weight:600;font-size:.92rem;display:grid;gap:4px;box-shadow:var(--shadow-sm)}
+  .steps4 div span{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--faint);font-weight:500}
+  .ovtext{display:grid;gap:14px;color:var(--ink-2);font-size:.98rem}
+  .ovtext h3{color:var(--ink)}
+  .ovtext ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:.95rem}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-lg);padding:22px;display:grid;gap:14px}
+  .panel .ph{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .panel .ph .who{font-weight:600}
+  .panel .ph .who span{display:block;color:var(--muted);font-size:.82rem;font-weight:400}
+  .panel .row{display:grid;gap:6px}
+  .panel .k{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .panel .helper{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);color:var(--accent-text);border-radius:8px;padding:12px 14px;font-size:.86rem;line-height:1.5}
+  .panel .helper .i{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:.7rem;font-weight:700;margin-top:1px}
+  .panel .acts{display:flex;justify-content:flex-end;gap:8px}
+  .panel .acts span{border-radius:7px;padding:7px 14px;font-size:.88rem;font-weight:600;border:1px solid var(--line);color:var(--ink-2)}
+  .panel .acts .save{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .after{display:grid;gap:6px;padding:14px;border:1px dashed var(--line);border-radius:8px;background:var(--panel-2)}
+
+  /* 07 */
+  .impact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .impact .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;box-shadow:var(--shadow-sm)}
+  .impact .ico{width:34px;height:34px;border-radius:8px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;font-weight:800;font-family:"Manrope",sans-serif;font-size:.85rem}
+  .impact h3{font-size:1.05rem}
+  .impact p{font-size:.92rem;color:var(--ink-2)}
+
+  /* 08 */
+  .same{display:grid;grid-template-columns:1fr 2fr;gap:24px;align-items:start}
+  @media (max-width:760px){.same{grid-template-columns:1fr}}
+  .same .scope{background:var(--accent-soft);border-radius:var(--r);padding:22px;display:grid;gap:8px}
+  .same .scope .k{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-text);font-weight:700}
+  .same .scope b{font-family:"Manrope",sans-serif;font-size:1.15rem;font-weight:700;color:var(--ink)}
+  .same .scope p{font-size:.92rem;color:var(--ink-2)}
+  .same ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+  .same li{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:11px 14px;font-size:.93rem;font-weight:500}
+  .same li .lk{flex:none;width:18px;height:18px;border-radius:5px;background:var(--neutral-bg);color:var(--neutral);display:grid;place-items:center;font-size:.65rem;font-weight:700}
+
+  /* 09 */
+  .final{text-align:center;padding:96px 0 84px}
+  .final .k{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.14em;color:var(--muted);margin-bottom:22px}
+  .final h2{font-size:clamp(2rem,4.2vw,3.1rem);font-weight:800;max-width:18ch;margin:0 auto}
+  .final .pair{margin:34px auto 0;display:grid;grid-template-columns:1fr 1fr;max-width:640px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--line);gap:1px}
+  .final .pair div{background:var(--panel);padding:22px 20px;font-family:"Manrope",sans-serif;font-weight:700;font-size:1.1rem;display:grid;gap:6px}
+  .final .pair div span{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.12em;font-weight:500;color:var(--muted)}
+  .final .pair .a span{color:var(--ok)} .final .pair .m span{color:var(--warn)}
+  @media (max-width:520px){.final .pair{grid-template-columns:1fr}}
+  footer{border-top:1px solid var(--line);padding:22px 0 44px;color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+  @media print{.topbar{position:static}section.ch{break-inside:avoid;padding:44px 0}.hero{padding:40px 0}}
+
+  /* date / task model */
+  .due{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .due .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+  .d-over{background:var(--danger-bg);color:var(--danger)} .d-today{background:var(--warn-bg);color:var(--warn)} .d-soon{background:var(--info-bg);color:var(--info)} .d-done{background:var(--ok-bg);color:var(--ok)} .d-none{background:var(--neutral-bg);color:var(--neutral)}
+  .task{display:grid;gap:5px;justify-items:start;min-width:270px}
+  .task .line{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 10px 5px 8px;box-shadow:var(--shadow-sm);font-size:.9rem;font-weight:600}
+  .task .line .act{color:var(--ink-2);font-weight:500}
+  .task .line .car{color:var(--faint);font-size:.7rem}
+  .task .line.open{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+  .task .note{font-size:.8rem;color:var(--ink-2);font-style:italic}
+  .pop{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow-lg);padding:12px;width:270px;display:grid;gap:10px;font-size:.88rem;margin-top:2px}
+  .pop .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:4px;display:block}
+  .pop .seg{display:flex;gap:4px}
+  .pop .seg span{flex:1;text-align:center;border:1px solid var(--line);border-radius:6px;padding:5px 0;color:var(--ink-2);font-size:.82rem}
+  .pop .seg span.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600}
+  .pop .inp{border:1px solid var(--line);border-radius:6px;padding:6px 10px;color:var(--ink);font-variant-numeric:tabular-nums;display:flex;justify-content:space-between}
+  .pop .inp span{color:var(--faint)}
+  .pop .quick{display:flex;gap:4px;flex-wrap:wrap}
+  .pop .quick span{border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:.76rem;color:var(--ink-2)}
+  .pop .done{border-top:1px solid var(--line-2);padding-top:10px;display:grid;gap:6px}
+  .pop .done .outs{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+  .pop .done .outs span{border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:.8rem;color:var(--ink-2);text-align:center}
+  .pop .acts{display:flex;justify-content:flex-end;gap:6px}
+  .pop .acts span{border-radius:6px;padding:6px 12px;font-size:.84rem;font-weight:600;border:1px solid var(--line);color:var(--ink-2)}
+  .pop .acts .save{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .map{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:22px;box-shadow:var(--shadow-sm)}
+  .map th{text-align:left;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:11px 16px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  .map td{padding:11px 16px;border-bottom:1px solid var(--line-2);vertical-align:middle;color:var(--ink-2)}
+  .map tr:last-child td{border-bottom:0}
+  .map td:first-child{color:var(--ink);font-weight:500}
+  .mapwrap{overflow-x:auto}
+  .urg{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .urg div{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:.86rem;color:var(--ink-2)}
+</style>
+
+<div class="topbar"><div class="wrap">
+  <div class="brand"><span class="mark">C</span><span class="crumb"><b>CRM</b> › Leads › Follow-Up</span></div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#s01">01</a><a href="#s02">02</a><a href="#s03">03</a><a href="#s04">04</a><a href="#s05">05</a><a href="#s06">06</a><a href="#s07">07</a><a href="#s08">08</a><a href="#s09">09</a>
+  </nav>
+</div></div>
+
+<!-- 01 -->
+<section class="ch hero" id="s01"><div class="wrap">
+  <div class="ch-num" style="margin-bottom:22px">01 — Overview</div>
+  <span class="kicker"><span class="dot"></span>Improvement proposal</span>
+  <h1>CRM Follow-Up Enhancement</h1>
+  <p class="sub">Every lead has a next step and a date. Automatic by default, editable when needed.</p>
+  <p class="intro">Today the Follow-Up column shows an automated status label. Labels are a judgment call, and the system's judgment does not always match what happened with the client. This proposal turns the column into a scheduled next step: what to do, when, and who owns it. The CRM still sets it automatically after every recorded interaction. When the system gets it wrong, an authorized user changes the date or marks the step done directly from the Leads list, and that edit is protected from being silently overwritten.</p>
+  <div class="facts">
+    <div><div class="k">Scope</div><div class="v">Follow-Up column only</div></div>
+    <div><div class="k">Approach</div><div class="v">Next step + due date, automatic by default</div></div>
+    <div><div class="k">Who can edit</div><div class="v">Authorized users</div></div>
+    <div><div class="k">Everything else</div><div class="v">Unchanged</div></div>
+  </div>
+</div></section>
+
+<!-- 02 -->
+<section class="ch" id="s02"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">02 — Challenge</div>
+    <div><h2>The current challenge</h2><p class="lede">The automated status can lag behind, or miss, the real conversation with the client. A label also does not say when the next step is due, so the team has to verify each row by hand.</p></div>
+  </div>
+  <div class="chain">
+    <div class="box"><div class="k">Today</div><div class="v">Automated status</div></div>
+    <div class="arr">→</div>
+    <div class="box risk"><div class="k">Problem</div><div class="v">May lag or be incorrect</div></div>
+    <div class="arr">→</div>
+    <div class="box"><div class="k">Consequence</div><div class="v">User must manually verify</div></div>
+  </div>
+  <div class="scen">
+    <div class="card"><span class="ix">Scenario 1</span><h3>Already contacted</h3><p>An advisor has already spoken with the client, but the column still shows that a follow-up is needed.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Followed Up</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 2</span><h3>Reached on another channel</h3><p>The client was contacted by phone, walk-in or personal text. The CRM never saw the interaction.</p><div class="shows"><span>CRM shows <b>No Response</b></span><span>Reality: <b>Contacted</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 3</span><h3>Status lags behind</h3><p>The latest interaction happened, but the automated status has not caught up yet and shows an older state.</p><div class="shows"><span>CRM shows <b>Contacted</b></span><span>Reality: <b>Waiting for Client</b></span></div></div>
+    <div class="card"><span class="ix">Scenario 4</span><h3>No date, no way to correct it</h3><p>The advisor can see the status is wrong, but cannot fix it, and nothing on the row says when the lead should be contacted next.</p><div class="shows"><span>CRM shows <b>Needs Follow-Up</b></span><span>Reality: <b>Call promised for Tuesday</b></span></div></div>
+  </div>
+  <div class="risks">Resulting risk:
+    <span class="tag">Missed follow-ups</span><span class="tag">Duplicate outreach</span><span class="tag">Extra manual checking</span><span class="tag">Reduced confidence in the Leads list</span>
+  </div>
+</div></section>
+
+<!-- 03 -->
+<section class="ch" id="s03"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">03 — Proposal</div>
+    <div><h2>A next step and a date, not a label.</h2><p class="lede">Replace the status label with a scheduled follow-up: an action, a due date and an owner. The CRM sets it automatically. Authorized users adjust it when needed.</p></div>
+  </div>
+  <div class="compare">
+    <div class="cmp cur">
+      <span class="lbl">Current</span>
+      <h3>Automated status label</h3>
+      <ul>
+        <li><span class="i">·</span>Shows a label such as Needs Follow-Up or Contacted</li>
+        <li><span class="i">·</span>Says nothing about when the next contact is due</li>
+        <li><span class="i">·</span>Interactions outside the CRM are not reflected</li>
+        <li><span class="i">·</span>Cannot be corrected, so the team verifies rows by hand</li>
+      </ul>
+    </div>
+    <div class="cmp pro">
+      <span class="rec">Recommended</span>
+      <span class="lbl">Proposed</span>
+      <h3>Scheduled next follow-up</h3>
+      <ul>
+        <li><span class="i">✓</span>Each lead shows its next step: <b>Call · Tue Sep 8 · Leon</b></li>
+        <li><span class="i">✓</span>The CRM schedules it automatically after every recorded interaction, using the agreed timing rule</li>
+        <li><span class="i">✓</span>Urgency is derived from the date: Overdue, Due today, Upcoming, Done</li>
+        <li><span class="i">✓</span>Authorized users change the date or action, or mark the step done with an outcome, from the Leads list</li>
+        <li><span class="i">✓</span>Each value shows whether it was set automatically or by a person, with who and when</li>
+      </ul>
+    </div>
+  </div>
+  <div class="urg" aria-label="Urgency derived from the due date">
+    <div><span class="due d-over"><span class="dot"></span>Overdue 2 days</span>Due date has passed</div>
+    <div><span class="due d-today"><span class="dot"></span>Due today</span>Due before end of day</div>
+    <div><span class="due d-soon"><span class="dot"></span>Sep 12</span>Upcoming</div>
+    <div><span class="due d-done"><span class="dot"></span>Done</span>Completed, next step scheduled</div>
+    <div><span class="due d-none"><span class="dot"></span>None</span>No further follow-up</div>
+  </div>
+  <div class="rule">
+    <span class="k">The key rule</span>
+    <p><b>A date or step set by a person is not overwritten by the next automated update.</b> It remains protected until one of two things happens:</p>
+    <ol>
+      <li>The authorized user changes it again or marks it done, or</li>
+      <li>A clearly new client interaction is recorded, according to the agreed CRM logic.</li>
+    </ol>
+  </div>
+  <div class="mapwrap">
+  <table class="map">
+    <thead><tr><th>Today's status label</th><th>In the proposed model</th></tr></thead>
+    <tbody>
+      <tr><td>Needs Follow-Up</td><td>A follow-up that is due today or overdue</td></tr>
+      <tr><td>Followed Up</td><td>The step was marked done, and the next one is scheduled</td></tr>
+      <tr><td>Contacted</td><td>Outcome <em>Reached</em> recorded when marking done</td></tr>
+      <tr><td>No Response</td><td>Outcome <em>No response</em>; the CRM schedules a retry automatically</td></tr>
+      <tr><td>Waiting for Client</td><td>Outcome <em>Waiting for client</em>; next step scheduled further out</td></tr>
+      <tr><td>Completed</td><td>Outcome <em>Booked / closed</em>; no further follow-up</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div></section>
+
+<!-- 04 -->
+<section class="ch" id="s04"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">04 — How it works</div>
+    <div><h2>One extra step, only when the schedule is wrong</h2><p class="lede">For most leads nothing changes. The edit is a short detour that only the person reviewing the row decides to take.</p></div>
+  </div>
+  <div class="flow" role="img" aria-label="Flow: client interaction, CRM detects activity, Follow-Up status updates automatically, is the status accurate? Yes: keep status. No: authorized user edits status. Correct status retained.">
+    <div class="fn">Client interaction</div>
+    <div class="fa"></div>
+    <div class="fn sys">Detects activity</div>
+    <div class="fa"></div>
+    <div class="fn sys">Next follow-up scheduled automatically</div>
+    <div class="fa"></div>
+    <div class="fq">Is the next step right?</div>
+    <div class="fa"></div>
+    <div class="fbr">
+      <div class="b yes"><span class="l">YES</span><div class="fn">Keep it</div></div>
+      <div class="b no"><span class="l">NO</span><div class="fn">Authorized user changes date or marks done</div></div>
+    </div>
+    <div class="fj"><span class="tip"></span></div>
+    <div class="fn end">Correct next step retained</div>
+  </div>
+  <p class="flow-cap">Review → Spot a wrong date or step → Adjust or mark done → Save</p>
+</div></section>
+
+<!-- 05 -->
+<section class="ch" id="s05"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">05 — Leads list</div>
+    <div><h2>Leads list experience</h2><p class="lede">The Follow-Up column keeps its place in the list and becomes sortable by date. Each value carries a quiet second line saying who set it. Sample data only.</p></div>
+  </div>
+  <div class="app">
+    <div class="bar">
+      <div class="t"><span class="crumb">CRM › Leads</span><h4>Leads</h4></div>
+      <div class="ctl"><span class="search">Search name, contact, event type…</span><span class="btn">+ New Lead</span></div>
+    </div>
+    <div class="tw">
+    <table class="leads">
+      <thead><tr><th>Lead</th><th>Event</th><th>Status</th><th>Assigned</th><th>Follow-Up ↑</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="lead"><b>D. Patel</b><span class="code mono">LD-26-0909</span></td>
+          <td class="ev"><b>Birthday</b><span>Nov 8, 2026 · 45 guests</span></td>
+          <td><span class="badge b-info"><span class="dot"></span>New</span></td>
+          <td class="as"><span class="av">C</span>Cams</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-over"><span class="dot"></span>Overdue 2 days</span><span class="act">Call · Sep 3</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>set after lead captured</span>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="lead"><b>M. Okafor</b><span class="code mono">LD-26-0912</span></td>
+          <td class="ev"><b>Wedding</b><span>Oct 3, 2027 · 80 guests</span></td>
+          <td><span class="badge b-info"><span class="dot"></span>New</span></td>
+          <td class="as"><span class="av">C</span>Cams</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call · 3:00 PM</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>1h response target</span>
+          </div></td>
+        </tr>
+        <tr class="active">
+          <td class="lead"><b>L. Tran</b><span class="code mono">LD-26-0911</span></td>
+          <td class="ev"><b>Corporate Dinner</b><span>Jun 14, 2027 · 120 guests</span></td>
+          <td><span class="badge b-info"><span class="dot"></span>Contacted</span></td>
+          <td class="as"><span class="av">L</span>Leon</td>
+          <td><div class="task">
+            <span class="line open"><span class="due d-soon"><span class="dot"></span>Wed Sep 9</span><span class="act">Text · quote follow-up</span><span class="car">▴</span></span>
+            <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM</span>
+            <div class="pop" aria-label="Edit next follow-up">
+              <div><span class="k">Action</span><div class="seg"><span>Call</span><span class="on">Text</span><span>Email</span><span>Meet</span></div></div>
+              <div><span class="k">Due</span><div class="inp">Wed, Sep 9, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span>+3 days</span><span>Next week</span></div></div>
+              <div><span class="k">Note</span><div class="inp" style="color:var(--ink-2)">Client asked for revised quote by Wed</div></div>
+              <div class="done"><span class="k">Or mark this step done</span><div class="outs"><span>Reached</span><span>No response</span><span>Waiting for client</span><span>Booked / closed</span></div></div>
+              <div class="acts"><span>Cancel</span><span class="save">Save</span></div>
+            </div>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="lead"><b>Reyes Family</b><span class="code mono">LD-26-0910</span></td>
+          <td class="ev"><b>Quinceañera</b><span>Mar 21, 2027 · 150 guests</span></td>
+          <td><span class="badge b-info"><span class="dot"></span>Qualified</span></td>
+          <td class="as"><span class="av">V</span>Vince</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-soon"><span class="dot"></span>Sat Sep 12</span><span class="act">Email · check in</span><span class="car">▾</span></span>
+            <span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>after outcome <em>Waiting for client</em></span>
+          </div></td>
+        </tr>
+        <tr>
+          <td class="lead"><b>J. Whitfield</b><span class="code mono">LD-26-0904</span></td>
+          <td class="ev"><b>Anniversary</b><span>Feb 14, 2027 · 60 guests</span></td>
+          <td><span class="badge b-ok"><span class="dot"></span>Booked</span></td>
+          <td class="as"><span class="av">V</span>Vince</td>
+          <td><div class="task">
+            <span class="line"><span class="due d-none"><span class="dot"></span>None</span><span class="act">No further follow-up</span><span class="car">▾</span></span>
+            <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Vince<span class="sep">·</span>Sep 2 · outcome <em>Booked</em></span>
+          </div></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="ic a" aria-hidden="true">⟳</span>Automatic: scheduled by the CRM from recorded activity and the agreed timing rule</span>
+    <span><span class="ic m" aria-hidden="true">✎</span>Set by a person: adjusted or completed by an authorized user, protected from automatic overwrite</span>
+    <span>▾ Editable by authorized users only · column sorts by due date</span>
+  </div>
+</div></section>
+
+<!-- 06 -->
+<section class="ch" id="s06"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">06 — Editing</div>
+    <div><h2>Editing a follow-up</h2><p class="lede">Four actions, all inside the Leads list. No separate screen, no form to fill.</p></div>
+  </div>
+  <div class="steps4">
+    <div><span>Step 1</span>Review the list</div>
+    <div><span>Step 2</span>Spot a wrong date or step</div>
+    <div><span>Step 3</span>Adjust, or mark done</div>
+    <div><span>Step 4</span>Save</div>
+  </div>
+  <div class="ov">
+    <div class="ovtext">
+      <h3>What the user sees</h3>
+      <p>The advisor opens the Follow-Up value on the row. They can move the date, change the action, add a short note, or mark the step done and record what happened. The column immediately shows the new step with a small <em>Set by</em> line: who changed it and when.</p>
+      <ul>
+        <li>Marking a step done asks for one outcome: Reached, No response, Waiting for client, or Booked / closed.</li>
+        <li>The CRM then schedules the next step automatically by the agreed rule, unless the outcome is Booked / closed.</li>
+        <li>Only authorized users see the edit control. Everyone else sees the same read-only value.</li>
+        <li>Every manual change is visible on the row, so managers can tell at a glance which schedules a person adjusted.</li>
+      </ul>
+      <div class="after">
+        <span class="k" style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600">Result on the row after marking done with outcome Reached</span>
+        <div class="task">
+          <span class="line"><span class="due d-soon"><span class="dot"></span>Thu Sep 10</span><span class="act">Call · confirm date</span><span class="car">▾</span></span>
+          <span class="src man"><span class="ic" aria-hidden="true">✎</span>Set by Leon<span class="sep">·</span>Today, 11:20 AM<span class="sep">·</span>last outcome <em>Reached</em></span>
+        </div>
+      </div>
+    </div>
+    <div class="panel" aria-label="Edit next follow-up">
+      <div class="ph">
+        <div class="who">L. Tran<span>Corporate Dinner · Jun 14, 2027</span></div>
+        <span class="badge b-accent">Edit follow-up</span>
+      </div>
+      <div class="row">
+        <span class="k">Current</span>
+        <div class="task"><span class="line"><span class="due d-today"><span class="dot"></span>Due today</span><span class="act">Call</span></span><span class="src auto"><span class="ic" aria-hidden="true">⟳</span>Automatic<span class="sep">·</span>set 40 min ago</span></div>
+      </div>
+      <div class="row"><span class="k">Action</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="seg"><span class="on">Call</span><span>Text</span><span>Email</span><span>Meet</span></div></div></div>
+      <div class="row"><span class="k">Due</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="inp">Thu, Sep 10, 2026<span>▾</span></div><div class="quick" style="margin-top:6px"><span>Today</span><span>Tomorrow</span><span class="on" style="border-color:var(--accent);color:var(--accent-text)">+3 days</span><span>Next week</span></div></div></div>
+      <div class="row"><span class="k">Mark the current step done</span><div class="pop" style="width:100%;padding:0;border:0;box-shadow:none;background:none"><div class="done" style="border:0;padding:0"><div class="outs"><span style="background:var(--accent-soft);border-color:var(--accent);color:var(--accent-text);font-weight:600">Reached ✓</span><span>No response</span><span>Waiting for client</span><span>Booked / closed</span></div></div></div></div>
+      <div class="helper"><span class="i">i</span><span>Dates and steps set by a person stay protected from automatic rescheduling unless a new client interaction triggers the agreed automation rule.</span></div>
+      <div class="acts"><span>Cancel</span><span class="save">Save</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 07 -->
+<section class="ch" id="s07"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">07 — Impact</div>
+    <div><h2>Why this matters</h2><p class="lede">The Follow-Up column is where the team decides who to contact next. A date makes that decision for them.</p></div>
+  </div>
+  <div class="impact">
+    <div class="card"><div class="ico">01</div><h3>Fewer missed follow-ups</h3><p>Every open lead has a due date. Anything past it turns Overdue on its own and rises to the top of the list.</p></div>
+    <div class="card"><div class="ico">02</div><h3>Less duplicate outreach</h3><p>Clients already reached by phone or in person are marked done with an outcome, so nobody contacts them again by mistake.</p></div>
+    <div class="card"><div class="ico">03</div><h3>Faster lead review</h3><p>Sort by due date and work top down. Managers see overdue and due-today counts without opening a single record.</p></div>
+    <div class="card"><div class="ico">04</div><h3>More reliable CRM data</h3><p>Outcomes, dates and who set them are recorded, so reports on follow-up activity reflect what happened.</p></div>
+  </div>
+</div></section>
+
+<!-- 08 -->
+<section class="ch" id="s08"><div class="wrap">
+  <div class="ch-head">
+    <div class="ch-num">08 — Scope</div>
+    <div><h2>What stays the same</h2><p class="lede">This proposal is deliberately narrow. It changes how one column behaves and nothing else.</p></div>
+  </div>
+  <div class="same">
+    <div class="scope">
+      <span class="k">Only this changes</span>
+      <b>Follow-Up column behavior</b>
+      <p>The column shows a scheduled next step instead of a status label. Automation still sets it. Authorized users can adjust it, with a visible source indicator and protection from automatic overwrite.</p>
+    </div>
+    <ul>
+      <li><span class="lk">=</span>Lead assignment</li>
+      <li><span class="lk">=</span>SLA / response timing</li>
+      <li><span class="lk">=</span>Lead status</li>
+      <li><span class="lk">=</span>Pipeline</li>
+      <li><span class="lk">=</span>Client records</li>
+      <li><span class="lk">=</span>Communication history</li>
+      <li><span class="lk">=</span>Existing follow-up automation</li>
+      <li><span class="lk">=</span>Warm / Cold scoring</li>
+    </ul>
+  </div>
+</div></section>
+
+<!-- 09 -->
+<section class="ch final" id="s09"><div class="wrap">
+  <div class="k">09 — EXPECTED OUTCOME</div>
+  <h2>Every lead has a next step and a date.</h2>
+  <div class="pair">
+    <div class="a"><span>SCHEDULED AUTOMATICALLY</span>when the CRM knows.</div>
+    <div class="m"><span>ADJUSTED BY A PERSON</span>when it doesn't.</div>
+  </div>
+</div></section>
+
+<footer class="wrap">
+  <span>CRM › Leads › Follow-Up · Improvement proposal</span>
+  <span>Prepared for the CRM / IT / Operations leadership team · Sample data only</span>
+</footer>
