@@ -32,11 +32,16 @@ scheduling, pricing inquiries, objections, and booking conversion.
 
 ## Design & conventions
 
-- Brand palette: forest green `#2F5D4A` on cream `#F6F3EC`.
-- Type system matches the rest of this project (Bodoni Moda / Source Sans 3 /
-  IBM Plex Mono).
-- Each scenario cleanly separates **what you say** (green *Say* blocks) from
-  **internal guidance**, **CRM actions**, and **Verify-first** reminders.
+- Layout: a cream "paper" reading column on a forest-green shell, with a sticky
+  top bar that holds a **live scenario filter**, a two-column table of contents,
+  fact-sheet cards, and collapsible scenario cards.
+- Brand palette: forest green on cream with a gold accent.
+- Type system: Fraunces (display) / Figtree (body) / IBM Plex Mono (utility).
+- Each scenario cleanly separates **what you say** (gold *Say* cards) from
+  **internal guidance** (green strips), **CRM actions** (dark footer box), and
+  **Verify-first** reminders (dashed caution box).
+- Type the filter bar (e.g. "pricing", "tour", "deposit") to narrow the 84
+  scenarios mid-call; a back-to-top button appears on scroll.
 - CRM pipeline stages mirror the live Web CRM: Lead → Contacted → Tour →
   Proposal → Won. Where a sub-status isn't standardized, the document says
   "use the corresponding approved CRM status."
