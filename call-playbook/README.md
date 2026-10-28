@@ -25,11 +25,10 @@ scheduling, pricing inquiries, objections, and booking conversion.
    - G · Objections & difficult conversations (63–74)
    - H · Closing & reservation conversion (75–84)
 5. Call flow & decision tree (Mermaid)
-6. CRM interaction template + 5 completed examples
-7. Proposed follow-up sequence + ready-to-use messages
-8. Training cheat sheets + 5 role-play exercises
-9. Supervisor quality-control checklist + proposed scoring
-10. Policy verification & escalation matrix
+6. Proposed follow-up sequence + ready-to-use messages
+7. Training cheat sheets + 5 role-play exercises
+8. Supervisor quality-control checklist + proposed scoring
+9. Policy verification & escalation matrix
 
 ## Design & conventions
 
