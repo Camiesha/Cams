@@ -1,0 +1,1430 @@
+<title>Crown Prince Call Playbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+  /* Layout concept: cream "paper" reading column on a forest-green shell; scripts you read
+     aloud sit in gold-ruled cards, internal notes in quiet green strips, CRM actions in a
+     boxed footer — three visually separate voices. Scenarios collapse; a top bar filters them. */
+  :root{
+    --forest:#1f3a2b; --forest-2:#2f5d4a; --moss:#5b7d63;
+    --cream:#f6f3ec; --cream-2:#efe8d6; --ink:#20281f; --ink-soft:#46513f;
+    --gold:#b08a34; --gold-soft:#d9c389; --line:#d8cfb8; --card:#ffffff;
+    --warn:#9a5b2d; --shell:#16281d; --verify-bg:#fbf4e6;
+    --font-display:"Fraunces","Georgia",serif;
+    --font-body:"Figtree","Segoe UI",system-ui,sans-serif;
+    --font-util:"IBM Plex Mono",ui-monospace,monospace;
+    --maxw:62rem;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --forest:#0f1d15; --forest-2:#2f5d4a; --moss:#7fa385;
+    --cream:#161d17; --cream-2:#1c241c; --ink:#e8ecdf; --ink-soft:#aab4a2;
+    --gold:#d8b45a; --gold-soft:#4a3d1c; --line:#2d3a2e; --card:#1f2a20;
+    --warn:#d08a4e; --shell:#0a140d; --verify-bg:#2a2113; color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --forest:#0f1d15; --forest-2:#2f5d4a; --moss:#7fa385;
+    --cream:#161d17; --cream-2:#1c241c; --ink:#e8ecdf; --ink-soft:#aab4a2;
+    --gold:#d8b45a; --gold-soft:#4a3d1c; --line:#2d3a2e; --card:#1f2a20;
+    --warn:#d08a4e; --shell:#0a140d; --verify-bg:#2a2113; color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html{scroll-padding-top:4rem}
+  body{background:var(--shell);color:var(--ink);font-family:var(--font-body);
+    line-height:1.6;margin:0;font-size:16px;-webkit-font-smoothing:antialiased}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--forest);z-index:60}
+  a{color:var(--gold)}
+  h1,h2,h3,h4{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;background:var(--cream);
+    padding-left:max(20px,env(safe-area-inset-left,0px));
+    padding-right:max(20px,env(safe-area-inset-right,0px));
+    padding-block:0;min-height:100vh;box-shadow:0 0 60px rgba(0,0,0,.35)}
+
+  .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--forest);
+    color:var(--cream);margin-left:max(-20px,calc(-1*env(safe-area-inset-left,0px)));
+    margin-right:max(-20px,calc(-1*env(safe-area-inset-right,0px)));
+    padding-left:max(20px,env(safe-area-inset-left,0px));
+    padding-right:max(20px,env(safe-area-inset-right,0px));
+    padding-block:.6rem;display:flex;gap:.9rem;align-items:center;flex-wrap:wrap;
+    border-bottom:2px solid var(--gold)}
+  .bar b{font-family:var(--font-display);font-size:1.05rem;letter-spacing:.01em;white-space:nowrap}
+  .bar .tag{font-family:var(--font-util);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-soft);border:1px solid var(--moss);border-radius:999px;padding:.12rem .5rem}
+  .bar input{flex:1;min-width:140px;background:rgba(255,255,255,.08);border:1px solid var(--moss);
+    color:var(--cream);border-radius:8px;padding:.4rem .7rem;font-family:var(--font-body);font-size:.85rem}
+  .bar input::placeholder{color:#b9c7b7}
+  .bar input:focus{outline:2px solid var(--gold);outline-offset:1px}
+
+  .cover{background:linear-gradient(160deg,var(--forest) 0%,var(--forest-2) 100%);color:var(--cream);
+    margin-left:max(-20px,calc(-1*env(safe-area-inset-left,0px)));
+    margin-right:max(-20px,calc(-1*env(safe-area-inset-right,0px)));
+    padding-left:max(28px,env(safe-area-inset-left,0px));
+    padding-right:max(28px,env(safe-area-inset-right,0px));
+    padding-block:3rem;position:relative;overflow:hidden}
+  .cover::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+    border-radius:50%;border:1px solid var(--moss);opacity:.4}
+  .cover::before{content:"";position:absolute;right:-20px;bottom:-90px;width:230px;height:230px;
+    border-radius:50%;border:1px solid var(--moss);opacity:.25}
+  .cover .eyebrow{font-family:var(--font-util);letter-spacing:.3em;text-transform:uppercase;
+    font-size:.68rem;color:var(--gold-soft)}
+  .cover h1{font-size:clamp(2.1rem,6vw,3.4rem);margin:.6rem 0 .3rem;font-weight:600}
+  .cover h1 em{font-style:italic;color:var(--gold-soft)}
+  .cover .sub{max-width:40rem;color:#d7e0d3;font-size:1.02rem}
+  .cover .facts{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
+  .cover .facts span{font-family:var(--font-util);font-size:.7rem;background:rgba(255,255,255,.07);
+    border:1px solid var(--moss);border-radius:6px;padding:.3rem .6rem;letter-spacing:.03em}
+
+  section{padding-block:1.6rem;border-bottom:1px solid var(--line);scroll-margin-top:4rem}
+  .kicker{font-family:var(--font-util);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold);display:block;margin-bottom:.35rem}
+  h2.sec{font-size:clamp(1.5rem,3.6vw,2rem);font-weight:600;margin-bottom:.2rem;color:var(--ink)}
+  .lead{color:var(--ink-soft);max-width:48rem;margin:.3rem 0 1rem}
+  p{margin:.5rem 0}
+  ul,ol{margin:.4rem 0;padding-left:1.2rem}
+  li{margin:.2rem 0}
+
+  .toc{columns:2;column-gap:2rem}
+  @media(max-width:640px){.toc{columns:1}}
+  .toc a{display:block;color:var(--ink);text-decoration:none;padding:.22rem 0;
+    border-bottom:1px dotted var(--line);font-size:.92rem;break-inside:avoid}
+  .toc a:hover{color:var(--gold)}
+  .toc .grp{font-family:var(--font-util);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--moss);margin:.9rem 0 .2rem;break-inside:avoid}
+  .toc a span{color:var(--moss);font-family:var(--font-util);font-size:.78rem;margin-right:.45rem}
+
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.7rem;margin-top:.6rem}
+  .legend div{border-radius:10px;padding:.7rem .85rem;font-size:.86rem}
+  .lg-say{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold)}
+  .lg-guide{background:var(--cream-2);border-left:4px solid var(--moss)}
+  .lg-crm{background:var(--forest);color:var(--cream);border-left:4px solid var(--gold)}
+  .legend b{font-family:var(--font-util);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:.2rem}
+  .lg-say b{color:var(--gold)} .lg-crm b{color:var(--gold-soft)} .lg-guide b{color:var(--forest-2)}
+
+  .scn{background:var(--cream);border:1px solid var(--line);border-radius:12px;margin:1rem 0;overflow:hidden}
+  .scn>summary{list-style:none;cursor:pointer;padding:.85rem 1rem;display:flex;gap:.7rem;align-items:baseline;
+    background:var(--cream-2)}
+  .scn>summary::-webkit-details-marker{display:none}
+  .scn>summary::before{content:"\25B8";color:var(--gold);font-size:.9rem;transition:transform .15s}
+  .scn[open]>summary::before{transform:rotate(90deg)}
+  .scn>summary:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+  .scn .num{font-family:var(--font-util);font-size:.82rem;color:var(--moss);font-weight:600;min-width:1.6rem}
+  .scn .ttl{font-family:var(--font-display);font-weight:600;font-size:1.08rem;color:var(--ink);flex:1}
+  .scn .body{padding:0 1rem 1.1rem}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:.9rem 0}
+  @media(max-width:560px){.meta{grid-template-columns:1fr}}
+  .meta .m{background:var(--cream-2);border-radius:8px;padding:.55rem .7rem;font-size:.84rem}
+  .meta .m b{font-family:var(--font-util);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--moss);display:block;margin-bottom:.15rem}
+
+  .lbl{font-family:var(--font-util);font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);margin:1rem 0 .3rem;display:flex;align-items:center;gap:.5rem}
+  .lbl::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .say{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:0 10px 10px 0;padding:.8rem 1rem;font-family:var(--font-display);font-size:1.04rem;
+    line-height:1.55;color:var(--ink)}
+  .say p{margin:.45rem 0}
+  .say .ph{color:var(--warn);font-style:italic;font-family:var(--font-body);font-size:.95em}
+  .say em.cue{color:var(--moss);font-style:italic;font-family:var(--font-body);font-size:.82em}
+
+  .guide{background:var(--cream-2);border-left:4px solid var(--moss);border-radius:0 8px 8px 0;
+    padding:.7rem .9rem;font-size:.9rem;color:var(--ink-soft)}
+  .guide ul{padding-left:1.1rem}
+  .guide ol{padding-left:1.2rem}
+  .guide b{color:var(--ink)}
+
+  .crm{background:var(--forest);color:var(--cream);border-radius:10px;padding:.8rem 1rem;margin-top:1rem;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.7rem}
+  .crm .c b{font-family:var(--font-util);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--gold-soft);display:block;margin-bottom:.15rem}
+  .crm .c{font-size:.86rem;color:#e4ebe1}
+
+  .verify{background:var(--verify-bg);border:1px dashed var(--warn);border-radius:8px;padding:.6rem .85rem;
+    font-size:.84rem;color:var(--warn);margin-top:.8rem}
+  .verify b{font-family:var(--font-util);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;display:block}
+
+  .tblwrap{overflow-x:auto;margin:.8rem 0}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:30rem}
+  th,td{text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--forest);color:var(--cream);font-family:var(--font-util);font-size:.64rem;
+    letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  tr:nth-child(even) td{background:var(--cream-2)}
+  td b{color:var(--ink)}
+
+  .call{background:var(--cream-2);border:1px solid var(--line);border-radius:10px;padding:.9rem 1.1rem;margin:.9rem 0}
+  .call h4{font-size:1.05rem;margin-bottom:.3rem;color:var(--ink)}
+  .note{border-left:4px solid var(--gold);padding-left:.9rem;color:var(--ink-soft);font-size:.92rem;margin:.8rem 0}
+  .note b{color:var(--ink)}
+
+  /* mermaid kept on fixed cream so the default light diagram stays legible in both themes */
+  .mermaid{background:#f6f3ec;border:1px solid var(--line);border-radius:10px;padding:1rem;
+    overflow-x:auto;text-align:center}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+  @media(max-width:620px){.grid2,.grid3{grid-template-columns:1fr}}
+  .fcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.85rem}
+  .fcard h4{font-size:1rem;margin-bottom:.35rem;color:var(--ink)}
+  .fcard .big{font-family:var(--font-display);font-size:1.5rem;color:var(--forest-2);font-weight:600}
+  .fcard ul{font-size:.9rem}
+
+  .pill{display:inline-block;font-family:var(--font-util);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:.12rem .5rem;border-radius:999px;margin-left:.4rem;vertical-align:middle;
+    background:var(--gold-soft);color:#5a4410}
+  :root[data-theme="dark"] .pill,:root:not([data-theme="light"]) .pill{color:var(--gold-soft);background:#4a3d1c}
+
+  .nomatch{display:none;text-align:center;color:var(--ink-soft);padding:2rem;font-style:italic}
+  footer{background:var(--forest);color:#cdd8ca;font-size:.8rem;
+    margin-left:max(-20px,calc(-1*env(safe-area-inset-left,0px)));
+    margin-right:max(-20px,calc(-1*env(safe-area-inset-right,0px)));
+    padding-left:max(20px,env(safe-area-inset-left,0px));
+    padding-right:max(20px,env(safe-area-inset-right,0px));padding-block:1.4rem}
+  footer b{color:var(--gold-soft);font-family:var(--font-display)}
+  .back{position:fixed;right:14px;bottom:14px;z-index:40;background:var(--gold);color:#2a2008;border:none;
+    font-family:var(--font-util);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:.5rem .7rem;border-radius:8px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3);opacity:.9}
+  .back[hidden]{display:none}
+  @media print{.bar,.back{display:none}.scn>.body{display:block!important}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+  <div class="bar">
+    <b>Crown Prince Event Hall</b>
+    <span class="tag">Coordinator Playbook</span>
+    <input id="search" type="search" placeholder="Filter scenarios — e.g. 'pricing', 'tour', 'deposit'…" aria-label="Filter scenarios">
+  </div>
+
+  <div class="cover">
+    <div class="eyebrow">Client Coordination · San Jose, California</div>
+    <h1>Call Script &amp; <em>Scenario Playbook</em></h1>
+    <p class="sub">A word-for-word script library and case-by-case guide for handling inbound leads, outbound calls,
+      tours, pricing inquiries, objections, and booking conversion — built for onboarding, daily call handling,
+      role-play, and CRM training.</p>
+    <div class="facts">
+      <span>Up to 300 guests</span>
+      <span>4,000+ sq ft</span>
+      <span>84 scenarios</span>
+      <span>Tours 7 days/week</span>
+      <span>(408) 408-1654</span>
+    </div>
+  </div>
+
+  <!-- ================= HOW TO USE ================= -->
+  <section id="how">
+    <span class="kicker">Start here</span>
+    <h2 class="sec">How to use this playbook</h2>
+    <p class="lead">Three voices appear throughout. Never blur them on a call: read the gold cards aloud,
+      keep the green notes to yourself, and complete the CRM box after you hang up. Use the filter bar at the
+      top to jump to the right scenario mid-call.</p>
+    <div class="legend">
+      <div class="lg-say"><b>Say — spoken script</b>Read aloud, naturally. Swap <span style="color:var(--warn);font-style:italic">[placeholders]</span> for real details. Never sound like you're reading.</div>
+      <div class="lg-guide"><b>Guide — internal only</b>Coaching, discovery prompts, and judgment calls. The client never hears this.</div>
+      <div class="lg-crm"><b>CRM — after the call</b>Status, next action, and follow-up date to log. No guessing on policy or payment.</div>
+    </div>
+    <div class="note">
+      <b>Four rules that protect the venue.</b> (1) Published rates are <em>starting</em> prices, never final quotes.
+      (2) Never promise a date, a tour time, a discount, or a policy exception until it's confirmed by the right person.
+      (3) Never call a booking confirmed until the reservation steps are complete and payment is verified.
+      (4) For any policy not printed in the fact sheet below, say you'll confirm the current approved policy — don't invent one.
+    </div>
+    <p style="font-size:.9rem;color:var(--ink-soft);margin-top:.8rem"><b>CRM pipeline stages</b> follow the live Web CRM:
+      Lead → Contacted → Tour → Proposal → Won. Where a sub-status isn't standardized, use the corresponding approved CRM status.</p>
+  </section>
+
+  <!-- ================= TOC ================= -->
+  <section id="toc">
+    <span class="kicker">Contents</span>
+    <h2 class="sec">Table of contents</h2>
+    <div class="toc">
+      <a href="#how"><span>01</span>How to use this playbook</a>
+      <a href="#facts"><span>02</span>Venue fact sheet (source of truth)</a>
+      <a href="#objectives"><span>03</span>Primary call objectives</a>
+      <a href="#flow"><span>04</span>Call flow &amp; decision tree</a>
+      <a href="#discovery"><span>05</span>Standard discovery flow</a>
+      <a href="#objections"><span>06</span>Objection-handling framework</a>
+      <div class="grp">Scenario library (1–84)</div>
+      <a href="#grpA"><span>A</span>New lead &amp; initial contact (1–10)</a>
+      <a href="#grpB"><span>B</span>Lead qualification (11–20)</a>
+      <a href="#grpC"><span>C</span>Pricing &amp; quote inquiries (21–32)</a>
+      <a href="#grpD"><span>D</span>Event-specific conversations (33–40)</a>
+      <a href="#grpE"><span>E</span>Venue policies &amp; facilities (41–52)</a>
+      <a href="#grpF"><span>F</span>Tour scheduling &amp; follow-up (53–62)</a>
+      <a href="#grpG"><span>G</span>Objections &amp; difficult calls (63–74)</a>
+      <a href="#grpH"><span>H</span>Closing &amp; reservation (75–84)</a>
+      <div class="grp">Operations</div>
+      <a href="#followup"><span>07</span>Follow-up sequence &amp; messages</a>
+      <a href="#training"><span>08</span>Training cheat sheets</a>
+      <a href="#roleplay"><span>09</span>Role-play exercises</a>
+      <a href="#qc"><span>10</span>Supervisor quality checklist</a>
+      <a href="#escalation"><span>11</span>Policy &amp; escalation</a>
+    </div>
+  </section>
+
+  <!-- ================= FACT SHEET ================= -->
+  <section id="facts">
+    <span class="kicker">Section 02 · Source of truth</span>
+    <h2 class="sec">Venue fact sheet</h2>
+    <p class="lead">Every quote and promise traces back to this. If a detail isn't here, verify before you say it.</p>
+    <div class="grid3">
+      <div class="fcard"><h4>Contact</h4>
+        <p>1654 Burdette Dr<br>San Jose, CA 95121</p>
+        <p><b>(408) 408-1654</b><br>crownprincehall@gmail.com<br>crownprincehall.com</p></div>
+      <div class="fcard"><h4>Hours &amp; tours</h4>
+        <p>Open daily <b>10:00 AM – 12:00 AM</b></p>
+        <p>Private tours by appointment, <b>seven days a week</b></p>
+        <p>360° virtual tour on the website</p></div>
+      <div class="fcard"><h4>Capacity &amp; space</h4>
+        <p class="big">300</p><p>guests maximum (subject to floor plan &amp; occupancy)</p>
+        <p>4,000+ sq ft · stage · dance floor · banquet seating · full bar</p></div>
+    </div>
+
+    <div class="lbl">Published starting rates <span class="pill">starting · not final</span></div>
+    <div class="tblwrap"><table>
+      <tr><th>Window</th><th>Starting rate</th><th>Notes</th></tr>
+      <tr><td><b>Monday–Thursday</b></td><td>$3,845</td><td rowspan="2">Six-hour minimum window. Starting package includes 10 tables for up to 100 guests, security, cleaning, and insurance. Weekend packages advertise 2 complimentary setup hours. Final quote depends on date, hours, guest count, services, add-ons &amp; fees.</td></tr>
+      <tr><td><b>Friday–Sunday &amp; holidays</b></td><td>$4,845</td></tr>
+      <tr><td><b>Add-ons &amp; extra hours</b></td><td>Confirm before quoting</td><td>Do not quote add-on, extra-hour, or package totals until confirmed.</td></tr>
+    </table></div>
+
+    <div class="grid2">
+      <div class="fcard"><h4>Space, staging &amp; seating</h4>
+        <ul>
+          <li>4,000+ sq ft flexible event space</li>
+          <li>Large stage · open dance floor</li>
+          <li>Round banquet tables; gold or silver Chiavari chairs</li>
+          <li>Black or white tablecloths</li>
+          <li>Bridal/VIP prep room (availability &amp; package)</li>
+          <li>Red-carpet entrance · mirrored hallway</li>
+          <li>Private gated lot, 100+ spaces; optional valet</li>
+        </ul></div>
+      <div class="fcard"><h4>AV, bar &amp; catering</h4>
+        <ul>
+          <li>Big-screen TVs · house sound · microphones</li>
+          <li>AV support / AV engineer (per package)</li>
+          <li>DJ lighting · uplighting · house color lighting</li>
+          <li>Full bar with structured bar packages; bartender (per package)</li>
+          <li>Outside catering welcome with prior approval</li>
+          <li>Refrigerator &amp; deep freezer for catering support</li>
+          <li>Add-ons: table runners, chafers, DJ, digital photobooth, VIP grand entrance, marquee numbers</li>
+        </ul>
+        <h4 style="margin-top:.7rem">Common event types</h4>
+        <p style="font-size:.9rem;color:var(--ink-soft)">Weddings &amp; receptions · quinceañeras · birthdays &amp; milestones ·
+          graduations, debuts &amp; Sweet 16s · corporate events &amp; banquets · concerts/performances · cocktail receptions</p>
+      </div>
+    </div>
+
+    <div class="lbl">Published policies</div>
+    <div class="guide"><ul>
+      <li>Outside catering welcome <b>with venue approval</b>.</li>
+      <li>Bar packages offered through the venue; <b>outside alcohol is not permitted</b> under the published standard policy.</li>
+      <li>All ages welcome · smoking not allowed indoors · security cameras in use.</li>
+      <li>Standard event window is 6 hours; extra hours may be quoted. Valet is optional, subject to confirmation.</li>
+    </ul></div>
+
+    <div class="verify"><b>Verify before promising</b>
+      Cancellation &amp; refund terms · reservation deposit amount · payment methods &amp; deadlines · insurance beyond the
+      package · accessibility specifics · outside-vendor restrictions · add-on &amp; extra-hour pricing · package totals ·
+      discounts · date availability · capacity for a specific layout · any policy exception. None of these are fixed here — confirm the current approved answer first.</div>
+  </section>
+
+  <!-- ================= OBJECTIVES ================= -->
+  <section id="objectives">
+    <span class="kicker">Section 03</span>
+    <h2 class="sec">Primary call objectives</h2>
+    <p class="lead">Every call, inbound or outbound, moves the lead along this line. You don't have to hit all ten
+      in one call — you have to advance at least one and log where you left off.</p>
+    <div class="tblwrap"><table>
+      <tr><th>#</th><th>Objective</th><th>What "done" looks like</th></tr>
+      <tr><td>1</td><td>Build a friendly, professional connection</td><td>Client feels heard, not processed</td></tr>
+      <tr><td>2</td><td>Understand the event requirements</td><td>Type, date, guest count captured</td></tr>
+      <tr><td>3</td><td>Qualify the lead</td><td>Core discovery fields logged</td></tr>
+      <tr><td>4</td><td>Explain relevant features &amp; starting prices</td><td>Right features matched to event type</td></tr>
+      <tr><td>5</td><td>Identify needs, budget &amp; concerns</td><td>Budget range + top concern noted</td></tr>
+      <tr><td>6</td><td>Encourage the next step (ideally a tour)</td><td>Tour offered, date/time proposed</td></tr>
+      <tr><td>7</td><td>Gather details for a tailored quote</td><td>Enough to request an approved quote</td></tr>
+      <tr><td>8</td><td>Record the interaction accurately</td><td>CRM recap completed</td></tr>
+      <tr><td>9</td><td>Assign a next action &amp; due date</td><td>Clear owner + follow-up date set</td></tr>
+      <tr><td>10</td><td>Progress toward approved quote &amp; confirmed reservation</td><td>Lead status advanced one stage</td></tr>
+    </table></div>
+  </section>
+
+  <!-- ================= CALL FLOW ================= -->
+  <section id="flow">
+    <span class="kicker">Section 04</span>
+    <h2 class="sec">Call flow &amp; decision tree</h2>
+    <p class="lead">The main path runs top to bottom; branches cover the "what ifs." Statuses map to the live pipeline
+      (Lead → Contacted → Tour → Proposal → Won); where a sub-status isn't standardized, use the corresponding approved CRM status.</p>
+    <pre class="mermaid">
+flowchart TD
+  A[New lead] --> B[First contact attempt]
+  B --> C{Contact established?}
+  C -- No answer --> V[Voicemail + follow-up text]
+  V --> W{Replied after attempts?}
+  W -- No, 4+ attempts --> X[Nurture / long-term follow-up]
+  W -- Yes --> D
+  C -- Yes --> D[Lead qualification]
+  D --> E{Qualified &amp; suitable?}
+  E -- Over 300 guests --> U1[Capacity review · log]
+  E -- Complex / production --> U3[Production review · log]
+  E -- Pricing only --> P1[Give starting rates · invite tour]
+  E -- Date unavailable --> U2[Offer alternative dates]
+  E -- Not interested --> Z1[Close politely · approved CRM status]
+  E -- Booked elsewhere --> Z2[Thank · keep for future · log]
+  E -- Yes --> F[Tour invitation]
+  F --> G{Tour scheduled?}
+  G -- Not ready --> H1[Send 360 tour + info · follow-up]
+  G -- Yes --> H[Tour confirmed]
+  H --> I{Tour completed?}
+  I -- No-show --> H2[Re-offer tour · follow-up]
+  I -- Yes --> J[Quote preparation]
+  J --> K[Quote follow-up]
+  K --> L{Ready to reserve?}
+  L -- Needs time / approval --> K
+  L -- Yes --> M[Reservation: quotation accepted]
+  M --> N{Deposit verified &amp; agreement signed?}
+  N -- Not verified --> M
+  N -- Yes --> O[Confirmed booking — Won]
+    </pre>
+    <div class="note"><b>Reading the branches.</b> Dead ends aren't failures — they're logged outcomes with a next action.
+      A "not interested" or "booked elsewhere" lead still gets a courteous close and, where appropriate, a note to
+      revisit for future events. Communication outcome, sales stage, tour status, quote status, and payment status are tracked separately.</div>
+  </section>
+
+  <!-- ================= DISCOVERY ================= -->
+  <section id="discovery">
+    <span class="kicker">Section 05</span>
+    <h2 class="sec">Standard discovery flow</h2>
+    <p class="lead">Collect these naturally over the conversation — not as a checklist read-out. Explain <em>why</em> you're
+      asking when it isn't obvious, and never re-ask something the client already told you.</p>
+    <div class="lbl">The natural order</div>
+    <div class="guide">
+      <ul>
+        <li><b>Warm open &amp; event type</b> — "What are we celebrating?" tells you almost everything about tone.</li>
+        <li><b>Date &amp; alternatives</b> — "Do you have a date in mind, or a few that could work?"</li>
+        <li><b>Guest count</b> — ties to capacity (up to 300) and whether you're past the 100-guest starting package.</li>
+        <li><b>Times &amp; setup/cleanup</b> — "Roughly what start and end time? Will you need setup time beforehand?"</li>
+        <li><b>Floor plan / seating</b> — banquet, theater, cocktail, ceremony, or combined ceremony + reception.</li>
+        <li><b>Budget range</b> — only if comfortable: "So I can point you the right direction, do you have a budget in mind?"</li>
+        <li><b>Catering &amp; bar</b> — "Bringing your own caterer? Would you like a bar package?"</li>
+        <li><b>DJ / entertainment / AV</b> — stage, dance floor, lighting, big-screen TVs, mics.</li>
+        <li><b>Decor &amp; customization</b> — florals, backdrops, VIP entrance, marquee numbers, prep room.</li>
+        <li><b>Anything affecting suitability</b> — accessibility, timing restrictions, cultural traditions.</li>
+        <li><b>Contact + tour preference</b> — best phone/email and a tour day/time that suits them.</li>
+      </ul>
+    </div>
+    <div class="lbl">Fields to capture</div>
+    <div class="tblwrap"><table>
+      <tr><th>Identity</th><th>Event</th><th>Logistics</th><th>Preferences</th></tr>
+      <tr>
+        <td>Full name<br>Best phone<br>Best email<br>Source</td>
+        <td>Event type<br>Preferred date<br>Alternative dates</td>
+        <td>Start &amp; end time<br>Setup/cleanup needs<br>Estimated guest count<br>Floor plan / seating</td>
+        <td>Budget range (if shared)<br>Catering &amp; bar<br>DJ / AV / lighting</td>
+      </tr>
+      <tr>
+        <td colspan="2">Decorations &amp; customization · bridal/VIP prep room &amp; add-ons</td>
+        <td colspan="2">Other requirements affecting suitability · preferred tour date &amp; time</td>
+      </tr>
+    </table></div>
+    <div class="call"><h4>Sample discovery conversation</h4>
+      <div class="guide" style="background:transparent;border:0;padding:0">
+        <p><b>Coordinator:</b> Thanks for reaching out to Crown Prince — what kind of event are you planning?</p>
+        <p><b>Client:</b> A quinceañera, probably around 150 guests.</p>
+        <p><b>Coordinator:</b> Wonderful. Do you have a date in mind, or a weekend you're aiming for?</p>
+        <p><b>Client:</b> A Saturday in June next year.</p>
+        <p><b>Coordinator:</b> Great — I'll check specific Saturdays so I can confirm what's open. Roughly what start and end time, and will you need extra setup time for décor?</p>
+        <p><b>Client:</b> Maybe 6 to midnight, and yes, we'll decorate.</p>
+        <p><b>Coordinator:</b> Perfect — our window is six hours and weekends advertise two complimentary setup hours; I'll confirm exactly how that applies to your package. Own caterer or would you like options? And a bar?</p>
+        <p><b>Client:</b> Our own caterer, and yes a bar.</p>
+        <p><b>Coordinator:</b> Got it — outside catering is welcome with our approval, and bar service runs through our packages. The best next step is a quick private tour so you can picture the stage and dance floor. What day this week works?</p>
+      </div></div>
+    <div class="note">Keep it a conversation, not an interrogation. If you've gathered type, date, guest count, and a tour
+      preference, you have enough to move forward — the rest can come at the tour.</div>
+  </section>
+
+  <!-- ================= OBJECTION FRAMEWORK ================= -->
+  <section id="objections">
+    <span class="kicker">Section 06</span>
+    <h2 class="sec">Objection-handling framework</h2>
+    <p class="lead">Same five steps every time. The goal is never to "win" — it's to understand the real concern and
+      keep the conversation moving.</p>
+    <div class="tblwrap"><table>
+      <tr><th>Step</th><th>Do this</th><th>Sounds like</th></tr>
+      <tr><td><b>1. Acknowledge</b></td><td>Name the concern out loud</td><td>"That's a completely fair thing to weigh."</td></tr>
+      <tr><td><b>2. Empathize</b></td><td>Show you're on their side</td><td>"Planning a celebration is a big investment — I get it."</td></tr>
+      <tr><td><b>3. Clarify</b></td><td>Find the real issue underneath</td><td>"When you say the price feels high, is it the total, or the fit for what you need?"</td></tr>
+      <tr><td><b>4. Offer</b></td><td>Give a relevant solution or next step</td><td>"A weekday date starts lower at $3,845, and seeing the space usually makes the value clearer."</td></tr>
+      <tr><td><b>5. Ask</b></td><td>A simple question that continues</td><td>"Would a weekday work for your event?"</td></tr>
+    </table></div>
+    <div class="grid2">
+      <div class="call"><h4>Price objection</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → clarify total vs. fit → point to the weekday starting rate and all-included items (10 tables for 100, security, cleaning, insurance, gated parking) → invite a tour → "What date range are you working with?" <b>Never promise a discount.</b></div></div>
+      <div class="call"><h4>Competitor comparison</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Never criticize the other venue. → clarify what matters most → highlight what's included and the stage/dance-floor/VIP-room flexibility → "Would it help to see it in person before you decide?"</div></div>
+      <div class="call"><h4>Indecision</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge it's a big choice → clarify what's holding them → offer a no-pressure tour → "Would it help to walk the space with no obligation?"</div></div>
+      <div class="call"><h4>Scheduling concern</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → clarify the constraint → offer alternative dates or flexible tour times (7 days/week) → "Would a weekday tour be easier?" <b>Never promise availability before checking.</b></div></div>
+      <div class="call"><h4>Budget limitation</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → clarify the ceiling → steer toward weekday pricing → offer a quote built around priorities → "If I put together options around that range, would that help?"</div></div>
+      <div class="call"><h4>Guest-count concern</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → confirm count → note the hall seats up to 300 and the starting package covers 100 (more tables quoted) → "What count should I plan around?" Over 300 → capacity review.</div></div>
+      <div class="call"><h4>Package-inclusion question</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → confirm what's included (tables for 100, security, cleaning, insurance) vs. add-ons → "Which pieces matter most so I get your quote right?" Don't imply everything is bundled.</div></div>
+      <div class="call"><h4>Special arrangement / discount request</h4>
+        <div class="guide" style="background:transparent;border:0;padding:0">Acknowledge → clarify exactly what they need → <b>document and refer to the authorized decision-maker</b>, don't promise → "Let me confirm what we can do and get right back to you — what's the best number?"</div></div>
+    </div>
+    <div class="note"><b>Never:</b> pressure the client, claim a date is available without checking, criticize a competitor,
+      or promise a discount, exception, or policy you aren't authorized to confirm.</div>
+  </section>
+
+  <!-- ================= SCENARIO LIBRARY ================= -->
+  <section id="library">
+    <span class="kicker">Scenario library · 1–84</span>
+    <h2 class="sec">Case-by-case scripts</h2>
+    <p class="lead">Expand any scenario. Each gives you when to use it, the objective, a word-for-word opening,
+      discovery prompts, response language, objection handling where relevant, a close, a verify note, and the CRM action.
+      Use the filter bar at the top to jump to the right one mid-call.</p>
+    <p id="nomatch" class="nomatch">No scenario matches that filter. Try a shorter word like "tour", "price", or "deposit".</p>
+
+    <h3 id="grpA" class="grpH" style="margin:1.4rem 0 .2rem;color:var(--forest-2)">A · New lead &amp; initial contact</h3>
+
+<details class="scn"><summary><span class="num">1</span><span class="ttl">New website inquiry</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>A form arrives through crownprincehall.com.</div><div class="m"><b>Objective</b>Respond fast, confirm details, invite a tour.</div></div>
+  <div class="lbl">Say — opening</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, this is <span class="ph">[Your Name]</span> with Crown Prince Event Hall in San Jose — thank you so much for reaching out! I saw you're interested in <span class="ph">[event type / date]</span>. I'd love to learn a little more and help you find the right fit. Is now a good time for a couple of quick questions?</p></div>
+  <div class="lbl">Discovery</div>
+  <div class="guide"><ul><li>Confirm what they already submitted (don't re-ask).</li><li>Event type, preferred date, estimated guest count.</li><li>Best phone and email, and a good tour time.</li></ul></div>
+  <div class="lbl">Response</div>
+  <div class="guide">Match one or two features to their event ("For a reception, our stage, open dance floor, and Chiavari chairs set a beautiful tone"). Share the relevant <b>starting</b> rate. Steer toward a tour.</div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>The best way to picture it is to see it — we offer private tours seven days a week by appointment. Would <span class="ph">[day/time]</span> or <span class="ph">[day/time]</span> work better for you?</p></div>
+  <div class="verify"><b>Verify first</b>Don't confirm the date is open or quote a final price until the schedule is checked.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · channel = web form</div><div class="c"><b>Next action</b>Confirm availability; invite tour</div><div class="c"><b>Follow-up</b>Within a few business hours if no reply</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">2</span><span class="ttl">New Facebook / social media inquiry</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>A DM or comment lead from social.</div><div class="m"><b>Objective</b>Move the chat to a call/text and qualify.</div></div>
+  <div class="lbl">Say — message</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, thanks for messaging Crown Prince Event Hall! We'd love to host your <span class="ph">[event type]</span>. So I can share the right details, may I ask your event date and about how many guests — and the best number to reach you? A quick call makes this easy.</p></div>
+  <div class="lbl">Discovery</div>
+  <div class="guide"><ul><li>Event type, date, guest count.</li><li>Capture a phone or email — social DMs are easy to lose.</li></ul></div>
+  <div class="lbl">Response</div>
+  <div class="guide">Keep replies short and warm. Share the matching starting rate, note tours are 7 days a week, and move pricing detail to a private message or call — not a public comment.</div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>I'd love to set up a quick tour so you can see the space — would a call later today work to find a time?</p></div>
+  <div class="verify"><b>Verify first</b>Don't quote beyond published starting rates in a public comment.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · channel = social</div><div class="c"><b>Next action</b>Capture phone/email; invite tour</div><div class="c"><b>Follow-up</b>Same day</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">3</span><span class="ttl">Outbound call to a newly received lead</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>First proactive dial on a fresh lead.</div><div class="m"><b>Objective</b>Make a warm first impression and open discovery.</div></div>
+  <div class="lbl">Say — opening</div>
+  <div class="say"><p>Hi, may I speak with <span class="ph">[Client Name]</span>? … Hi <span class="ph">[Client Name]</span>, this is <span class="ph">[Your Name]</span> calling from Crown Prince Event Hall in San Jose — you reached out about your <span class="ph">[event type]</span>, and I wanted to help you get the details and check your date. Do you have a quick minute?</p><p><em class="cue">If yes → Scenario 4. If busy → Scenario 5. If no answer → Scenarios 6/7.</em></p></div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Wonderful — let me ask you a few quick things so I can point you in the right direction.</p></div>
+  <div class="verify"><b>Verify first</b>Availability and pricing specifics.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Qualify or schedule callback</div><div class="c"><b>Follow-up</b>Set a due date before ending</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">4</span><span class="ttl">Client answers and has time to talk</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>A willing, available lead.</div><div class="m"><b>Objective</b>Complete core discovery and invite a tour.</div></div>
+  <div class="lbl">Say — opening</div>
+  <div class="say"><p>Perfect, thank you! So I can tailor this to you — what's the occasion you're planning, and do you have a date in mind?</p></div>
+  <div class="lbl">Discovery</div>
+  <div class="guide"><ul><li>Walk the natural order (Section 05): type → date → timing/setup → guest count → floor plan → catering/bar → entertainment/AV → décor → budget (if offered) → tour.</li><li>Weave in 1–2 relevant features as you go (stage, dance floor, gated parking).</li></ul></div>
+  <div class="lbl">Response</div>
+  <div class="guide">Reflect back what you heard, match features to the event, share the relevant starting rate as a <b>starting</b> price, and set up the tour as the natural next step.</div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>This sounds like a beautiful <span class="ph">[event]</span>. I'd love for you to see the space — would <span class="ph">[day/time]</span> or <span class="ph">[day/time]</span> suit you for a tour?</p></div>
+  <div class="verify"><b>Verify first</b>Complimentary setup hours, extra-hour pricing, guest-count suitability, layout, vendor arrangements.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted → Tour once scheduled</div><div class="c"><b>Next action</b>Schedule tour; prep quote inputs</div><div class="c"><b>Follow-up</b>Day before tour</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">5</span><span class="ttl">Client answers but is busy</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Reached but can't talk now.</div><div class="m"><b>Objective</b>Lock a specific callback; keep momentum.</div></div>
+  <div class="lbl">Say — opening</div>
+  <div class="say"><p>No problem at all, I completely understand! This will only take a few minutes when you're free. Would later today around <span class="ph">[time]</span> work, or is tomorrow morning better for a quick call?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide"><ul><li>Get a <b>specific</b> time, not "call me later." Confirm the best number.</li></ul></div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Great — I'll call you <span class="ph">[day/time]</span>. I'll also text you my name and number. Talk soon, <span class="ph">[Client Name]</span>!</p></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · callback scheduled</div><div class="c"><b>Next action</b>Call at agreed time + intro text</div><div class="c"><b>Follow-up</b>At agreed callback time</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">6</span><span class="ttl">Client does not answer</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Outbound call rings out.</div><div class="m"><b>Objective</b>Leave a voicemail and text; log the attempt.</div></div>
+  <div class="lbl">Guide</div>
+  <div class="guide"><ul><li>Leave a voicemail (Scenario 7) and a follow-up text (Scenario 8).</li><li>Log the attempt number; space attempts per the follow-up sequence; vary call, text, email.</li></ul></div>
+  <div class="verify"><b>Verify first</b>Respect any contact-time or opt-out rules.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · outcome = No answer, attempt #<span class="ph">[n]</span></div><div class="c"><b>Next action</b>Voicemail + text; schedule next attempt</div><div class="c"><b>Follow-up</b>Per cadence</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">7</span><span class="ttl">Voicemail script</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Call goes to voicemail.</div><div class="m"><b>Objective</b>Warm, under 20 seconds, with a reason to call back.</div></div>
+  <div class="lbl">Say — voicemail</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, this is <span class="ph">[Your Name]</span> from Crown Prince Event Hall in San Jose — you reached out about your <span class="ph">[event type]</span>. I'd love to help with your date and answer any questions. Call me back at (408) 408-1654, or I'll try you again <span class="ph">[day]</span>. Looking forward to connecting — thank you!</p></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · Voicemail left</div><div class="c"><b>Next action</b>Follow-up text (Scenario 8)</div><div class="c"><b>Follow-up</b>1–2 days</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">8</span><span class="ttl">Follow-up text after an unanswered call</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Right after a missed call / voicemail.</div><div class="m"><b>Objective</b>An easy, low-pressure way to re-engage.</div></div>
+  <div class="lbl">Say — text</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, it's <span class="ph">[Your Name]</span> with Crown Prince Event Hall 👋 I just tried calling about your <span class="ph">[event type]</span>. Happy to help by text if that's easier! Do you have a date in mind and a rough guest count? You can also take our 360° virtual tour at crownprincehall.com.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Keep texting within permitted hours; honor opt-outs ("reply STOP").</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · follow-up text sent</div><div class="c"><b>Next action</b>Await reply; next attempt per cadence</div><div class="c"><b>Follow-up</b>2–3 days</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">9</span><span class="ttl">Client replies by text but hasn't answered discovery questions</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They text back vaguely ("still looking," "how much?").</div><div class="m"><b>Objective</b>Get the two anchors — date &amp; guest count — then steer to a call/tour.</div></div>
+  <div class="lbl">Say — text</div>
+  <div class="say"><p>So glad you reached out! To give you the right info, two quick things: what date (or weekend) are you considering, and about how many guests? Our starting rates are $3,845 Monday–Thursday and $4,845 Friday–Sunday and holidays, and the best way to see it all is a quick tour.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Ask no more than two questions per text. Offer a call: "Want me to call you with details? What's a good time?"</div>
+  <div class="verify"><b>Verify first</b>Quote only the published <em>starting</em> rates; final totals need review.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · details pending</div><div class="c"><b>Next action</b>Collect date + count; propose tour</div><div class="c"><b>Follow-up</b>Within a day</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">10</span><span class="ttl">Inquiry submitted with incomplete information</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>A form/DM missing date, count, or contact.</div><div class="m"><b>Objective</b>Fill the gaps without friction.</div></div>
+  <div class="lbl">Say — opening</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, thanks for your interest in Crown Prince! I have a few details but want to make sure I help you accurately. Could you share <span class="ph">[the missing piece(s) — e.g. your event date and estimated guest count]</span>? And the best phone and email to reach you?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Reference what they already gave so it feels like continuity, not a restart. Prioritize contact → date → guest count → event type.</div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Perfect — with that I can give you accurate details and the best starting price, and we can line up a tour whenever you're ready.</p></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · missing fields flagged</div><div class="c"><b>Next action</b>Complete the profile; qualify</div><div class="c"><b>Follow-up</b>Within 24 hrs</div></div>
+</div></details>
+
+    <h3 id="grpB" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">B · Lead qualification</h3>
+    <p class="note" style="margin-top:.2rem">Scenarios 15–17 use only Crown Prince's real features and layouts — stage, dance floor, banquet seating, Chiavari chairs, AV, VIP prep room. Never reference a courtyard or studio; those belong to another venue. Always say final capacity and layout suitability require confirmation.</p>
+
+<details class="scn"><summary><span class="num">11</span><span class="ttl">Client knows the event date and guest count</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>A well-defined lead with a firm date and headcount.</div><div class="m"><b>Objective</b>Check availability, match the right rate window, convert to a tour.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Wonderful — <span class="ph">[Event Date]</span> for about <span class="ph">[Guest Count]</span> guests gives me a clear picture. That falls on a <span class="ph">[weekday/weekend]</span>, so the starting rate would be <span class="ph">[$3,845 weekday / $4,845 weekend &amp; holiday]</span>, and the space comfortably supports your group. Let me note that and check the calendar for you.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide"><ul><li>Say you'll <b>check</b> the date, not that it's open.</li><li>If count is near/over 100, note the starting package covers up to 100 guests; more requires additional tables to quote.</li></ul></div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Can I get you in for a tour this week so you can picture your <span class="ph">[event]</span> here?</p></div>
+  <div class="verify"><b>Verify first</b>Date availability; extra tables/guests beyond 100; extra-hour and add-on pricing.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour on booking · date + count recorded</div><div class="c"><b>Next action</b>Confirm availability; schedule tour</div><div class="c"><b>Follow-up</b>Same day with availability result</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">12</span><span class="ttl">Client has a flexible date</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Open to several dates.</div><div class="m"><b>Objective</b>Use flexibility to find an available, well-suited date.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That flexibility really helps — it gives us the best shot at your ideal setup, and weekday dates Monday–Thursday start lower at $3,845. If you share a couple of months or weekends you're considering, I'll check what's open. Popular weekends do fill up, so it's smart to lock in a tour while you compare.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Gather a date <b>range</b> and firm must-avoids. Frame weekdays as value, not a downgrade. Don't manufacture false scarcity.</div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Let's get you in for a tour so you can decide with the space in front of you — what's good this week?</p></div>
+  <div class="verify"><b>Verify first</b>Never confirm specific dates as open before checking.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · flexible date</div><div class="c"><b>Next action</b>Return available dates; invite tour</div><div class="c"><b>Follow-up</b>With date options within a day</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">13</span><span class="ttl">Client has not decided on a date</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Early-stage planner, no date.</div><div class="m"><b>Objective</b>Keep momentum; a tour can happen before a date exists.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That's completely fine — a lot of our clients tour first and choose a date once they've fallen in love with the space. Do you at least have a season or rough timeframe in mind? Either way, seeing it usually makes the date decision much easier.</p></div>
+  <div class="lbl">Say — closing</div>
+  <div class="say"><p>Why don't we schedule a tour this week — no commitment, just so you can picture it. What day works?</p></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · date undecided</div><div class="c"><b>Next action</b>Schedule tour; nurture</div><div class="c"><b>Follow-up</b>Share seasonal availability as a reason to reconnect</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">14</span><span class="ttl">Client expects more than 300 guests</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Stated count exceeds advertised capacity.</div><div class="m"><b>Objective</b>Be honest about limits while keeping the door open.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Thank you for sharing that. Our hall is advertised for up to 300 guests, and final capacity depends on the floor plan and configuration. For a group that size I want to be upfront and have our team confirm whether we can accommodate your exact setup — I'd rather give you an honest answer than a maybe. May I check and get right back to you?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide"><ul><li>Don't promise it will or won't work — route to management for a capacity ruling.</li><li>If close to 300, a specific layout may still fit; confirm first.</li></ul></div>
+  <div class="verify"><b>Verify first</b>Maximum capacity for the specific configuration — occupancy limits are not negotiable.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · flag Capacity review</div><div class="c"><b>Next action</b>Escalate exact count &amp; layout for a ruling</div><div class="c"><b>Follow-up</b>Back to client with confirmed answer</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">15</span><span class="ttl">Client needs a specific floor plan or combined ceremony / banquet / dance-floor layout</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They want a particular configuration.</div><div class="m"><b>Objective</b>Show flexibility using real features; confirm suitability.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>We can do quite a bit in one room — our 4,000-plus square feet flexes between a ceremony on the stage, banquet seating with round tables and Chiavari chairs, and an open dance floor, often in the same event. To confirm the exact layout works for your guest count, I'd have our team review the plan. Seeing the space on a tour makes this much clearer.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Use only real elements: stage, dance floor, banquet tables, Chiavari chairs, big-screen TVs, house lighting, VIP prep room. Never invent a courtyard/studio or a second room.</div>
+  <div class="verify"><b>Verify first</b>That the specific layout fits the guest count and occupancy requirements.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · layout request noted</div><div class="c"><b>Next action</b>Tour + layout confirmation</div><div class="c"><b>Follow-up</b>Confirm feasibility after review</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">16</span><span class="ttl">Client wants to know if a specific event configuration is possible</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>"Can you do X setup?"</div><div class="m"><b>Objective</b>Affirm what's genuinely possible, confirm the rest.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Great question. Our layouts are flexible — banquet, theater seating, cocktail reception, ceremony, or a combined ceremony-and-reception all work in the hall. For your exact configuration and guest count, let me confirm the details with our team so I'm giving you an accurate answer. Would a tour this week help you visualize it?</p></div>
+  <div class="verify"><b>Verify first</b>Anything beyond standard layouts — confirm before committing.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Confirm configuration; invite tour</div><div class="c"><b>Follow-up</b>With the confirmed answer</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">17</span><span class="ttl">Client only needs the main hall for a particular layout or format</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Simple single-use request.</div><div class="m"><b>Objective</b>Confirm fit quickly and convert.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Perfect — the main hall is exactly what we offer, and it's well suited to a <span class="ph">[format — banquet / theater / cocktail reception]</span>. With the stage, open dance floor, and flexible seating, it adapts nicely. Let me confirm the setup for your guest count, and let's get you in to see it.</p></div>
+  <div class="verify"><b>Verify first</b>Layout suitability for the final count.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour</div><div class="c"><b>Next action</b>Confirm layout; schedule tour</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">18</span><span class="ttl">Client has a specific budget</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They share a number.</div><div class="m"><b>Objective</b>Set honest expectations against starting prices; find fit.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Thank you for sharing that — it really helps me guide you. Our starting rates are $3,845 Monday–Thursday and $4,845 Friday–Sunday and holidays, and the starting package already includes 10 tables for up to 100 guests, security, cleaning, and insurance. From there, final pricing depends on your date and services. Would it help if I had our team put together a quote around your budget and priorities?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">If budget is below the starting rate, gently note the weekday option and route to the quote team. Never invent a discount to "make it fit."</div>
+  <div class="verify"><b>Verify first</b>Any pricing beyond published starting rates, and any discount — requires manager approval.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · budget range recorded</div><div class="c"><b>Next action</b>Route quote request</div><div class="c"><b>Follow-up</b>When the quote is ready</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">19</span><span class="ttl">Client has multiple event requirements</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Several needs at once (catering + bar + AV + décor).</div><div class="m"><b>Objective</b>Capture all, organize, confirm standard vs. add-on.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Let's go through each of those so nothing gets missed. I'll note your catering plan, bar, AV, lighting, and décor, then our team will confirm which are part of the package and which are add-ons so your quote is accurate. You've clearly thought this through — that makes my job easy.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Repeat each item back to confirm; separate "included" from "subject to confirmation."</div>
+  <div class="verify"><b>Verify first</b>Which services are included vs. add-ons; don't assume everything is bundled.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · requirements itemized</div><div class="c"><b>Next action</b>Tour + detailed quote request</div><div class="c"><b>Follow-up</b>Confirm inclusions &amp; add-ons</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">20</span><span class="ttl">Client is planning for a company or organization</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Corporate/org booker (not the end guest).</div><div class="m"><b>Objective</b>Identify decision process, invoicing/approval needs, contacts.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Wonderful — we host corporate meetings, presentations, and banquets often. To set this up smoothly, who's the main point of contact, and is there an approval or billing process I should plan around? Our stage, big-screen TVs, sound system, and AV support make presentations easy, and I'll confirm the specifics for your date.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Ask about head count, agenda/AV needs, catering, and whether a formal quote/PO is required.</div>
+  <div class="verify"><b>Verify first</b>AV engineer availability per package, invoicing terms, org-specific requirements.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · organization + billing contact</div><div class="c"><b>Next action</b>Tour and/or formal quote</div><div class="c"><b>Follow-up</b>Per their approval timeline</div></div>
+</div></details>
+
+    <h3 id="grpC" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">C · Pricing &amp; quote inquiries</h3>
+    <p class="note" style="margin-top:.2rem">Starting prices: Mon–Thu $3,845 · Fri–Sun &amp; holidays $4,845. Starting package includes 10 tables for up to 100 guests, security, cleaning, and insurance. Never imply all services are included. Never invent discounts, taxes, extra-hour prices, deposit amounts, or package totals.</p>
+
+<details class="scn"><summary><span class="num">21</span><span class="ttl">Client immediately asks "How much does it cost?"</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Price is the first question.</div><div class="m"><b>Objective</b>Answer honestly with starting rates, then open discovery.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Happy to help with that! Our starting rates are $3,845 Monday through Thursday and $4,845 Friday through Sunday and holidays, for a six-hour event. That starting package includes 10 tables for up to 100 guests, plus security, cleaning, and insurance. The final price depends on your date and what you'd like to add — can I ask your date and guest count so I give you accurate numbers?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Lead with the number (don't dodge), then pivot to discovery.</div>
+  <div class="verify"><b>Verify first</b>Final totals, add-ons, extra hours — all require review.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · price-led inquiry</div><div class="c"><b>Next action</b>Qualify; invite tour/quote</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">22</span><span class="ttl">Client asks for weekday pricing</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Weekday-specific ask.</div><div class="m"><b>Objective</b>Give the accurate weekday starting rate.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>For Monday through Thursday, our starting rate is $3,845 for a six-hour event, including 10 tables for up to 100 guests, security, cleaning, and insurance. The final total depends on your date and any add-ons. What day were you considering?</p></div>
+  <div class="verify"><b>Verify first</b>Whether complimentary setup hours apply to that weekday package — don't assume.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Confirm date; invite tour</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">23</span><span class="ttl">Client asks for weekend or holiday pricing</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Weekend/holiday ask.</div><div class="m"><b>Objective</b>Accurate weekend starting rate + setup-hour note.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>For Friday through Sunday and holidays, the starting rate is $4,845 for a six-hour event, with the same inclusions — 10 tables for up to 100 guests, security, cleaning, and insurance — and weekend packages advertise two complimentary setup hours before your doors open. Final pricing depends on your date and selections. What date are you eyeing?</p></div>
+  <div class="verify"><b>Verify first</b>Exact setup-hour terms for their package; holiday dates.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Confirm date; invite tour</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">24</span><span class="ttl">Client asks whether security, cleaning, and insurance are included</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Inclusions question.</div><div class="m"><b>Objective</b>Confirm these three are included; clarify the rest is add-on.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Yes — security, cleaning, and insurance are all included in the starting package, along with 10 tables for up to 100 guests. Other services, like certain add-ons or extra hours, are quoted separately so your total reflects exactly what you need. Is there something specific you'd like included?</p></div>
+  <div class="verify"><b>Verify first</b>Don't present add-ons as included; confirm any add-on pricing.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Capture desired add-ons</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">25</span><span class="ttl">Client asks for a complete package price</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants an all-in number.</div><div class="m"><b>Objective</b>Explain the quote is built to their needs; gather inputs.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>I'd love to get you an accurate all-in number. Because every event is a little different, our team builds a full quote from your date, guest count, and the services you choose — starting from $3,845 weekdays or $4,845 weekends and holidays. If you share those details, I'll have a tailored quote put together for you.</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Collect: date, count, catering/bar, AV, add-ons, hours. Route to the quote team.</div>
+  <div class="verify"><b>Verify first</b>Never state a package total before the authorized team reviews it.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted → Proposal when quote is sent</div><div class="c"><b>Next action</b>Route quote request</div><div class="c"><b>Follow-up</b>When quote is ready (per approved SLA)</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">26</span><span class="ttl">Client requests a discount</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They ask for a lower price.</div><div class="m"><b>Objective</b>Stay warm, don't promise, route to the decision-maker.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I completely understand — budget matters."</li><li><b>Empathize:</b> "You want the best value for your celebration."</li><li><b>Clarify:</b> "Is it the overall number, or a specific piece?"</li><li><b>Offer:</b> "Weekday dates start lower at $3,845, and I can ask our manager what options may be available — I can't promise a discount, but I'll absolutely ask."</li><li><b>Ask:</b> "What date are you considering so I can look into it?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never confirm a discount yourself — only an authorized manager can.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · flag Pricing review</div><div class="c"><b>Next action</b>Escalate discount request</div><div class="c"><b>Follow-up</b>With the manager's answer</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">27</span><span class="ttl">Client says the venue is too expensive</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Price objection.</div><div class="m"><b>Objective</b>Reframe around value and options without discounting.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I hear you — it's a real investment."</li><li><b>Empathize:</b> "You want to feel it's worth every dollar."</li><li><b>Clarify:</b> "Is the weekday or weekend rate closer to what you had in mind?"</li><li><b>Offer:</b> "The starting package already covers security, cleaning, insurance, and tables for 100 — and weekday dates start at $3,845. A tour helps you see the value in person."</li><li><b>Ask:</b> "Would a weekday date work for your event?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Don't invent savings; highlight only real inclusions and published rates.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · objection noted</div><div class="c"><b>Next action</b>Offer weekday option / tour</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">28</span><span class="ttl">Client compares Crown Prince with a cheaper venue</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Price-shopping against a competitor.</div><div class="m"><b>Objective</b>Differentiate on genuine strengths, never disparage.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "Smart to compare — this is a big decision."</li><li><b>Empathize:</b> "You want the best fit for your guests and budget."</li><li><b>Clarify:</b> "What matters most to you — space, parking, amenities?"</li><li><b>Offer:</b> "What I can speak to is what we include: a large stage, open dance floor, bar packages, AV and house lighting, a VIP prep room, and 100-plus gated spaces, with security, cleaning, and insurance in the starting package."</li><li><b>Ask:</b> "Would seeing it in person help you compare fairly?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never claim we're cheaper/better than a named competitor without substantiation; compare only on facts.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · comparing venues</div><div class="c"><b>Next action</b>Tour invitation</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">29</span><span class="ttl">Client wants a quote without a tour</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Quote now, no visit.</div><div class="m"><b>Objective</b>Provide a quote path while still offering a tour.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Absolutely — I can have a quote prepared based on your date, guest count, and the services you'd like. If you share those, I'll get it routed. And whenever you're ready, a quick tour or our 360° virtual tour at crownprincehall.com is a great companion to the numbers.</p></div>
+  <div class="verify"><b>Verify first</b>Quote amount requires team review; don't state a total on the call.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted → Proposal on send · tour = virtual offered</div><div class="c"><b>Next action</b>Route quote</div><div class="c"><b>Follow-up</b>After quote delivery</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">30</span><span class="ttl">Client wants an exact quote before giving event details</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>"Just tell me the price" with no info.</div><div class="m"><b>Objective</b>Explain why details are needed; give the honest starting range.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>I want to give you a real number, not a guess — and the honest answer is it depends on a few things. Our starting rates are $3,845 weekdays and $4,845 weekends and holidays. To get your exact total, I just need your date, guest count, and any services you want. Even two or three quick details let me get you an accurate quote.</p></div>
+  <div class="verify"><b>Verify first</b>No exact total until requirements are reviewed.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Collect minimum details → quote</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">31</span><span class="ttl">Client asks about additional services or fees</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Add-ons/fees question.</div><div class="m"><b>Objective</b>List what's available honestly; confirm pricing via quote.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Great question. We offer add-ons like table runners, chafers, DJ services, a digital photobooth, a VIP grand entrance, marquee numbers, and bar packages — availability and pricing are confirmed per event. Rather than guess, I'll have the exact amounts included in your quote so there are no surprises. Which of these interest you?</p></div>
+  <div class="verify"><b>Verify first</b>Every add-on price and any applicable fee — subject to confirmation.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · add-ons noted</div><div class="c"><b>Next action</b>Include in quote</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">32</span><span class="ttl">Client requests a special package or customization</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants something custom.</div><div class="m"><b>Objective</b>Capture the vision; route for a tailored quote.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>I love that you have a specific vision — let's make it happen the right way. Tell me what you're picturing, and I'll have our team put together a customized quote. Custom packages are reviewed and confirmed so everything is accurate and approved before you decide.</p></div>
+  <div class="verify"><b>Verify first</b>Custom pricing and feasibility — manager/team approval required.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · custom quote flagged</div><div class="c"><b>Next action</b>Route customization request</div><div class="c"><b>Follow-up</b>When the tailored quote is ready</div></div>
+</div></details>
+
+    <h3 id="grpD" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">D · Event-specific conversations</h3>
+    <p class="note" style="margin-top:.2rem">Match real features to each event — stage, dance floor, banquet tables, Chiavari chairs, AV, mics, big-screen TVs, house lighting, VIP prep room. For technically complex events, say sound, lighting, equipment, production, and capacity need review before confirmation.</p>
+
+<details class="scn"><summary><span class="num">33</span><span class="ttl">Wedding ceremony and reception</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wedding inquiry.</div><div class="m"><b>Objective</b>Paint the vision; emphasize combined ceremony+reception flexibility.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Congratulations! Crown Prince is beautiful for weddings — you can hold your ceremony on the stage, then flow into a reception with banquet seating, Chiavari chairs, and an open dance floor, all in one elegant space. There's a red-carpet entrance, a bridal/VIP prep room subject to availability, house lighting, and AV for your slideshow. I'd love to confirm your date and get you in for a tour.</p></div>
+  <div class="lbl">Discovery</div>
+  <div class="guide"><ul><li>Date, guest count, ceremony + reception vs. reception only, catering/bar, décor, prep-room need.</li></ul></div>
+  <div class="verify"><b>Verify first</b>Prep-room availability per package, combined-layout fit for the count, setup hours.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · type = Wedding</div><div class="c"><b>Next action</b>Tour + quote</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">34</span><span class="ttl">Quinceañera</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Quinceañera inquiry.</div><div class="m"><b>Objective</b>Celebrate the tradition; highlight stage, entrance, dance floor.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>¡Felicidades! Quinceañeras are one of our favorites. The large stage is perfect for the ceremony and vals, the open dance floor gives room for the whole court, and the red-carpet entrance with a VIP grand entrance add-on makes a stunning moment. We have house lighting and big-screen TVs for the slideshow. Shall I check your date and set up a tour?</p></div>
+  <div class="lbl">Discovery</div>
+  <div class="guide"><ul><li>Date, guest count, court size, DJ/entertainment, VIP entrance add-on, catering/bar.</li></ul></div>
+  <div class="verify"><b>Verify first</b>VIP grand entrance and other add-on availability &amp; pricing.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · type = Quinceañera</div><div class="c"><b>Next action</b>Tour + quote</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">35</span><span class="ttl">Birthday or milestone celebration</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Birthday/anniversary/milestone.</div><div class="m"><b>Objective</b>Flexible, festive framing.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Sounds like a celebration worth doing right! The hall adapts easily — dance floor, DJ lighting, a full bar with bar packages, big-screen TVs for photos and video, and marquee numbers as an add-on for milestone birthdays. Tell me your date and guest count and I'll check availability and get you a tour.</p></div>
+  <div class="verify"><b>Verify first</b>Bar package and marquee-number availability &amp; pricing.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · type = Birthday/Milestone</div><div class="c"><b>Next action</b>Tour + quote</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">36</span><span class="ttl">Graduation, debut, or Sweet 16</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Youth milestone events.</div><div class="m"><b>Objective</b>Energy + safe, all-ages framing.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>What a milestone! Our space is great for debuts and Sweet 16s — stage for the program, open dance floor, DJ and uplighting, and big-screen TVs for a photo montage. All ages are welcome, security is included, and we have 100-plus gated parking spaces for families. Let's check your date and set up a tour.</p></div>
+  <div class="verify"><b>Verify first</b>Any age/bar-service arrangements if alcohol is involved; confirm bar policy specifics.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour</div><div class="c"><b>Next action</b>Tour + quote</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">37</span><span class="ttl">Corporate event, meeting, presentation, or banquet</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Business event.</div><div class="m"><b>Objective</b>Emphasize AV, seating flexibility, professionalism.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Perfect — we host corporate events regularly. The stage works for presentations and head tables, with big-screen TVs, a house sound system and microphones, and AV support subject to the package. We can set theater seating, banquet rounds, or a cocktail layout, and there's ample gated parking. What's your date, head count, and AV needs?</p></div>
+  <div class="verify"><b>Verify first</b>AV engineer availability per package; invoicing terms.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · type = Corporate · billing contact</div><div class="c"><b>Next action</b>Tour and/or formal quote</div><div class="c"><b>Follow-up</b>Per approval timeline</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">38</span><span class="ttl">Concert, live performance, or production event</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Technically complex / production event.</div><div class="m"><b>Objective</b>Show capability but gate on a production review.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That sounds exciting — we have a large stage, house sound and lighting, and DJ/uplighting that suit performances well. Because productions have specific sound, lighting, equipment, capacity, and staging needs, I'd want our team to review the details so we confirm everything can be supported safely and properly. Can you share the production requirements and expected attendance so I can route it for review?</p></div>
+  <div class="lbl">Guide</div>
+  <div class="guide">Gather: attendance, stage/sound/lighting specs, load-in needs, ticketing, timing. Do not confirm feasibility on the call.</div>
+  <div class="verify"><b>Verify first</b>Sound, lighting, equipment, capacity, and special arrangements — all require review before any commitment.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · flag Production review</div><div class="c"><b>Next action</b>Escalate for feasibility</div><div class="c"><b>Follow-up</b>With the review outcome</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">39</span><span class="ttl">Cocktail reception or social gathering</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Mingling-style event.</div><div class="m"><b>Objective</b>Highlight bar, flow, lighting.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>A cocktail reception works beautifully here — a full bar with structured bar packages, open flow around the dance floor, house color lighting to set the mood, and flexible seating. We can arrange the layout for easy mingling. What date and guest count are you thinking, and would you like a bar package?</p></div>
+  <div class="verify"><b>Verify first</b>Bar package details; outside alcohol is not permitted under standard policy.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour</div><div class="c"><b>Next action</b>Tour + quote</div><div class="c"><b>Follow-up</b>Tour confirmation</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">40</span><span class="ttl">Event requiring a particular seating arrangement or floor plan</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Specific seating need.</div><div class="m"><b>Objective</b>Confirm layout options; route for sign-off.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>We can arrange banquet rounds, theater seating, a cocktail layout, or a combined ceremony-and-reception setup, with Chiavari chairs and black or white tablecloths. For your exact arrangement and guest count, let me confirm the plan with our team so it's accurate. A tour makes it easy to visualize — shall we set one up?</p></div>
+  <div class="verify"><b>Verify first</b>Layout fit for the final count and occupancy requirements.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · layout noted</div><div class="c"><b>Next action</b>Confirm layout; tour</div><div class="c"><b>Follow-up</b>Feasibility confirmation</div></div>
+</div></details>
+
+    <h3 id="grpE" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">E · Venue policies &amp; facilities</h3>
+    <p class="note" style="margin-top:.2rem">Use published policies exactly. For anything not published — cancellation, refunds, deposit amount, payment methods/deadlines, insurance beyond the package, accessibility, vendor restrictions, special permissions — don't invent. Acknowledge, say the team will verify the current approved policy, and commit to a follow-up.</p>
+
+<details class="scn"><summary><span class="num">41</span><span class="ttl">Outside catering and food</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Catering question.</div><div class="m"><b>Objective</b>Confirm outside catering is welcome with approval.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Good news — outside catering is welcome with our prior approval. We also have a refrigerator and deep freezer on site to support your caterer. Who are you thinking of using, and I'll make sure we get them approved?</p></div>
+  <div class="verify"><b>Verify first</b>Caterer approval, and any kitchen/insurance requirements for that vendor.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · caterer noted</div><div class="c"><b>Next action</b>Submit caterer for approval</div><div class="c"><b>Follow-up</b>Confirm approval</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">42</span><span class="ttl">Alcohol and bar service</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Bar/alcohol question.</div><div class="m"><b>Objective</b>Explain bar packages; no outside alcohol.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>We handle bar service through our own structured bar packages, with a bartender available subject to the package. Under our standard policy, outside alcohol isn't permitted — this keeps everything licensed and worry-free for you. Would you like me to share bar package options for your event?</p></div>
+  <div class="verify"><b>Verify first</b>Bar package specifics and bartender arrangements per package.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · bar interest noted</div><div class="c"><b>Next action</b>Include bar package in quote</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">43</span><span class="ttl">Bringing a DJ or entertainment provider</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Outside entertainment question.</div><div class="m"><b>Objective</b>Welcome it; confirm vendor access/setup.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>You're welcome to bring your entertainment, and we also offer DJ services as an add-on if that's easier. We have a house sound system, microphones, DJ lighting, and uplighting. I'll confirm vendor access and setup details for your date so your DJ has what they need.</p></div>
+  <div class="verify"><b>Verify first</b>Outside-vendor requirements (insurance/approval) and vendor access timing — confirm, don't assume.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · entertainment plan noted</div><div class="c"><b>Next action</b>Confirm vendor access/setup</div><div class="c"><b>Follow-up</b>Share confirmed details</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">44</span><span class="ttl">Music, karaoke, sound equipment, and AV support</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>AV/sound question.</div><div class="m"><b>Objective</b>Explain what's equipped; confirm inclusions vs. add-ons.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>We're well equipped — a house sound system with microphones, big-screen TVs for slideshows and video, and AV support with an AV engineer subject to the package. For karaoke or specific equipment, let me confirm what's included with your package versus an add-on. What are you planning to run?</p></div>
+  <div class="verify"><b>Verify first</b>Which AV items are included per package; AV engineer availability.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · AV needs noted</div><div class="c"><b>Next action</b>Confirm inclusions vs. add-ons</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">45</span><span class="ttl">Decorations, floral arrangements, and installation</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Décor question.</div><div class="m"><b>Objective</b>Welcome décor; confirm guidelines &amp; setup access.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>You're welcome to decorate and bring florals to make it yours. So we protect the space and plan timing, I'll confirm our décor guidelines — installation, any restrictions, and setup access — and share them with you. What look are you going for?</p></div>
+  <div class="verify"><b>Verify first</b>Décor restrictions (fixings, open flame, confetti) and setup-hour access — verify current approved rules; don't invent.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · décor plan noted</div><div class="c"><b>Next action</b>Confirm décor guidelines + setup access</div><div class="c"><b>Follow-up</b>Share approved guidelines</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">46</span><span class="ttl">Tables, chairs, linens, and room setup</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Furnishings question.</div><div class="m"><b>Objective</b>Confirm included furnishings; quote extra tables above 100.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>The starting package includes 10 tables for up to 100 guests, and we provide round banquet tables, gold or silver Chiavari chairs, and black or white tablecloths. If you need more tables for a larger count, we'll add that to your quote. How many guests are you planning for?</p></div>
+  <div class="verify"><b>Verify first</b>Additional-table pricing and setup for counts above 100.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · count + setup noted</div><div class="c"><b>Next action</b>Quote additional tables if &gt;100</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">47</span><span class="ttl">Parking, valet, and accessibility</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Parking/accessibility question.</div><div class="m"><b>Objective</b>Share parking facts; verify valet &amp; accessibility specifics.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Parking is easy — we have a private gated lot with 100-plus spaces, plus street parking, and valet is available as an optional arrangement. For accessibility, I want to give you accurate details, so let me confirm the specifics for your needs and follow up. What would you like to make sure is accommodated?</p></div>
+  <div class="verify"><b>Verify first</b>Valet arrangement and all accessibility specifics — verify; do not invent.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · parking/accessibility noted</div><div class="c"><b>Next action</b>Confirm valet + accessibility specifics</div><div class="c"><b>Follow-up</b>Share confirmed details</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">48</span><span class="ttl">Event hours, setup, vendor access, and cleanup</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Timing question.</div><div class="m"><b>Objective</b>State the window + setup hours; confirm specifics per package.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Our standard event window is six hours, and weekend packages advertise two complimentary setup hours before your doors open. Extra hours can be quoted if you need them. Exact setup, vendor access, and cleanup times depend on your package, so I'll confirm those for your date so everyone's on the same page.</p></div>
+  <div class="verify"><b>Verify first</b>That complimentary setup hours apply to their specific package/day; extra-hour pricing; cleanup window.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · timing needs noted</div><div class="c"><b>Next action</b>Confirm setup/access/cleanup for the package</div><div class="c"><b>Follow-up</b>Share confirmed schedule</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">49</span><span class="ttl">Guest count and capacity limitations</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Capacity question.</div><div class="m"><b>Objective</b>State the up-to-300 cap; confirm for the layout.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>We're advertised for up to 300 guests, and the final number depends on your floor plan and configuration to meet occupancy requirements. Tell me your expected count and layout, and I'll confirm the best setup for your group.</p></div>
+  <div class="verify"><b>Verify first</b>Capacity for the specific layout — occupancy limits are firm; near 300 needs a ruling.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · count + layout noted</div><div class="c"><b>Next action</b>Confirm capacity for the configuration</div><div class="c"><b>Follow-up</b>Share confirmed fit</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">50</span><span class="ttl">House rules, smoking, security cameras, permitted activities</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>House-rules question.</div><div class="m"><b>Objective</b>State published rules; verify anything specific.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Happy to go over our house rules. All ages are welcome, smoking isn't allowed indoors, and security cameras are in use for everyone's safety. If you have a specific activity in mind, let me know and I'll confirm whether it's permitted so there are no surprises on your day.</p></div>
+  <div class="verify"><b>Verify first</b>Any activity not explicitly published — verify the current approved rule; do not invent.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · special activity noted</div><div class="c"><b>Next action</b>Confirm permitted activities</div><div class="c"><b>Follow-up</b>Share confirmed answer</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">51</span><span class="ttl">Cancellation and refund policies</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Asked about cancellation/refunds.</div><div class="m"><b>Objective</b>Safe, honest response — these terms are not published to you.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That's an important question, and I want to give you the exact, current terms rather than anything approximate. Let me confirm our cancellation and refund policy with our team and get that to you in writing so you have it clearly. May I follow up with you by <span class="ph">[phone/email]</span> today?</p></div>
+  <div class="verify"><b>Verify first</b>Never state or estimate cancellation or refund terms — confirm with management.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Flag Policy verify · outstanding = cancellation/refund terms</div><div class="c"><b>Next action</b>Escalate to management</div><div class="c"><b>Follow-up</b>Deliver confirmed terms in writing</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">52</span><span class="ttl">Reservation deposit and payment methods</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Asked how/what to pay.</div><div class="m"><b>Objective</b>Safe response — deposit amount and methods are not published to you.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Great — that means you're thinking seriously, which I love. I want to give you the precise deposit amount, accepted payment methods, and the exact steps, so let me confirm the current details with our team and walk you through it properly. Can I follow up shortly with everything in writing?</p></div>
+  <div class="verify"><b>Verify first</b>Never state a deposit amount, payment method, or deadline — confirm via the approved booking workflow.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Flag Policy verify · outstanding = deposit/payment details</div><div class="c"><b>Next action</b>Route to the booking owner</div><div class="c"><b>Follow-up</b>Deliver confirmed steps</div></div>
+</div></details>
+
+    <h3 id="grpF" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">F · Tour scheduling &amp; follow-up</h3>
+    <p class="note" style="margin-top:.2rem">Tours are by appointment, 7 days a week. Never promise a specific time until the actual schedule is checked and the appointment confirmed. For virtual tours, send clients to the 360° virtual tour at crownprincehall.com.</p>
+
+<details class="scn"><summary><span class="num">53</span><span class="ttl">Client agrees to a tour</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Client says yes to a tour.</div><div class="m"><b>Objective</b>Confirm a time against the schedule and send details.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Wonderful — you're going to love seeing it. We do private tours by appointment seven days a week. Let me check our schedule and confirm a time that works for both of us. Are weekdays or weekends better, and morning, afternoon, or evening?</p></div>
+  <div class="lbl">Say — closing (after checking)</div>
+  <div class="say"><p>I'll confirm <span class="ph">[proposed day/time]</span> and send you the address at 1654 Burdette Dr and a reminder. See you then, <span class="ph">[Client Name]</span>!</p></div>
+  <div class="verify"><b>Verify first</b>Actual schedule availability before confirming any time.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Scheduled</div><div class="c"><b>Next action</b>Confirm time; send details + reminder</div><div class="c"><b>Follow-up</b>Reminder day before</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">54</span><span class="ttl">Client asks for a same-day tour</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants to come in today.</div><div class="m"><b>Objective</b>Check availability before promising a time.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>I'd love to make that happen! Let me check whether we have an opening today — since tours are by appointment, I want to confirm availability before I promise a time. Give me one moment, and if today's full I'll find you the very next opening.</p></div>
+  <div class="verify"><b>Verify first</b>Same-day availability and staffing — never confirm before checking.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Same-day requested</div><div class="c"><b>Next action</b>Check availability; confirm or offer next slot</div><div class="c"><b>Follow-up</b>Immediate</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">55</span><span class="ttl">Client requests a specific tour time</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They name a day/time.</div><div class="m"><b>Objective</b>Confirm against the real schedule.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p><span class="ph">[Day]</span> at <span class="ph">[time]</span> — let me check the calendar and confirm that works on our end. If it's open, it's yours; if not, I'll offer the closest options. One moment while I verify.</p></div>
+  <div class="verify"><b>Verify first</b>The requested time against the real schedule before confirming.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Time requested</div><div class="c"><b>Next action</b>Confirm or offer alternatives</div><div class="c"><b>Follow-up</b>Confirmation message</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">56</span><span class="ttl">Client needs to reschedule</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Needs a new time.</div><div class="m"><b>Objective</b>Reschedule warmly; no friction.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>No problem at all — things come up! Let's find a new time that's easier for you. What day works better, and I'll check the schedule and lock it in.</p></div>
+  <div class="verify"><b>Verify first</b>Availability for the new time.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Rescheduled</div><div class="c"><b>Next action</b>Confirm new time</div><div class="c"><b>Follow-up</b>New confirmation + reminder</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">57</span><span class="ttl">Client cancels a tour</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Cancels the appointment.</div><div class="m"><b>Objective</b>Stay gracious; offer the virtual tour; set re-engagement.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Thanks for letting me know — I appreciate it. No worries at all. When you're ready, I'd still love to show you the space, or you can take our 360° virtual tour at crownprincehall.com anytime. Would it be okay if I check back with you in a week or two?</p></div>
+  <div class="verify"><b>Verify first</b>Honor it if they want no further contact.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Per flow · tour status = Cancelled</div><div class="c"><b>Next action</b>Offer virtual tour; gentle re-engagement</div><div class="c"><b>Follow-up</b>Per cadence (with permission)</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">58</span><span class="ttl">Client misses the scheduled tour (no-show)</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Didn't show for the appointment.</div><div class="m"><b>Objective</b>Warm, non-accusatory re-offer.</div></div>
+  <div class="lbl">Say — call/text</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, we had you down for a tour today and missed you — totally understand life gets busy! I'd still love to show you Crown Prince. Would you like to pick a new time? In the meantime, our 360° virtual tour is at crownprincehall.com.</p></div>
+  <div class="verify"><b>Verify first</b>Keep tone warm, never accusatory.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = No-show</div><div class="c"><b>Next action</b>Re-offer tour</div><div class="c"><b>Follow-up</b>One gentle follow-up; then per cadence</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">59</span><span class="ttl">Client completed the tour and wants a quote</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Toured and ready for numbers.</div><div class="m"><b>Objective</b>Capture inputs; route a tailored quote.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>So glad you loved it! Let me get you an accurate quote. I'll confirm your date, guest count, and the services we talked about — <span class="ph">[recap items]</span> — and have a tailored quote prepared for you. I'll follow up as soon as it's ready.</p></div>
+  <div class="verify"><b>Verify first</b>Quote total — reviewed and approved before sending.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour → Proposal on send · quote = Requested</div><div class="c"><b>Next action</b>Route quote</div><div class="c"><b>Follow-up</b>Deliver quote per approved SLA</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">60</span><span class="ttl">Client completed the tour but hasn't responded</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Quiet after the visit.</div><div class="m"><b>Objective</b>Value-add follow-up with a genuine reason.</div></div>
+  <div class="lbl">Say — follow-up</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, it was great showing you Crown Prince! I wanted to check in and see if any questions came up after your visit. I'm happy to put together a quote for your <span class="ph">[Event Date]</span> whenever you're ready — just say the word.</p></div>
+  <div class="verify"><b>Verify first</b>Don't assume disinterest — give a genuine reason to re-engage.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Awaiting response</div><div class="c"><b>Next action</b>Value-add follow-up</div><div class="c"><b>Follow-up</b>Per cadence, each with a reason to reconnect</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">61</span><span class="ttl">Client liked the venue but needs time to decide</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Positive but not ready.</div><div class="m"><b>Objective</b>No pressure; clarify concern; agree a check-in.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That makes complete sense — this is a big decision and you should feel confident. There's no pressure at all. So I can be helpful, is there anything specific you're weighing? And would it be alright if I check your date stays open and follow up in a few days?</p></div>
+  <div class="verify"><b>Verify first</b>Don't claim a date is held — only that you'll check it stays open.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Considering</div><div class="c"><b>Next action</b>Clarify concern; agree a check-in</div><div class="c"><b>Follow-up</b>At the agreed time with date-status update</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">62</span><span class="ttl">Client asks to see the venue virtually</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants a virtual look.</div><div class="m"><b>Objective</b>Point to the official 360° tour; offer in-person too.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Absolutely — we have a 360° virtual tour right on our website at crownprincehall.com, so you can walk through the space anytime from your phone or computer. Take a look, and whenever you'd like the full experience, I'd be glad to set up a private in-person tour too.</p></div>
+  <div class="verify"><b>Verify first</b>Point only to the official crownprincehall.com virtual tour.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Tour · status = Virtual shared</div><div class="c"><b>Next action</b>Send link; offer in-person tour</div><div class="c"><b>Follow-up</b>Check impressions after a day or two</div></div>
+</div></details>
+
+    <h3 id="grpG" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">G · Objections &amp; difficult calls</h3>
+    <p class="note" style="margin-top:.2rem">Every objection uses the five-step framework: Acknowledge → Empathize → Clarify → Offer → Ask. Never pressure, invent scarcity, criticize competitors, promise discounts, or confirm an unapproved exception.</p>
+
+<details class="scn"><summary><span class="num">63</span><span class="ttl">Client says they're just browsing</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Early, non-committal.</div><div class="m"><b>Objective</b>Stay helpful and pressure-free; leave a reference point.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "Totally fine — browsing is exactly how it should start."</li><li><b>Empathize:</b> "You want to explore your options before committing."</li><li><b>Clarify:</b> "Are you early in planning, or comparing a few venues?"</li><li><b>Offer:</b> "No pressure — I can send our 360° virtual tour and a quick overview so you have us to reference."</li><li><b>Ask:</b> "What's the occasion you're dreaming up?"</li></ol></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · early-stage</div><div class="c"><b>Next action</b>Send virtual tour/info</div><div class="c"><b>Follow-up</b>Light-touch per cadence</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">64</span><span class="ttl">Client is comparing several venues</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Shopping multiple venues.</div><div class="m"><b>Objective</b>Differentiate on genuine strengths, never disparage.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "That's a smart way to decide."</li><li><b>Empathize:</b> "You want the best fit for your day and budget."</li><li><b>Clarify:</b> "What matters most as you compare — space, amenities, parking?"</li><li><b>Offer:</b> "Here's what we include — stage, dance floor, bar packages, AV, VIP prep room, 100-plus gated spaces, with security, cleaning, and insurance in the starting package."</li><li><b>Ask:</b> "Would an in-person tour help you compare us fairly?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Compare on facts only; never disparage competitors.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · comparing venues</div><div class="c"><b>Next action</b>Tour invitation</div><div class="c"><b>Follow-up</b>Per engagement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">65</span><span class="ttl">Client is not ready to book</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Hesitant to commit.</div><div class="m"><b>Objective</b>Offer a no-commitment next step.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "No rush — booking should feel right."</li><li><b>Empathize:</b> "You want to be sure before committing."</li><li><b>Clarify:</b> "Is there a detail that would help you feel ready?"</li><li><b>Offer:</b> "A tour is a no-commitment next step, and I can keep you posted on your date's availability."</li><li><b>Ask:</b> "Would you like to at least see the space while you decide?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Don't imply a hold or deadline that doesn't exist.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour</div><div class="c"><b>Next action</b>Tour or scheduled check-in</div><div class="c"><b>Follow-up</b>Per cadence</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">66</span><span class="ttl">Client needs approval from a partner or family</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Shared decision.</div><div class="m"><b>Objective</b>Enable the group decision.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "Of course — this is a shared decision."</li><li><b>Empathize:</b> "You want everyone on board and excited."</li><li><b>Clarify:</b> "Would it help if they saw it too?"</li><li><b>Offer:</b> "Bring them to the tour, or I can send the 360° virtual tour and a summary to share."</li><li><b>Ask:</b> "When could you all come by together?"</li></ol></div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted / Tour · decision-maker noted</div><div class="c"><b>Next action</b>Group tour / shareable info</div><div class="c"><b>Follow-up</b>After they consult</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">67</span><span class="ttl">Client is concerned about the price</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Price worry.</div><div class="m"><b>Objective</b>Reframe around value/options.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I understand — price is a real factor."</li><li><b>Empathize:</b> "You want to feel it's worth it."</li><li><b>Clarify:</b> "Is the rate itself, or what's included, the concern?"</li><li><b>Offer:</b> "The starting package covers security, cleaning, insurance, and tables for 100 — and weekdays start at $3,845. I can route a quote built around your priorities."</li><li><b>Ask:</b> "Would a weekday date or a priority-focused quote help?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>No invented savings; route any pricing flexibility to a manager.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted</div><div class="c"><b>Next action</b>Weekday option / tailored quote</div><div class="c"><b>Follow-up</b>Via quote</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">68</span><span class="ttl">Client wants a discount that can't be approved immediately</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Direct discount ask.</div><div class="m"><b>Objective</b>Route it honestly; don't leave them guessing.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I really appreciate you asking directly."</li><li><b>Empathize:</b> "You want the best possible value."</li><li><b>Clarify:</b> "What total were you hoping to land near?"</li><li><b>Offer:</b> "I can't approve pricing changes myself, but I'll bring your request to our manager and get you a real answer."</li><li><b>Ask:</b> "What date should I reference when I ask?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never confirm a discount — only an authorized manager can.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Contacted · flag Pricing review</div><div class="c"><b>Next action</b>Escalate discount request</div><div class="c"><b>Follow-up</b>With the manager's decision</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">69</span><span class="ttl">Client requests a date hold</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants to secure a date.</div><div class="m"><b>Objective</b>Confirm the hold process; don't promise a hold.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I love that you're ready to protect your date."</li><li><b>Empathize:</b> "You don't want to lose it while you finalize."</li><li><b>Clarify:</b> "Is <span class="ph">[Event Date]</span> the one you want to secure?"</li><li><b>Offer:</b> "Let me confirm our current hold process and what it requires, and I'll walk you through the exact steps."</li><li><b>Ask:</b> "Can I follow up today with the hold details?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never confirm a date is held until the approved hold process is completed; don't invent hold terms.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal if progressing · flag Hold request</div><div class="c"><b>Next action</b>Confirm hold process with booking owner</div><div class="c"><b>Follow-up</b>Deliver steps</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">70</span><span class="ttl">Client is frustrated about delayed responses</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Upset about waiting.</div><div class="m"><b>Objective</b>Own it, resolve, commit to a firm follow-up.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "You're absolutely right to expect a prompt reply, and I'm sorry for the delay."</li><li><b>Empathize:</b> "Planning is stressful enough without waiting on us."</li><li><b>Clarify:</b> "Let me make sure I have everything you need right now — what's outstanding?"</li><li><b>Offer:</b> "I'll personally own this and get you answers, with a clear time I'll follow up."</li><li><b>Ask:</b> "What's the best way and time to reach you today?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Only commit to a follow-up time you can keep; escalate if needed.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Flag Service recovery · issue noted</div><div class="c"><b>Next action</b>Resolve outstanding items; set firm follow-up</div><div class="c"><b>Follow-up</b>At the committed time, no slips</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">71</span><span class="ttl">Client asks something the coordinator can't answer</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Question outside your knowledge.</div><div class="m"><b>Objective</b>Never guess — confirm, then respond.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "That's a great question."</li><li><b>Empathize:</b> "You deserve an accurate answer, not a guess."</li><li><b>Clarify:</b> "Let me make sure I understand exactly what you need."</li><li><b>Offer:</b> "I'll confirm this with our team and get right back to you so it's correct."</li><li><b>Ask:</b> "Is <span class="ph">[phone/email]</span> the best way to reach you with the answer?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never guess — confirm, then respond.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Flag Policy verify · open question logged</div><div class="c"><b>Next action</b>Escalate</div><div class="c"><b>Follow-up</b>With the verified answer</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">72</span><span class="ttl">Client is no longer interested</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>They opt out.</div><div class="m"><b>Objective</b>Close politely; capture the reason.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I completely understand, and thank you for letting me know."</li><li><b>Empathize:</b> "You've got to do what's right for your event."</li><li><b>Clarify:</b> "If you're open to it — was there something we could've done better?"</li><li><b>Offer:</b> "No pressure at all. If plans change, we'd be glad to help, and the 360° tour is always on our site."</li><li><b>Ask:</b> "Would it be okay to keep your info in case anything changes?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Honor their decision; capture the reason for learning.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Closed / not interested (approved status) · reason noted</div><div class="c"><b>Next action</b>Close politely</div><div class="c"><b>Follow-up</b>None unless they opt in</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">73</span><span class="ttl">Client has already booked another venue</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Booked elsewhere.</div><div class="m"><b>Objective</b>Stay gracious; keep the door open.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "Congratulations — that's exciting!"</li><li><b>Empathize:</b> "I'm glad you found the right fit for this event."</li><li><b>Clarify:</b> "Totally understood."</li><li><b>Offer:</b> "If plans ever change, or you have another event down the road, we'd love to be considered."</li><li><b>Ask:</b> "May I keep your details for future celebrations?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Stay gracious; never disparage their choice.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Closed / booked elsewhere (approved status)</div><div class="c"><b>Next action</b>Gracious close</div><div class="c"><b>Follow-up</b>Optional future-event note with permission</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">74</span><span class="ttl">Client requests an exception to venue policy</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants a policy exception.</div><div class="m"><b>Objective</b>Document and refer; never approve yourself.</div></div>
+  <div class="lbl">Guide — five-step framework</div>
+  <div class="guide"><ol><li><b>Acknowledge:</b> "I hear what you're asking for."</li><li><b>Empathize:</b> "I understand why that matters for your event."</li><li><b>Clarify:</b> "Let me make sure I capture exactly what you need."</li><li><b>Offer:</b> "I'm not able to approve exceptions myself, but I'll document your request and bring it to the right person for a decision."</li><li><b>Ask:</b> "Can I follow up with you once I have an answer?"</li></ol></div>
+  <div class="verify"><b>Verify first</b>Never confirm an unapproved exception — document and refer.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Flag Exception request · specifics documented</div><div class="c"><b>Next action</b>Route to authorized decision-maker</div><div class="c"><b>Follow-up</b>With the decision</div></div>
+</div></details>
+
+    <h3 id="grpH" class="grpH" style="margin:1.8rem 0 .2rem;color:var(--forest-2)">H · Closing &amp; reservation</h3>
+    <p class="note" style="margin-top:.2rem">Follow the approved booking workflow: quotation → deposit (via the approved link) → signed rental agreement → confirmed. Never present an inquiry, verbal yes, unsigned document, date request, or unverified payment as a confirmed booking. Never invent deposit amounts, refund/cancellation terms, payment methods, or deadlines.</p>
+
+<details class="scn"><summary><span class="num">75</span><span class="ttl">Client is ready to reserve</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Ready to move forward.</div><div class="m"><b>Objective</b>Secure it the right way via the workflow.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>That's fantastic — I'm so happy for you! Here's how we'll secure everything the right way: I'll get your quotation confirmed for <span class="ph">[Event Date]</span>, then walk you through the deposit and the rental agreement steps. Let me confirm the current details so I guide you through it accurately — give me just a moment.</p></div>
+  <div class="verify"><b>Verify first</b>Exact deposit, payment method, and agreement steps — don't state from memory.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal → booking workflow</div><div class="c"><b>Next action</b>Confirm quote; route deposit + agreement steps</div><div class="c"><b>Follow-up</b>Send documents/link per workflow</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">76</span><span class="ttl">Client asks how to secure a date</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants the steps to lock a date.</div><div class="m"><b>Objective</b>Explain the path; confirm exact figures.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Great question. In general, we confirm your date once your quotation is accepted, your deposit is in, and the rental agreement is signed. I want to give you the exact, current deposit amount and steps, so let me confirm those and send them over so it's clear and correct.</p></div>
+  <div class="verify"><b>Verify first</b>Never state the deposit figure or deadline without confirming via the approved workflow.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal</div><div class="c"><b>Next action</b>Confirm &amp; send booking steps</div><div class="c"><b>Follow-up</b>With written steps</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">77</span><span class="ttl">Client requests booking documents</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants the paperwork.</div><div class="m"><b>Objective</b>Route accurate, approved documents.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Absolutely — I'll get your booking documents to you. I'll make sure the quotation and rental agreement reflect your <span class="ph">[Event Date]</span>, guest count, and selected services, and I'll send them through our proper booking process so everything is accurate and signable.</p></div>
+  <div class="verify"><b>Verify first</b>Send only approved documents with reviewed, correct details.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · documents requested</div><div class="c"><b>Next action</b>Route document request to booking owner</div><div class="c"><b>Follow-up</b>Confirm delivery</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">78</span><span class="ttl">Client needs clarification about the quote</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Questions on a line.</div><div class="m"><b>Objective</b>Clarify; confirm anything uncertain.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Of course — let's go through it together so it's crystal clear. Which line would you like me to explain? I'll confirm anything I'm not 100% certain on rather than guess, so you have accurate numbers you can trust.</p></div>
+  <div class="verify"><b>Verify first</b>Any figure you're unsure of — confirm, don't improvise.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · clarification points noted</div><div class="c"><b>Next action</b>Clarify / route open items</div><div class="c"><b>Follow-up</b>With confirmed answers</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">79</span><span class="ttl">Client received a quote but hasn't responded</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Quiet after the quote.</div><div class="m"><b>Objective</b>Value-add follow-up with a reason.</div></div>
+  <div class="lbl">Say — follow-up</div>
+  <div class="say"><p>Hi <span class="ph">[Client Name]</span>, I wanted to check in on the quote I sent for your <span class="ph">[Event Date]</span>. Do you have any questions I can answer, or anything you'd like adjusted? I'm happy to help you move forward whenever you're ready — and I'll keep an eye on your date in the meantime.</p></div>
+  <div class="verify"><b>Verify first</b>Don't claim the date is held unless the approved hold is in place.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · quote = Awaiting decision</div><div class="c"><b>Next action</b>Value-add follow-up</div><div class="c"><b>Follow-up</b>Per cadence, each with a reason to reconnect</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">80</span><span class="ttl">Client says they'll pay later</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Intends to pay, not now.</div><div class="m"><b>Objective</b>Keep warm; clarify the date isn't held yet.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Totally understand — whenever works for you. I'll note that. Just so you have the full picture, the date is confirmed once the deposit and signed agreement are in, so I'll keep you posted on availability. Would it help if I checked back on <span class="ph">[day]</span> to see if you're ready?</p></div>
+  <div class="verify"><b>Verify first</b>The date is NOT confirmed or held until deposit + signed agreement are complete; say so kindly.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · payment pending</div><div class="c"><b>Next action</b>Scheduled check-in</div><div class="c"><b>Follow-up</b>At agreed time + availability note</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">81</span><span class="ttl">Client claims to have made a payment</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Says a payment was sent.</div><div class="m"><b>Objective</b>Verify before confirming anything.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Thank you — I appreciate that, and I'll confirm it on our end right away. Once our team verifies the payment against our records, I'll send you confirmation so you have it in writing. Can I follow up with you shortly after I've checked?</p></div>
+  <div class="verify"><b>Verify first</b>Never treat a claimed payment as received; verify before confirming anything.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Payment = Claimed, pending verification</div><div class="c"><b>Next action</b>Route to verify against bank/records</div><div class="c"><b>Follow-up</b>Send receipt/confirmation once verified</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">82</span><span class="ttl">Client asks whether the reservation is confirmed</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Wants their status.</div><div class="m"><b>Objective</b>State the true status precisely.</div></div>
+  <div class="lbl">Say — if complete</div>
+  <div class="say"><p>Let me confirm your status precisely. Your deposit is verified and your signed agreement is on file, so yes — your <span class="ph">[Event Date]</span> is confirmed, and I'll send written confirmation. Congratulations!</p></div>
+  <div class="lbl">Say — if not complete</div>
+  <div class="say"><p>You're almost there! We confirm the date once the deposit is verified and the rental agreement is signed. Right now we're waiting on <span class="ph">[step]</span>, and as soon as that's in, I'll send your confirmation.</p></div>
+  <div class="verify"><b>Verify first</b>Confirm only when every required step is verified complete — never before.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Won only when deposit verified + agreement signed; else Proposal with outstanding steps</div><div class="c"><b>Next action</b>State true status; complete remaining steps</div><div class="c"><b>Follow-up</b>Written confirmation when complete</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">83</span><span class="ttl">Client has concerns before signing</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Hesitant at the agreement stage.</div><div class="m"><b>Objective</b>Resolve concerns; never pressure.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>It's completely normal to want to feel sure before signing — let's talk it through. What's on your mind? I'll answer what I can and confirm anything I'm not certain about, so you can sign with total confidence.</p></div>
+  <div class="verify"><b>Verify first</b>Any policy/term concern — confirm the approved answer; never pressure to sign.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · concerns logged</div><div class="c"><b>Next action</b>Address/route concerns</div><div class="c"><b>Follow-up</b>Once resolved, re-send agreement</div></div>
+</div></details>
+
+<details class="scn"><summary><span class="num">84</span><span class="ttl">Client is ready to proceed but still needs final approval</span></summary><div class="body">
+  <div class="meta"><div class="m"><b>When to use</b>Awaiting a partner/org sign-off.</div><div class="m"><b>Objective</b>Keep documents ready; don't hold or confirm.</div></div>
+  <div class="lbl">Say</div>
+  <div class="say"><p>Perfect — you're in a great spot. While you get that final approval, I'll make sure your quotation and documents are ready to go, and I'll keep an eye on your date. The moment you're cleared, we can move straight to the deposit and agreement. When do you expect to hear back?</p></div>
+  <div class="verify"><b>Verify first</b>Don't hold or confirm the date on a pending approval; keep documents ready, not finalized.</div>
+  <div class="crm"><div class="c"><b>CRM status</b>Proposal · awaiting client approval</div><div class="c"><b>Next action</b>Ready documents; scheduled check-in</div><div class="c"><b>Follow-up</b>At their expected approval date</div></div>
+</div></details>
+  </section>
+
+  <!-- ================= FOLLOW-UP ================= -->
+  <section id="followup">
+    <span class="kicker">Section 07</span>
+    <h2 class="sec">Follow-up sequence &amp; messages</h2>
+    <div class="note"><b>Proposed operating framework, not existing company policy.</b> All timings marked
+      <span class="pill">approve</span> should be confirmed by management. Every follow-up must give a genuine reason to
+      reconnect — never just "Are you still interested?" Respect opt-outs and permitted contact hours.</div>
+    <div class="tblwrap"><table>
+      <tr><th>Stage</th><th>Proposed timing <span class="pill">approve</span></th><th>Channel</th><th>Reason to reconnect</th></tr>
+      <tr><td><b>Initial contact</b></td><td>Within a few business hours</td><td>Call → text</td><td>Welcome; confirm date &amp; count</td></tr>
+      <tr><td><b>Unanswered calls</b></td><td>Attempt 2: next day · Attempt 3: +2–3 days · then weekly</td><td>Call / VM / text / email</td><td>Offer virtual tour; quick question</td></tr>
+      <tr><td><b>No event details</b></td><td>+1 day, then every 2–3 days</td><td>Text / email</td><td>"Two quick details and I'll get you accurate pricing"</td></tr>
+      <tr><td><b>Tour invitation</b></td><td>Same day as qualification; re-offer +2 days</td><td>Call / text</td><td>Propose specific day options</td></tr>
+      <tr><td><b>Tour reminder</b></td><td>Day before + morning of</td><td>Text</td><td>Confirm time + address</td></tr>
+      <tr><td><b>Awaiting quote</b></td><td>Quote within approved SLA; follow +1 day after</td><td>Call / email</td><td>Deliver quote; answer questions</td></tr>
+      <tr><td><b>Quote awaiting decision</b></td><td>+2 days, +5 days, then weekly</td><td>Call / text / email</td><td>Offer to adjust; date-availability update</td></tr>
+      <tr><td><b>Stopped responding</b></td><td>Spaced touches, then a final "door-open" note</td><td>Text / email</td><td>New info; seasonal availability; gentle close</td></tr>
+      <tr><td><b>Needs more time</b></td><td>At the client's requested interval</td><td>Agreed channel</td><td>Check in as promised; no pressure</td></tr>
+      <tr><td><b>Unresolved policy question</b></td><td>As soon as verified (same/next day)</td><td>Call / email (in writing)</td><td>Deliver the confirmed answer</td></tr>
+      <tr><td><b>Payment pending</b></td><td>As soon as checked (same day where possible)</td><td>Call / email</td><td>Confirm receipt + next step (agreement)</td></tr>
+    </table></div>
+    <div class="grid2">
+      <div class="call"><h4>Tour reminder (text)</h4><div class="say"><p>Hi <span class="ph">[Client Name]</span>, looking forward to your tour tomorrow at <span class="ph">[Confirmed Tour Time]</span>! We're at 1654 Burdette Dr, San Jose. Reply here if anything changes — see you then! — <span class="ph">[Your Name]</span>, Crown Prince Event Hall</p></div></div>
+      <div class="call"><h4>Quote follow-up (email)</h4><div class="say"><p>Hi <span class="ph">[Client Name]</span>, I hope your <span class="ph">[Event Date]</span> planning is going well. Just checking in on the quote I sent — happy to walk through any line or adjust services. I'll keep an eye on your date's availability in the meantime. Warmly, <span class="ph">[Your Name]</span></p></div></div>
+      <div class="call"><h4>Re-engage gone quiet (text)</h4><div class="say"><p>Hi <span class="ph">[Client Name]</span>, a few <span class="ph">[season]</span> dates just opened and I thought of your <span class="ph">[event type]</span>. Would you like me to check if your date is still available? No pressure either way!</p></div></div>
+      <div class="call"><h4>Payment verified (text)</h4><div class="say"><p>Hi <span class="ph">[Client Name]</span>, good news — your deposit is verified and a receipt is on its way. The last step to confirm your date is the signed rental agreement; I'll send it now. Thank you!</p></div></div>
+    </div>
+  </section>
+
+  <!-- ================= TRAINING CHEAT SHEETS ================= -->
+  <section id="training">
+    <span class="kicker">Section 08</span>
+    <h2 class="sec">Training cheat sheets</h2>
+    <div class="call"><h4>Quick-reference call opening</h4><div class="say"><p>Hi <span class="ph">[Client Name]</span>, this is <span class="ph">[Your Name]</span> with Crown Prince Event Hall in San Jose — thanks for reaching out about your <span class="ph">[event type]</span>. I'd love to help with your date and details. Do you have a quick minute?</p></div></div>
+    <div class="call"><h4>60-second Crown Prince introduction</h4><div class="say"><p>Crown Prince Event Hall is a private event venue in San Jose with over 4,000 square feet — a large stage, open dance floor, banquet seating with Chiavari chairs, and a full bar. We host weddings, quinceañeras, birthdays, corporate events, and more, for up to 300 guests. You get a red-carpet entrance, big-screen TVs, house sound and lighting, a VIP prep room, and a private gated lot with over 100 spaces. Our starting rates are $3,845 Monday–Thursday and $4,845 weekends and holidays, and the starting package already includes 10 tables for up to 100 guests, security, cleaning, and insurance. Tours are by appointment, seven days a week — and there's a 360° virtual tour on our website.</p></div></div>
+    <div class="grid2">
+      <div class="fcard"><h4>Discovery cheat sheet</h4><ul><li>Name · phone · email · source</li><li>Event type · date (+alternates)</li><li>Start/end time · setup/cleanup</li><li>Guest count · floor plan / seating</li><li>Catering · bar</li><li>DJ · AV · lighting · stage</li><li>Décor · add-ons · prep room</li><li>Budget (if offered) · tour time</li></ul></div>
+      <div class="fcard"><h4>Pricing cheat sheet</h4><ul><li>Mon–Thu: <b>$3,845</b> starting</li><li>Fri–Sun &amp; holidays: <b>$4,845</b> starting</li><li>6-hour minimum window</li><li>Included: 10 tables (up to 100), security, cleaning, insurance</li><li>Weekend: 2 complimentary setup hours</li><li>Everything else = quoted/confirmed</li><li><b>Never</b> invent discounts, taxes, extra-hour/add-on totals, deposits</li></ul></div>
+      <div class="fcard"><h4>Venue-features cheat sheet</h4><ul><li>4,000+ sq ft · stage · dance floor</li><li>Round tables · gold/silver Chiavari · black/white linens</li><li>Big-screen TVs · house sound · mics · AV engineer (per pkg)</li><li>DJ lighting · uplighting · house color lighting</li><li>Full bar + packages · bartender (per pkg)</li><li>VIP/bridal prep room (per availability)</li><li>Red-carpet entrance · mirrored hallway · gated lot 100+ · optional valet</li></ul></div>
+      <div class="fcard"><h4>Objection-handling cheat sheet</h4><ul><li><b>1 Acknowledge</b> the concern</li><li><b>2 Empathize</b> genuinely</li><li><b>3 Clarify</b> the real issue</li><li><b>4 Offer</b> a solution / next step</li><li><b>5 Ask</b> to continue</li><li>Never pressure, invent scarcity, knock competitors, or promise discounts</li></ul></div>
+      <div class="fcard"><h4>Call-closing cheat sheet</h4><ul><li>Confirm the agreed next step</li><li>Set a specific follow-up time</li><li>Default close = book the tour</li><li>Recap what you'll verify</li><li>Thank them by name</li><li>Log the recap immediately</li></ul></div>
+      <div class="fcard"><h4>Policy-escalation cheat sheet</h4><ul><li>Cancellation / refunds → verify</li><li>Deposit / payment methods → verify</li><li>Policy exceptions → document + refer</li><li>Over 300 guests → capacity review</li><li>Production events → production review</li><li>Discounts / custom pricing → manager</li><li>Accessibility specifics → verify</li></ul></div>
+    </div>
+    <div class="call" style="background:var(--verify-bg);border-color:var(--warn)"><h4 style="color:var(--warn)">Common mistakes to avoid</h4>
+      <ul style="color:var(--ink-soft)">
+        <li>Confirming a date, tour time, or booking before it's actually checked/verified.</li>
+        <li>Quoting a final total or stating a deposit, tax, extra-hour, or add-on figure from memory.</li>
+        <li>Implying every service is included in the starting package.</li>
+        <li>Inventing a cancellation, refund, or payment policy instead of verifying.</li>
+        <li>Promising a discount or approving a policy exception yourself.</li>
+        <li>Mentioning a courtyard or studio — Crown Prince is one hall; those belong to another venue.</li>
+        <li>Treating a claimed payment, verbal yes, or unsigned document as a confirmed booking.</li>
+        <li>Reading internal notes to the client, or letting discovery feel like an interrogation.</li>
+        <li>Letting a lead go cold with no logged next action and follow-up date.</li>
+      </ul></div>
+  </section>
+
+  <!-- ================= ROLE-PLAY ================= -->
+  <section id="roleplay">
+    <span class="kicker">Section 09</span>
+    <h2 class="sec">Role-play exercises</h2>
+    <p class="lead">Run these in pairs — one coordinator, one "client" reading the prompts. Debrief against the quality checklist afterward.</p>
+    <details class="scn"><summary><span class="num">1</span><span class="ttl">Straightforward inquiry (easy)</span></summary><div class="body">
+      <div class="meta"><div class="m"><b>Skill focus</b>Opening, discovery, tour conversion.</div><div class="m"><b>Client says</b>"A birthday, maybe 90 people in February." · "A Saturday works best." · "Sure, I could come see it."</div></div>
+      <div class="lbl">Target behaviors</div>
+      <div class="guide"><ul><li>Warm opening; captures name/contact/date/count.</li><li>Shares correct weekend starting rate; doesn't over-promise.</li><li>Books a tour (checks schedule first) and sets a follow-up.</li></ul></div>
+    </div></details>
+    <details class="scn"><summary><span class="num">2</span><span class="ttl">Price objection (medium)</span></summary><div class="body">
+      <div class="meta"><div class="m"><b>Skill focus</b>Five-step framework, value framing.</div><div class="m"><b>Client says</b>"$4,845 is more than I wanted." · "The place down the street is cheaper." · "Can you do anything on price?"</div></div>
+      <div class="lbl">Target behaviors</div>
+      <div class="guide"><ul><li>Acknowledge → empathize → clarify → offer → ask.</li><li>Reframes with real inclusions; offers the weekday rate.</li><li>Routes the discount request to a manager — doesn't promise one. No competitor bashing.</li></ul></div>
+    </div></details>
+    <details class="scn"><summary><span class="num">3</span><span class="ttl">Unanswered lead (medium)</span></summary><div class="body">
+      <div class="meta"><div class="m"><b>Skill focus</b>Voicemail + text, cadence discipline.</div><div class="m"><b>Scenario</b>No pickup on two attempts; on attempt 3 a short text: "Still deciding."</div></div>
+      <div class="lbl">Target behaviors</div>
+      <div class="guide"><ul><li>Concise, warm voicemail with a call-back reason.</li><li>Follow-up text within permitted hours; offers virtual tour.</li><li>On reply, asks only date + guest count; steers to a call/tour. Logs each outcome + next date.</li></ul></div>
+    </div></details>
+    <details class="scn"><summary><span class="num">4</span><span class="ttl">Completed tour awaiting a decision (hard)</span></summary><div class="body">
+      <div class="meta"><div class="m"><b>Skill focus</b>Value-add follow-up, handling indecision.</div><div class="m"><b>Client says</b>"We loved it, but need to think and talk to family." · "How long will our date stay open?" · "Send the quote."</div></div>
+      <div class="lbl">Target behaviors</div>
+      <div class="guide"><ul><li>No pressure; clarifies what they're weighing.</li><li>Does NOT claim the date is held — offers to check availability.</li><li>Routes an accurate tailored quote; agrees a specific check-in with a real reason.</li></ul></div>
+    </div></details>
+    <details class="scn"><summary><span class="num">5</span><span class="ttl">Client ready to reserve (hard)</span></summary><div class="body">
+      <div class="meta"><div class="m"><b>Skill focus</b>Booking workflow accuracy, payment honesty.</div><div class="m"><b>Client says</b>"We're ready — let's book it!" · "I'll send the deposit today." · "So the date's ours now, right?"</div></div>
+      <div class="lbl">Target behaviors</div>
+      <div class="guide"><ul><li>Explains the real path: quotation → deposit → signed agreement → confirmed.</li><li>Confirms deposit/payment steps rather than stating figures from memory.</li><li>States the date is confirmed only after payment is verified and the agreement is signed. Names the next action + owner.</li></ul></div>
+    </div></details>
+  </section>
+
+  <!-- ================= QC ================= -->
+  <section id="qc">
+    <span class="kicker">Section 10</span>
+    <h2 class="sec">Supervisor quality checklist</h2>
+    <p class="lead">Score each call on the eleven dimensions below. The scoring system is a <span class="pill">proposed training standard</span> for coaching, to be approved and adjusted by management.</p>
+    <div class="tblwrap"><table>
+      <tr><th>#</th><th>Dimension</th><th>What "good" looks like</th><th>0–3</th></tr>
+      <tr><td>1</td><td><b>Professionalism &amp; rapport</b></td><td>Warm, confident, courteous; uses the client's name.</td><td>___</td></tr>
+      <tr><td>2</td><td><b>Listening &amp; communication</b></td><td>Lets the client talk; doesn't interrupt or over-script.</td><td>___</td></tr>
+      <tr><td>3</td><td><b>Discovery &amp; qualification</b></td><td>Captures date, count, type, needs naturally.</td><td>___</td></tr>
+      <tr><td>4</td><td><b>Pricing &amp; policy accuracy</b></td><td>Correct starting rates; verifies the rest; invents nothing.</td><td>___</td></tr>
+      <tr><td>5</td><td><b>Feature presentation</b></td><td>Relevant real features; no courtyard/studio errors.</td><td>___</td></tr>
+      <tr><td>6</td><td><b>Tour conversion &amp; next step</b></td><td>Invites a tour; proposes specifics; no false confirmations.</td><td>___</td></tr>
+      <tr><td>7</td><td><b>Objection handling</b></td><td>Uses the five-step framework; no pressure or discounts.</td><td>___</td></tr>
+      <tr><td>8</td><td><b>Follow-up commitment</b></td><td>Sets a specific next action and due date/time.</td><td>___</td></tr>
+      <tr><td>9</td><td><b>CRM documentation</b></td><td>Accurate, concise recap; correct statuses.</td><td>___</td></tr>
+      <tr><td>10</td><td><b>Escalation</b></td><td>Routes exceptions, capacity, production, pricing correctly.</td><td>___</td></tr>
+      <tr><td>11</td><td><b>Booking/payment accuracy</b></td><td>Never calls an unverified payment or unsigned doc "confirmed."</td><td>___</td></tr>
+    </table></div>
+    <div class="grid2">
+      <div class="fcard"><h4>Scoring scale (proposed)</h4><ul><li><b>3</b> — Excellent, model behavior</li><li><b>2</b> — Good, minor coaching</li><li><b>1</b> — Needs improvement</li><li><b>0</b> — Not demonstrated / error</li></ul></div>
+      <div class="fcard"><h4>Banding (proposed · 33 max)</h4><ul><li><b>30–33</b> — Exemplary</li><li><b>24–29</b> — Meets standard</li><li><b>18–23</b> — Developing; coach</li><li><b>&lt;18</b> — Retrain before solo calls</li><li><span class="pill">Auto-fail</span> any invented price/policy or false booking confirmation, regardless of total.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= ESCALATION ================= -->
+  <section id="escalation">
+    <span class="kicker">Section 11 · Reference</span>
+    <h2 class="sec">Policy verification &amp; escalation</h2>
+    <p class="lead">When the published fact sheet doesn't settle a question, don't improvise. Acknowledge, confirm the current approved answer, and follow up.</p>
+    <div class="tblwrap"><table>
+      <tr><th>Situation</th><th>Coordinator action</th><th>Route to</th></tr>
+      <tr><td>Cancellation / refund terms</td><td>Acknowledge; promise written confirmation</td><td>Management</td></tr>
+      <tr><td>Deposit / payment methods / deadlines</td><td>Acknowledge; confirm via booking workflow</td><td>Booking owner / Management</td></tr>
+      <tr><td>Discount or custom pricing</td><td>Document request; don't promise</td><td>Manager</td></tr>
+      <tr><td>Policy exception (alcohol, décor, vendor)</td><td>Document specifics; don't approve</td><td>Authorized decision-maker</td></tr>
+      <tr><td>Over 300 guests / tight capacity</td><td>Capture exact count + layout</td><td>Capacity review (Management)</td></tr>
+      <tr><td>Concert / production / complex AV</td><td>Capture full requirements</td><td>Production review (Ops/AV)</td></tr>
+      <tr><td>Accessibility specifics</td><td>Capture needs; promise verified answer</td><td>Management</td></tr>
+      <tr><td>Outside-vendor insurance / approval</td><td>Capture vendor details</td><td>Management</td></tr>
+      <tr><td>Final quote amount</td><td>Gather requirements; don't state a total</td><td>Quote team</td></tr>
+      <tr><td>Date hold</td><td>Confirm current hold process first</td><td>Booking owner</td></tr>
+    </table></div>
+    <div class="note"><b>The one-line rule for every coordinator:</b> "I want to give you the exact, current answer — let me confirm that with our team and get right back to you." It is always better to verify than to invent.</div>
+  </section>
+
+  <footer>
+    <b>Crown Prince Event Hall</b> · 1654 Burdette Dr, San Jose, CA 95121 · (408) 408-1654 · crownprincehall.com<br>
+    Internal Client Coordinator training document · v2 · Prepared 2026-10-28<br>
+    Prices shown are published starting rates, not final quotes. Verify all unpublished policies with management before committing.
+  </footer>
+</div>
+
+<button class="back" id="backTop" hidden aria-label="Back to top">↑ Top</button>
+
+<script>
+(function(){
+  // --- scenario filter ---
+  var input=document.getElementById('search');
+  var lib=document.getElementById('library');
+  var nomatch=document.getElementById('nomatch');
+  function apply(){
+    if(!lib)return;
+    var q=(input.value||'').trim().toLowerCase();
+    var cards=lib.querySelectorAll('details.scn');
+    var anyVisible=false;
+    cards.forEach(function(c){
+      var match=!q||c.textContent.toLowerCase().indexOf(q)>-1;
+      c.hidden=!match;
+      if(match){anyVisible=true; if(q) c.open=true; else c.open=false;}
+    });
+    // hide a group heading when all its scenarios are filtered out
+    lib.querySelectorAll('h3.grpH').forEach(function(h){
+      var vis=false, n=h.nextElementSibling;
+      while(n && !(n.tagName==='H3' && n.classList.contains('grpH'))){
+        if(n.tagName==='DETAILS' && !n.hidden){vis=true;break;}
+        if(n.tagName==='P' && q){ /* intro note hidden while filtering */ }
+        n=n.nextElementSibling;
+      }
+      h.hidden=q && !vis;
+    });
+    // hide group intro notes while filtering
+    lib.querySelectorAll('h3.grpH + p.note').forEach(function(p){p.hidden=!!q;});
+    nomatch.style.display=anyVisible?'none':'block';
+  }
+  if(input){input.addEventListener('input',apply);}
+
+  // --- back to top ---
+  var back=document.getElementById('backTop');
+  function onScroll(){ if(!back)return; back.hidden=(window.scrollY||document.documentElement.scrollTop)<600; }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  if(back){back.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});}
+})();
+</script>

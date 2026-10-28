@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CPH / ACD Lead Score Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--shadow:rgba(28,26,31,.10);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--shadow:rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--shadow:rgba(0,0,0,.4)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:"Bodoni Moda",Didot,serif;font-weight:600;margin:0;line-height:1.1}
+.topbar{position:sticky;top:0;z-index:40;background:var(--panel);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.topbar h1{font-size:20px}
+.topbar .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--wine)}
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding:7px 13px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--wine);color:#fff;border-color:var(--wine)}
+.note{background:var(--gold-soft);border-bottom:1px solid var(--line);padding:7px 20px;font-size:12.5px;color:var(--ink)}
+.note b{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.view{padding:18px 20px 60px}
+.view[hidden]{display:none}
+/* board */
+.board{display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:14px;align-items:start;overflow-x:auto}
+@media (max-width:1000px){.board{grid-template-columns:repeat(5,250px)}}
+.col-h{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:0 2px 8px;border-bottom:2px solid var(--line);margin-bottom:10px;display:flex;justify-content:space-between}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:11px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.card:hover,.card:focus-visible{border-color:var(--wine);box-shadow:0 2px 10px var(--shadow);outline:none}
+.card.won{opacity:.78;cursor:default}
+.card .top{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.nm{font-weight:600;font-size:15px}
+.sub{color:var(--muted);font-size:12px;margin:1px 0 0}
+.ring{--p:0;--c:var(--gold);width:42px;height:42px;border-radius:50%;flex:0 0 42px;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0);transition:background .3s ease}
+.ring::before{content:"";width:31px;height:31px;border-radius:50%;background:var(--panel);grid-area:1/1}
+.ring b{grid-area:1/1;font-size:13px;font-family:"IBM Plex Mono",monospace;z-index:1;font-variant-numeric:tabular-nums}
+.ring.ns{background:var(--line)}.ring.ns b{font-size:15px;color:var(--muted)}
+.cls{display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.03em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid;white-space:nowrap}
+.cls .g{font-size:11px}
+.cls.hot{background:var(--wine-soft);color:var(--wine);border-color:var(--wine)}
+.cls.warm{background:var(--gold-soft);color:var(--gold);border-color:var(--gold)}
+.cls.cold{background:var(--slate-soft);color:var(--slate);border-color:var(--slate)}
+.cls.ns{background:transparent;color:var(--muted);border-color:var(--line);border-style:dashed}
+.cls.won{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.02em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--slate-soft);color:var(--slate)}
+.chip.tour{background:var(--good-soft);color:var(--good)}
+.chip.warnx{background:var(--gold-soft);color:var(--gold)}
+.chip.alert{background:var(--wine-soft);color:var(--wine)}
+.delta{font-family:"IBM Plex Mono",monospace;font-size:11px;margin-left:6px}
+.delta.up{color:var(--good)}.delta.down{color:var(--wine)}
+.nextline{margin-top:9px;font-size:12px;border-top:1px dashed var(--line);padding-top:7px}
+.nextline b{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block;margin-bottom:1px}
+.simu{margin-top:9px}
+.mini{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:6px 9px;border:1px solid var(--good);color:var(--good);background:var(--good-soft);border-radius:6px;cursor:pointer;width:100%}
+.mini:hover{background:var(--good);color:#fff}
+.readiness{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:7px 0 3px}
+.readiness i{display:block;height:100%;background:var(--slate)}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.34);opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;background:var(--panel);border-left:1px solid var(--line);box-shadow:-4px 0 24px var(--shadow);transform:translateX(100%);transition:transform .22s ease;z-index:60;overflow:auto;padding:20px}
+.drawer.open{transform:none}
+@media (max-width:560px){.drawer{width:100%;top:auto;bottom:0;height:86vh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;transform:translateY(100%)}.drawer.open{transform:none}}
+.dclose{position:absolute;top:14px;right:14px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:6px;cursor:pointer;font-size:16px;width:30px;height:30px}
+.dhead{display:flex;align-items:center;gap:13px;margin:4px 0 6px}
+.dhead .ring{width:54px;height:54px;flex-basis:54px}.dhead .ring::before{width:40px;height:40px}.dhead .ring b{font-size:16px}
+.seg{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px;border-top:1px solid var(--line);padding-top:12px}
+.fac{margin:6px 0}
+.fac-h{display:flex;justify-content:space-between;font-size:13.5px;gap:10px}
+.fac-h .pts{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;color:var(--muted)}
+.bar{height:7px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;border-radius:4px}
+.bar i.pos{background:var(--good)}.bar i.neg{background:var(--wine)}.bar i.fit{background:var(--slate)}.bar i.int{background:var(--gold)}
+.ul{margin:4px 0 2px;padding-left:18px;font-size:13.5px}.ul li{margin-bottom:4px}
+.ul.grey li{color:var(--muted)}
+.nextbox{background:var(--wine-soft);border-radius:8px;padding:11px 13px;margin-top:8px;font-size:14px}
+.nextbox b{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--wine);margin-bottom:3px}
+.tl{list-style:none;padding:0;margin:4px 0 0}
+.tl li{position:relative;padding:0 0 13px 22px;border-left:2px solid var(--line);font-size:13px}
+.tl li::before{content:"";position:absolute;left:-6px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--panel);border:2px solid var(--slate)}
+.tl li.up::before{border-color:var(--good)}.tl li.down::before{border-color:var(--wine)}
+.tl .when{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted)}
+.tl .d{font-family:"IBM Plex Mono",monospace;font-size:11px}
+.tl .d.up{color:var(--good)}.tl .d.down{color:var(--wine)}
+/* dashboard */
+.dash{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+@media (max-width:820px){.dash{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.panel h3{font-size:17px;margin-bottom:10px}
+.panel .ph-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.dist{display:flex;gap:10px;flex-wrap:wrap}
+.distb{flex:1;min-width:64px;border:1px solid var(--line);border-radius:8px;padding:9px;text-align:center;cursor:pointer;background:transparent}
+.distb:hover{border-color:var(--wine)}
+.distb .v{font-family:"IBM Plex Mono",monospace;font-size:22px}
+.distb .l{font-size:11px;color:var(--muted)}
+.prow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px;cursor:pointer}
+.prow:last-child{border-bottom:0}
+.prow .meta{flex:1;min-width:0}
+.prow .nm{font-size:14px}
+.prow .mn{font-size:12px;color:var(--muted)}
+.alist{margin:0;padding-left:0;list-style:none;font-size:13.5px}
+.alist li{padding:6px 0;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.alist li:last-child{border-bottom:0}
+.sigrow{display:flex;gap:8px;align-items:center;padding:6px 0;font-size:13.5px;border-bottom:1px solid var(--line)}
+.sigrow:last-child{border-bottom:0}
+/* mobile frame */
+.mobwrap{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
+.phone{width:320px;max-width:100%;border:10px solid var(--ink);border-radius:30px;background:var(--paper);overflow:hidden;box-shadow:0 8px 30px var(--shadow)}
+.phone-h{background:var(--panel);border-bottom:1px solid var(--line);padding:10px 14px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.phone-b{padding:12px;max-height:560px;overflow:auto}
+.qbtns{display:flex;gap:6px;margin-top:9px}
+.qbtn{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10.5px;text-transform:uppercase;padding:7px 0;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);cursor:pointer}
+.qbtn:hover{border-color:var(--wine);color:var(--wine)}
+.legend{font-size:12px;color:var(--muted);margin-top:8px}
+.legend .cls{margin-right:8px}
+.caption{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+</style>
+<body>
+<div class="topbar">
+<div><div class="eyebrow">Interactive prototype</div><h1>CPH / ACD · Lead Score</h1></div>
+<div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-selected="true" data-tab="pipeline">Pipeline</button>
+<button class="tab" role="tab" aria-selected="false" data-tab="dashboard">Dashboard</button>
+<button class="tab" role="tab" aria-selected="false" data-tab="mobile">Mobile</button>
+</div>
+</div>
+<div class="note"><b>Demo</b> &nbsp;All leads and scores are illustrative. Click any card to open its live score breakdown. On the lead in the <b>Lead</b> column (Daniela R.), press <b>“Simulate Calendly tour”</b> to watch the score recompute and the override push it to Warm. Scores are computed by the model in §5 of the report.</div>
+
+<!-- PIPELINE -->
+<section class="view" id="pipeline" role="tabpanel">
+<p class="caption">Score &amp; classification are separate from the pipeline <em>stage</em> (column): a lead can sit in “Contacted” yet score Hot. Glyph + label on every chip — meaning is never colour alone.</p>
+<div class="board" id="board"></div>
+<div class="legend">
+<span class="cls hot"><span class="g">●</span>Hot 70–100</span>
+<span class="cls warm"><span class="g">◐</span>Warm 40–69</span>
+<span class="cls cold"><span class="g">○</span>Cold 0–39</span>
+<span class="cls ns"><span class="g">◇</span>Not scored</span>
+<span class="cls won"><span class="g">✓</span>Booked</span>
+</div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="view" id="dashboard" role="tabpanel" hidden>
+<div class="dash">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div class="panel">
+<div class="ph-sub">Lead distribution · click to filter</div>
+<div class="dist" id="dist"></div>
+</div>
+<div class="panel">
+<h3>Highest-priority leads</h3>
+<div class="ph-sub">Ranked by urgency — date proximity + overdue follow-up + next milestone, not score alone</div>
+<div id="prio"></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div class="panel">
+<h3>Buying-intent signals</h3>
+<div class="ph-sub">Recent meaningful actions</div>
+<div class="sigrow"><span class="chip tour">NEW</span> Daniela R. — self-booked a Calendly tour</div>
+<div class="sigrow"><span class="chip tour">✓</span> James T. — requested a quotation</div>
+<div class="sigrow"><span class="chip tour">●</span> Priya &amp; Sam — asked about the deposit</div>
+<div class="sigrow"><span class="chip">✓</span> Maria L. — tour completed, awaiting follow-up</div>
+</div>
+<div class="panel">
+<h3>Follow-up attention</h3>
+<div class="ph-sub">Operational — kept separate from the score</div>
+<ul class="alist">
+<li><span class="chip alert">!</span> Robert K. — Hot-intent gone quiet, no-show + 3 unanswered</li>
+<li><span class="chip warnx">⏱</span> Maria L. — toured, follow-up due</li>
+<li><span class="chip warnx">⏱</span> 2 tours to confirm this week</li>
+<li><span class="chip">◇</span> Daniela R. — new, awaiting first reply</li>
+</ul>
+</div>
+<div class="panel">
+<h3>Conversion insights</h3>
+<div class="ph-sub">Historical rates — not an individual lead's probability</div>
+<div class="fac"><div class="fac-h"><span>Hot → booked</span><span class="pts">illustrative</span></div><div class="bar"><i class="pos" style="width:62%"></i></div></div>
+<div class="fac"><div class="fac-h"><span>Warm → booked</span><span class="pts">illustrative</span></div><div class="bar"><i class="int" style="width:28%"></i></div></div>
+<div class="fac"><div class="fac-h"><span>Cold → booked</span><span class="pts">illustrative</span></div><div class="bar"><i class="fit" style="width:7%"></i></div></div>
+<p class="caption" style="margin-top:8px">Shown only once validated against real bookings (§10). These bars are placeholders.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- MOBILE -->
+<section class="view" id="mobile" role="tabpanel" hidden>
+<p class="caption">Mobile-first for staff in the field: compact card, bottom-sheet breakdown, quick call/text/email. Same server-computed score as desktop.</p>
+<div class="mobwrap">
+<div class="phone">
+<div class="phone-h">Pipeline · 6 leads</div>
+<div class="phone-b" id="mobboard"></div>
+</div>
+<div style="max-width:340px">
+<h3 style="font-size:18px;margin-bottom:8px">What stays, what simplifies</h3>
+<p class="caption"><b>Keep:</b> score ring, class chip, event date, tour status, the single next action, quick-contact buttons, the breakdown factor list and activity list.</p>
+<p class="caption"><b>Simplify / hide:</b> multi-series charts, the dashboard's wide conversion visuals — replaced by stacked bars in a bottom sheet.</p>
+<p class="caption">Tap a card to open the same breakdown drawer, which docks as a bottom sheet on a narrow screen.</p>
+</div>
+</div>
+</section>
+
+<!-- DRAWER -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Score breakdown" aria-hidden="true">
+<button class="dclose" id="dclose" aria-label="Close">×</button>
+<div id="dbody"></div>
+</aside>
+
+<script>
+"use strict";
+// ---------- model (mirrors report §5) ----------
+var MILESTONE={inquiry:0,engaged:10,tourBooked:25,tourCompleted:38,quoted:44,bookingIntent:52};
+var KEY=["eventType","eventDate","guests","budget","contact"];
+function dateFitPts(d){ if(d==null)return 0; if(d>=14&&d<=300)return 10; if((d>300&&d<=540)||(d>=0&&d<14))return 6; return 0; }
+function decay(days){ if(days==null)return 1; if(days<=14)return 1; if(days>=45)return 0; return 1-(days-14)/31; }
+function compute(L){
+  var fit=0, unknown=[];
+  if(L.eventType) fit+=6; else unknown.push("Event type");
+  if(L.eventDate!=null) fit+=dateFitPts(L.daysOut); else unknown.push("Event date");
+  if(L.guests!=null){ if(L.guestsFit) fit+=8; } else unknown.push("Guest count");
+  if(L.dateAvailable) fit+=5;
+  if(L.budget==="aligned") fit+=6; else if(L.budget==="flexible") fit+=4; else if(L.budget==null) unknown.push("Budget");
+  fit=Math.min(35,fit);
+  var base=MILESTONE[L.milestone]||0, bonus=0;
+  if(L.calendly) bonus+=3; if(L.inbound) bonus+=2; if(L.negotiation) bonus+=3;
+  var intent=Math.min(55,base+bonus);
+  var engRaw=(L.activeReply?6:0)+(L.fast?4:0);
+  var eng=Math.max(0,Math.min(10,Math.round(engRaw*decay(L.daysSinceReply))));
+  var neg=0; if(L.noShow)neg+=10; if(L.reschedule)neg+=(L.reschedule>=2?6:2); if(L.unanswered>=3)neg+=8; neg=Math.min(25,neg);
+  var raw=Math.max(0,Math.min(100,fit+intent+eng-neg));
+  var known=KEY.filter(function(k){return L[k]!=null && L[k]!==false;}).length;
+  var highIntent=["tourBooked","tourCompleted","quoted","bookingIntent"].indexOf(L.milestone)>=0;
+  var cls, floored=false, ceiled=false;
+  if(L.lifecycle==="won"){ cls="won"; }
+  else if(L.lifecycle==="lost"){ cls="cold"; ceiled=true; }
+  else if(known<3 && !highIntent){ cls="ns"; }
+  else{
+    cls = raw>=70?"hot":raw>=40?"warm":"cold";
+    if(L.calendly && !L.noShow && !L.cancelled && cls==="cold"){ cls="warm"; floored=true; }
+    if(L.milestone==="tourCompleted" && cls==="cold"){ cls="warm"; floored=true; }
+    if(L.milestone==="bookingIntent" && cls!=="hot"){ cls="hot"; floored=true; }
+  }
+  return {fit:fit,intent:intent,eng:eng,neg:neg,raw:raw,cls:cls,unknown:unknown,
+          confidence:known+"/"+KEY.length, floored:floored, ceiled:ceiled};
+}
+var CLS={hot:{g:"●",t:"Hot",c:"var(--wine)"},warm:{g:"◐",t:"Warm",c:"var(--gold)"},cold:{g:"○",t:"Cold",c:"var(--slate)"},ns:{g:"◇",t:"Not scored",c:"var(--line)"},won:{g:"✓",t:"Booked",c:"var(--good)"}};
+
+// ---------- data (illustrative) ----------
+var LEADS=[
+ {id:"daniela",name:"Daniela R.",venue:"CPH",type:"Wedding",stage:"Lead",eventType:"Wedding",eventDate:null,daysOut:null,guests:null,budget:null,contact:true,
+  milestone:"inquiry",lastAct:"Inquiry 10 min ago",tour:null,canSimulate:true,
+  events:[{w:"today · 15:14",t:"Inquiry received",d:"+6",cls:"up",r:"Event type captured; not yet contacted"}]},
+ {id:"maria",name:"Maria L.",venue:"CPH",type:"Quinceañera",stage:"Tour",eventType:"Quinceañera",eventDate:"Jun 6",daysOut:234,guests:180,guestsFit:true,budget:"flexible",contact:true,dateAvailable:true,
+  milestone:"tourBooked",calendly:true,activeReply:true,fast:false,daysSinceReply:2,tour:"booked",lastAct:"Replied 2d ago",
+  events:[{w:"Sep 28 · 14:02",t:"Inquiry received",d:"+16",cls:"up"},{w:"Sep 28 · 14:09",t:"Tour booked via Calendly",d:"→ Warm",cls:"up",r:"Self-booked 7 min after inquiring"},{w:"Oct 2 · 10:41",t:"Confirmed event details",d:"+10",cls:"up"},{w:"Oct 13 · 09:30",t:"Replied to message",d:"+6",cls:"up"}]},
+ {id:"james",name:"James T.",venue:"CPH",type:"Corporate",stage:"Proposal",eventType:"Corporate",eventDate:"Jan 14",daysOut:91,guests:150,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+  milestone:"quoted",inbound:true,activeReply:true,fast:true,daysSinceReply:1,tour:"completed",lastAct:"Requested quote today",
+  events:[{w:"Sep 20",t:"Inquiry received",d:"+35",cls:"up"},{w:"Sep 25",t:"Tour completed",d:"+3",cls:"up"},{w:"Oct 10",t:"Actively responding",d:"+10",cls:"up"},{w:"Oct 15",t:"Quotation requested",d:"+6",cls:"up"}]},
+ {id:"priya",name:"Priya & Sam",venue:"ACD",type:"Wedding",stage:"Deposit",eventType:"Wedding",eventDate:"Mar 12",daysOut:148,guests:120,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+  milestone:"bookingIntent",negotiation:true,activeReply:true,fast:false,daysSinceReply:1,tour:"completed",lastAct:"Asked about deposit",
+  events:[{w:"Aug 30",t:"Inquiry received",d:"+35",cls:"up"},{w:"Sep 12",t:"Tour completed",d:"+3",cls:"up"},{w:"Oct 1",t:"Quotation sent",d:"+6",cls:"up"},{w:"Oct 14",t:"Deposit discussion",d:"→ Hot",cls:"up"}]},
+ {id:"robert",name:"Robert K.",venue:"CPH",type:"Birthday",stage:"Tour",eventType:"Birthday",eventDate:"Nov 24",daysOut:40,guests:90,guestsFit:true,budget:null,contact:true,
+  milestone:"tourBooked",noShow:true,unanswered:3,daysSinceReply:21,tour:"noshow",lastAct:"No reply 21d",
+  events:[{w:"Sep 2",t:"Inquiry received",d:"+24",cls:"up"},{w:"Sep 8",t:"Tour booked",d:"+25",cls:"up"},{w:"Sep 15",t:"Tour no-show",d:"−10",cls:"down",r:"Temporary; restores over 14d or on re-attend"},{w:"Sep 24",t:"3rd unanswered follow-up",d:"−8",cls:"down",r:"Clears on any reply"}]},
+ {id:"grace",name:"Grace O.",venue:"ACD",type:"Wedding",stage:"Deposit",eventType:"Wedding",eventDate:"Dec 6",daysOut:52,guests:140,guestsFit:true,budget:"aligned",contact:true,dateAvailable:true,
+  milestone:"bookingIntent",lifecycle:"won",tour:"completed",lastAct:"Deposit paid — booked",
+  events:[{w:"Jul 10",t:"Inquiry received",d:"+35",cls:"up"},{w:"Jul 28",t:"Tour completed",d:"+3",cls:"up"},{w:"Aug 15",t:"Quotation signed",d:"+6",cls:"up"},{w:"Aug 20",t:"Deposit paid → Booked",d:"✓ Won",cls:"up",r:"Conversion — exits prospect scoring"}]}
+];
+var STAGES=["Lead","Contacted","Tour","Proposal","Deposit"];  // mirrors the CRM's Journey
+var filterCls=null;
+
+function tourChip(t){
+  if(t==="booked")return '<span class="chip tour">✓ Tour booked</span>';
+  if(t==="completed")return '<span class="chip tour">✓ Tour done</span>';
+  if(t==="noshow")return '<span class="chip alert">✕ No-show</span>';
+  return '<span class="chip">○ No tour</span>';
+}
+function ringHTML(r,big){
+  if(r.cls==="ns")return '<div class="ring ns'+(big?" ":"")+'"><b>?</b></div>';
+  var pct=r.cls==="won"?100:r.raw;
+  return '<div class="ring" style="--p:'+pct+';--c:'+CLS[r.cls].c+'"><b>'+(r.cls==="won"?"✓":r.raw)+'</b></div>';
+}
+function clsChip(cls){return '<span class="cls '+cls+'"><span class="g">'+CLS[cls].g+'</span>'+CLS[cls].t+'</span>';}
+
+function cardHTML(L){
+  var r=compute(L); L._r=r;
+  var daysTxt=L.daysOut!=null?(" · "+L.daysOut+"d"):"";
+  var h='<div class="card" tabindex="0" data-id="'+L.id+'" role="button" aria-label="Open '+L.name+' breakdown">';
+  h+='<div class="top"><div><div class="nm">'+L.name+'</div><div class="sub">'+L.type+' · '+(L.eventDate||"no date")+daysTxt+' · '+L.venue+'</div></div>'+ringHTML(r)+'</div>';
+  h+='<div style="margin-top:7px">'+clsChip(r.cls);
+  if(r.floored)h+=' <span class="delta up">▲ override</span>';
+  h+='</div>';
+  h+='<div class="chiprow">'+tourChip(L.tour)+'<span class="chip">💬 '+L.lastAct+'</span></div>';
+  if(r.cls==="ns"){ h+='<div class="readiness"><i style="width:'+(parseInt(r.confidence)*20)+'%"></i></div><div class="sub">Data-readiness '+r.confidence+' — needs: '+r.unknown.join(", ")+'</div>'; }
+  h+='<div class="nextline"><b>Next action</b>'+nextAction(L,r)+'</div>';
+  if(L.canSimulate)h+='<div class="simu"><button class="mini" data-sim="'+L.id+'">Simulate Calendly tour →</button></div>';
+  h+='</div>';
+  return h;
+}
+function nextAction(L,r){
+  if(L.lifecycle==="won")return "Booked — hand to events team";
+  if(r.cls==="ns")return "Respond now; confirm date &amp; guest count";
+  if(L.milestone==="bookingIntent")return "Send agreement + deposit link; hold date 48h";
+  if(L.milestone==="quoted")return "Send quote within 24h; propose a tour to close";
+  if(L.tour==="noshow")return "One reschedule offer; if silent 7d, mark dormant";
+  if(L.milestone==="tourCompleted")return "Follow up on the visit; send quotation";
+  if(L.tour==="booked")return "Confirm tour; send pre-tour note for guests &amp; budget";
+  return "Respond and qualify";
+}
+function renderBoard(){
+  var b=document.getElementById("board"); b.innerHTML="";
+  STAGES.forEach(function(st){
+    var col=document.createElement("div");
+    var inCol=LEADS.filter(function(L){return L.stage===st && (!filterCls || compute(L).cls===filterCls);});
+    col.innerHTML='<div class="col-h"><span>'+st+'</span><span>'+inCol.length+'</span></div>'+inCol.map(cardHTML).join("");
+    b.appendChild(col);
+  });
+}
+function renderMob(){
+  var m=document.getElementById("mobboard");
+  m.innerHTML=LEADS.map(cardHTML).join("");
+}
+
+// ---------- drawer ----------
+function openDrawer(L){
+  var r=compute(L);
+  var db=document.getElementById("dbody"); var h="";
+  h+='<div class="dhead">'+ringHTML(r,true)+'<div><div style="margin-bottom:4px">'+clsChip(r.cls)+(r.floored?' <span class="delta up">▲ override applied</span>':'')+'</div><div class="nm">'+L.name+'</div><div class="sub">'+L.type+' · '+L.venue+' · '+(L.eventDate||"no date")+(L.daysOut!=null?" · "+L.daysOut+"d":"")+'</div></div></div>';
+  if(r.cls==="ns"){
+    h+='<div class="seg">Why “not scored yet”</div><p style="font-size:13.5px;margin:0 0 6px">Confidence '+r.confidence+' key fields known and no high-intent action yet. Not a low score — an information gap.</p>';
+    h+='<div class="seg">Information still needed</div><ul class="ul grey">'+r.unknown.map(function(u){return "<li>"+u+"</li>";}).join("")+'</ul>';
+  } else {
+    h+='<div class="seg">Score composition</div>';
+    h+=facBar("Fit / qualification",r.fit,35,"fit");
+    h+=facBar("Intent / behaviour",r.intent,55,"int");
+    h+=facBar("Engagement quality",r.eng,10,"pos");
+    if(r.neg>0)h+=facBar("Negative (reversible)",-r.neg,-25,"neg");
+    h+='<div class="seg">Positive signals</div><ul class="ul">'+posSignals(L,r).map(function(s){return "<li>"+s+"</li>";}).join("")+'</ul>';
+    var att=attention(L); if(att.length){h+='<div class="seg">Attention needed</div><ul class="ul">'+att.map(function(s){return "<li>"+s+"</li>";}).join("")+'</ul>';}
+    if(r.unknown.length){h+='<div class="seg">Still unknown <span style="text-transform:none;color:var(--muted)">(not a negative)</span></div><ul class="ul grey">'+r.unknown.map(function(u){return "<li>"+u+"</li>";}).join("")+'</ul>';}
+  }
+  h+='<div class="seg">Recommended next action</div><div class="nextbox"><b>Do this</b>'+nextAction(L,r)+'</div>';
+  h+='<div class="seg">Score trend · what changed it</div><ul class="tl">'+(L.events||[]).map(function(e){return '<li class="'+(e.cls||"")+'"><span class="when">'+e.w+'</span> — '+e.t+' <span class="d '+(e.cls||"")+'">'+e.d+'</span>'+(e.r?'<br><span class="sub">'+e.r+'</span>':"")+'</li>';}).join("")+'</ul>';
+  db.innerHTML=h;
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawer").setAttribute("aria-hidden","false");
+  document.getElementById("scrim").classList.add("open");
+}
+function facBar(label,val,max,cls){
+  var pct=Math.round(Math.abs(val)/Math.abs(max)*100);
+  return '<div class="fac"><div class="fac-h"><span>'+label+'</span><span class="pts">'+(val>=0?"+":"")+val+' / '+max+'</span></div><div class="bar"><i class="'+cls+'" style="width:'+pct+'%"></i></div></div>';
+}
+function posSignals(L,r){
+  var s=[];
+  if(L.calendly)s.push("Tour booked via Calendly — strong proactive intent (+25/+3)");
+  else if(L.tour==="booked")s.push("Tour booked (+25)");
+  if(L.milestone==="tourCompleted"||L.tour==="completed")s.push("Tour completed — demonstrated commitment (+38)");
+  if(L.milestone==="quoted")s.push("Quotation requested/sent (+44)");
+  if(L.milestone==="bookingIntent")s.push("Discussing deposit / how to reserve (+52)");
+  if(L.eventDate)s.push("Serviceable event date (+"+dateFitPts(L.daysOut)+")");
+  if(L.eventType)s.push("Event type identified (+6)");
+  if(L.guests!=null&&L.guestsFit)s.push("Guest count fits capacity &amp; a package (+8)");
+  if(L.budget==="aligned")s.push("Budget aligns with a package (+6)");
+  if(L.budget==="flexible")s.push("Budget flexible (+4)");
+  if(L.activeReply&&r.eng>0)s.push("Actively responding (+"+r.eng+")");
+  return s.length?s:["No positive signals yet"];
+}
+function attention(L){
+  var a=[];
+  if(L.tour==="noshow")a.push("Tour no-show (−10, temporary — restores on re-attend)");
+  if(L.unanswered>=3)a.push(L.unanswered+" unanswered follow-ups (−8, clears on any reply)");
+  if(L.tour==="booked")a.push("Tour not yet completed");
+  if(L.daysSinceReply!=null&&L.daysSinceReply>=14)a.push("Quiet for "+L.daysSinceReply+" days — engagement decaying");
+  return a;
+}
+function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("drawer").setAttribute("aria-hidden","true");document.getElementById("scrim").classList.remove("open");}
+
+// ---------- simulate Calendly booking ----------
+function simulate(id){
+  var L=LEADS.filter(function(x){return x.id===id;})[0]; if(!L)return;
+  var before=compute(L);
+  L.milestone="tourBooked"; L.calendly=true; L.tour="booked"; L.stage="Tour"; L.canSimulate=false; L.lastAct="Booked tour just now";
+  var after=compute(L);
+  L.events.push({w:"today · 15:21",t:"Tour booked via Calendly",d:(before.cls==="ns"?"→ Warm":("+"+(after.raw-before.raw))),cls:"up",r:"Self-booked — override floors the lead at Warm despite an incomplete profile"});
+  renderBoard(); renderMob(); renderDash();
+  openDrawer(L);
+}
+
+// ---------- dashboard ----------
+function renderDash(){
+  var counts={hot:0,warm:0,cold:0,ns:0,won:0};
+  LEADS.forEach(function(L){counts[compute(L).cls]++;});
+  var dist=document.getElementById("dist");
+  dist.innerHTML=["hot","warm","cold","ns","won"].map(function(k){
+    return '<button class="distb" data-fcls="'+k+'"><div class="v" style="color:'+CLS[k].c+'">'+CLS[k].g+counts[k]+'</div><div class="l">'+CLS[k].t+'</div></button>';
+  }).join("");
+  var ranked=LEADS.filter(function(L){return compute(L).cls!=="won";}).slice().sort(function(a,b){
+    return urgency(b)-urgency(a);
+  });
+  document.getElementById("prio").innerHTML=ranked.map(function(L){
+    var r=compute(L);
+    return '<div class="prow" data-id="'+L.id+'">'+ringHTML(r)+'<div class="meta"><div class="nm">'+L.name+' '+clsChip(r.cls)+'</div><div class="mn">'+L.type+' · '+(L.eventDate||"no date")+(L.daysOut!=null?" · "+L.daysOut+"d":"")+' · '+nextAction(L,r)+'</div></div></div>';
+  }).join("");
+}
+function urgency(L){
+  var r=compute(L),u=0;
+  u+=({hot:40,warm:25,cold:8,ns:15,won:0})[r.cls];
+  if(L.daysOut!=null)u+=Math.max(0,60-L.daysOut)/2;        // nearer events rank up
+  if(L.tour==="noshow"||L.unanswered>=3)u+=20;             // overdue / at-risk
+  if(L.tour==="completed"&&L.milestone!=="bookingIntent")u+=10; // toured, needs follow-up
+  if(r.cls==="ns")u+=12;                                   // new leads surface, not sink
+  return u;
+}
+
+// ---------- wiring ----------
+document.querySelectorAll(".tab").forEach(function(t){
+  t.addEventListener("click",function(){
+    document.querySelectorAll(".tab").forEach(function(x){x.setAttribute("aria-selected","false");});
+    t.setAttribute("aria-selected","true");
+    ["pipeline","dashboard","mobile"].forEach(function(v){document.getElementById(v).hidden=(v!==t.dataset.tab);});
+  });
+});
+document.addEventListener("click",function(e){
+  var sim=e.target.closest("[data-sim]"); if(sim){e.stopPropagation();simulate(sim.dataset.sim);return;}
+  var fc=e.target.closest("[data-fcls]"); if(fc){filterCls=(filterCls===fc.dataset.fcls?null:fc.dataset.fcls);document.querySelector('.tab[data-tab="pipeline"]').click();renderBoard();return;}
+  var card=e.target.closest("[data-id]"); if(card){var L=LEADS.filter(function(x){return x.id===card.dataset.id;})[0];if(L&&L.lifecycle!=="won")openDrawer(L);else if(L)openDrawer(L);}
+});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape")closeDrawer();
+  if((e.key==="Enter"||e.key===" ")&&document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.id){e.preventDefault();var L=LEADS.filter(function(x){return x.id===document.activeElement.dataset.id;})[0];if(L)openDrawer(L);}
+});
+document.getElementById("dclose").addEventListener("click",closeDrawer);
+document.getElementById("scrim").addEventListener("click",closeDrawer);
+renderBoard(); renderMob(); renderDash();
+</script>
+</body>
+</html>

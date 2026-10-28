@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Scoring — Build Specification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;--viz:#2A78D6;--neg:#C23A39;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
+main{max-width:820px;margin:0 auto;padding:52px 24px 80px}
+h1,h2{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.015em}
+h2{font-size:23px;margin:44px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+h2 .n{font-family:"IBM Plex Mono",monospace;color:var(--wine);font-size:.58em;margin-right:9px;vertical-align:3px}
+h3{font-size:16px;margin:20px 0 6px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+.meta{color:var(--muted);font-size:14px;margin-top:14px;font-family:"IBM Plex Mono",monospace}
+p{margin:0 0 13px;max-width:72ch}ul,ol{padding-left:20px;margin:0 0 13px;max-width:72ch}li{margin-bottom:5px}
+.lede{font-size:18.5px;color:var(--muted);max-width:60ch;border-left:3px solid var(--gold);padding-left:16px;font-style:italic;margin:16px 0 0}
+a{color:var(--wine)}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--code);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+.tablewrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+caption{caption-side:top;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding-bottom:7px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1.5px solid var(--line);vertical-align:bottom}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:hover{background:var(--code)}
+tfoot td{font-weight:600;border-top:2px solid var(--ink);border-bottom:0}
+.pos{color:var(--good)}.negc{color:var(--neg)}
+.grp td{background:var(--code);font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cls{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;text-transform:uppercase}
+.hot{color:var(--wine)}.warm{color:var(--gold)}.cold{color:var(--slate)}.won{color:var(--good)}.ns{color:var(--muted)}
+.rangebar{display:flex;height:32px;border-radius:6px;overflow:hidden;margin:12px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.rangebar div{display:flex;align-items:center;justify-content:center;color:#fff;gap:5px}
+.rangebar .c-cold{background:var(--slate);flex:0 0 40%}.rangebar .c-warm{background:var(--gold);flex:0 0 30%}.rangebar .c-hot{background:var(--wine);flex:0 0 30%}
+.scale{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
+.note{background:var(--gold-soft);border-left:3px solid var(--gold);padding:13px 16px;border-radius:0 6px 6px 0;margin:16px 0}
+.note.key{background:var(--good-soft);border-color:var(--good)}.note.warn{background:var(--wine-soft);border-color:var(--wine)}
+.note p:last-child{margin:0}.note .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px}
+.tag.p1{background:var(--wine-soft);color:var(--wine)}.tag.p2{background:var(--gold-soft);color:var(--gold)}.tag.p3{background:var(--slate-soft);color:var(--slate)}
+</style>
+<body>
+<main>
+<span class="eyebrow">Lead-scoring build spec · October 2026</span>
+<h1 style="margin-top:12px">Lead Scoring — Build Specification</h1>
+<div class="meta">Crown Prince Event Hall (CPH, ≤300) &amp; Alvin Studio &amp; Courtyard (ACD, ≤100)</div>
+<p class="lede">A practical scoring system sales leadership can approve and a developer can build — one table, clear rules, automatic updates. Buying behaviour drives the classification, not profile completeness.</p>
+
+<div class="note warn"><span class="k">What the number is</span><p>The 0–100 score is a <strong>priority score</strong> that ranks which leads to work first. The percentage <strong>bands below are provisional scoring bands, not measured booking probabilities.</strong> Real conversion probabilities come later, from booking history (see §6). All weights are proposed and should be tuned once outcomes accrue.</p></div>
+
+<!-- 1 -->
+<h2><span class="n">1</span>Classification bands</h2>
+<div class="rangebar"><div class="c-cold">○ Cold</div><div class="c-warm">◐ Warm</div><div class="c-hot">● Hot</div></div>
+<div class="scale"><span>0</span><span>40</span><span>70</span><span>100</span></div>
+<div class="tablewrap"><table>
+<thead><tr><th>Band</th><th class="n">Score</th><th>Meaning</th><th>Enters when</th></tr></thead>
+<tbody>
+<tr><td><span class="cls hot">● Hot</span></td><td class="n">70–100</td><td>Strong buying intent — act today</td><td>Toured + quoting, or asked about a deposit</td></tr>
+<tr><td><span class="cls warm">◐ Warm</span></td><td class="n">40–69</td><td>Promising — keep engaging</td><td>Confirmed tour, or good fit + replying</td></tr>
+<tr><td><span class="cls cold">○ Cold</span></td><td class="n">0–39</td><td>Low current priority</td><td>Worked but low intent</td></tr>
+<tr><td><span class="cls ns">◇ Not scored yet</span></td><td class="n">—</td><td>Too little info for a score</td><td>New / barely-contacted lead</td></tr>
+<tr><td><span class="cls won">✓ Won</span></td><td class="n">—</td><td>Converted — leaves the queue</td><td>Deposit paid or agreement signed</td></tr>
+<tr><td><span class="cls cold">✕ Lost</span></td><td class="n">—</td><td>Disqualified / not interested</td><td>Explicit no, or unfit for both venues</td></tr>
+</tbody></table></div>
+<p><strong>A new lead is never Cold by default.</strong> With too little information it is <em>Not scored yet</em> (shown with the missing fields), not a low score.</p>
+
+<!-- 2 -->
+<h2><span class="n">2</span>The scoring matrix</h2>
+<p><code>Score = Fit + Buying Intent + Engagement − Negative Signals</code>, clamped to 0–100. <strong>Buying Intent</strong> uses the <em>highest milestone reached</em> (it does not add milestones together, so one tour isn't counted twice). Unknown fields score <strong>0</strong> — never negative.</p>
+<div class="tablewrap"><table>
+<caption>One scoring table — proposed weights, to validate against outcomes</caption>
+<thead><tr><th>Signal</th><th class="n">Points</th><th>How it is applied</th></tr></thead>
+<tbody>
+<tr class="grp"><td colspan="3">Fit &amp; inquiry quality — max 35</td></tr>
+<tr><td>Inquiry quality — event type &amp; a serviceable date given</td><td class="n">15</td><td>Type 7 + date 8; recomputed when fields change</td></tr>
+<tr><td>Guest count within the venue's capacity</td><td class="n">10</td><td>Fits CPH ≤300 / ACD ≤100; over both → <span class="negc">disqualify</span></td></tr>
+<tr><td>Budget alignment</td><td class="n">10</td><td>Aligned 10 · flexible 6 · <strong>unknown 0 (neutral)</strong> · far below min → <span class="negc">disqualify</span></td></tr>
+<tr class="grp"><td colspan="3">Buying intent — max 55 · highest milestone wins</td></tr>
+<tr><td>Unconfirmed tour <em>request</em> (no slot yet)</td><td class="n">15</td><td>Intent signal; does <strong>not</strong> force Warm on its own</td></tr>
+<tr><td><strong>Calendly tour booked</strong> (confirmed, self-serve)</td><td class="n pos">28</td><td>25 + 3 self-booked bonus · <strong>→ at least Warm</strong> (§3)</td></tr>
+<tr><td>Tour attended</td><td class="n pos">38</td><td>Replaces "booked" · → at least Warm</td></tr>
+<tr><td>Quote requested or sent</td><td class="n pos">45</td><td>Request + send count once (not twice)</td></tr>
+<tr><td>Deposit / "how do I reserve" discussion</td><td class="n pos">52</td><td><strong>→ Hot</strong> (§3)</td></tr>
+<tr class="grp"><td colspan="3">Engagement — max 10 · fades with silence</td></tr>
+<tr><td>Responsiveness — actively replying</td><td class="n">10</td><td>Two-way replies 6 + prompt/repeat 4; decays to 0 over ~30–45 days of silence; returns on any reply</td></tr>
+<tr class="grp"><td colspan="3">Negative signals — capped at −25 · reversible</td></tr>
+<tr><td>Tour no-show</td><td class="n negc">−10</td><td>Temporary; clears if they reschedule &amp; attend</td></tr>
+<tr><td>Repeated cancels / reschedules</td><td class="n negc">−6</td><td>After the second time</td></tr>
+<tr><td>Prolonged silence after prior engagement</td><td class="n negc">−8</td><td>≥3 unanswered follow-ups; clears on any reply</td></tr>
+<tr><td>Explicit disinterest / disqualified</td><td class="n negc">Lost</td><td>Moves to Lost — overrides the score</td></tr>
+</tbody>
+<tfoot><tr><td>Positive total</td><td class="n">100</td><td>35 + 55 + 10</td></tr></tfoot>
+</table></div>
+<p style="font-size:13.5px;color:var(--muted)"><strong>Data completeness is tracked separately</strong> (how many key fields are known) as a readiness indicator — it never adds or removes points.</p>
+
+<!-- 3 -->
+<h2><span class="n">3</span>Behaviour-driven rules (overrides)</h2>
+<p>Applied after the score, in this order — the first that matches wins:</p>
+<ol>
+<li><strong>Won</strong> — deposit paid or agreement signed → leaves the prospect queue.</li>
+<li><strong>Lost</strong> — explicit disinterest, or requirements fit neither venue → Cold, overrides any score.</li>
+<li><strong>Deposit discussion → Hot</strong>, regardless of the number.</li>
+<li><strong>Confirmed Calendly tour (or attended tour) → at least Warm</strong>, even if budget, guest count and everything else are missing.</li>
+<li><strong>Too little info → Not scored yet</strong> (with the missing fields), never Cold.</li>
+<li>Otherwise, classify by score (70 / 40 thresholds).</li>
+</ol>
+<div class="note key"><span class="k">The signature case</span><p>A customer submits an inquiry and <strong>immediately books a Calendly tour</strong>: +28 intent, and rule 4 makes them <strong>Warm on the spot</strong> — even with no budget or guest count yet. An <em>unconfirmed request</em> for a tour signals interest but does not force Warm; it is chased hard as a follow-up instead.</p></div>
+
+<!-- 4 -->
+<h2><span class="n">4</span>Automatic updates</h2>
+<p>The score and classification recalculate automatically — on the <strong>server</strong>, so desktop and mobile always match — whenever:</p>
+<ul>
+<li>A new inquiry arrives, or lead details are added or corrected.</li>
+<li>A Calendly tour is booked, rescheduled, cancelled, attended, or missed.</li>
+<li>A customer replies (or goes silent — a nightly check applies decay).</li>
+<li>A quote is requested or sent.</li>
+<li>A deposit is discussed, a deposit is received, or an agreement is signed.</li>
+</ul>
+<p>Requirements: <strong>one scoring function</strong> as the single source of truth; <strong>ignore duplicate events</strong> (same Calendly booking counts once); keep an <strong>audit log</strong> of score changes with the reason; negative signals are <strong>reversible</strong> when the customer re-engages. Each lead shows its score, classification, the top reasons, what's missing, and the recommended next action. <strong>Follow-up urgency is tracked separately</strong> from the score — a Hot lead can still have an overdue task, and a brand-new lead can need an urgent first reply.</p>
+
+<!-- 5 -->
+<h2><span class="n">5</span>Worked examples</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Lead</th><th>Calculation</th><th class="n">Score</th><th>Class</th><th>Next action</th></tr></thead>
+<tbody>
+<tr><td>New inquiry, event type only</td><td>fit 7 · intent 0 · eng 0</td><td class="n">7</td><td>Not scored yet</td><td>Respond fast; get date &amp; guests</td></tr>
+<tr><td>Inquiry + immediate Calendly tour (type &amp; date known)</td><td>15 + 28 + 0</td><td class="n">43</td><td><span class="warm">◐ Warm</span> (rule 4)</td><td>Confirm tour; qualify at the visit</td></tr>
+<tr><td>Attended tour + requested a quote (full fit, replying)</td><td>35 + 45 + 10</td><td class="n">90</td><td><span class="hot">● Hot</span></td><td>Send quote within 24h</td></tr>
+<tr><td>Asks how to pay the deposit</td><td>35 + 52 + 10</td><td class="n">97</td><td><span class="hot">● Hot</span> (rule 3)</td><td>Send agreement + deposit link</td></tr>
+<tr><td>Strong intent, budget &amp; guests unknown</td><td>15 + 28 + 6</td><td class="n">49</td><td><span class="warm">◐ Warm</span></td><td>Unknowns = 0, not a penalty</td></tr>
+<tr><td>No-show, then 3 unanswered follow-ups</td><td>25 + 28 + 0 − 18</td><td class="n">35</td><td><span class="cold">○ Cold</span></td><td>One reschedule offer; recovers if they reply</td></tr>
+<tr><td>Deposit paid</td><td>frozen</td><td class="n">—</td><td><span class="won">✓ Won</span></td><td>Hand to events team</td></tr>
+</tbody></table></div>
+<p style="font-size:13.5px;color:var(--muted)">Figures illustrative. Every example uses the one table and rules above; the score always stays within 0–100.</p>
+
+<!-- 6 -->
+<h2><span class="n">6</span>Priority score now, real probability later</h2>
+<p>Today's bands are a <strong>priority ranking</strong> — useful immediately and easy to explain. They are <strong>not</strong> a measured chance of booking, and must never be shown as one (a score of 70 is not "70% likely to book").</p>
+<p>Once the CRM has accumulated enough <strong>booked vs. not-booked history</strong>, actual probabilities can be calculated — and this is simple to start:</p>
+<ol>
+<li>Record each lead's outcome: did it become a confirmed booking, and when.</li>
+<li>Compute the <strong>historical booking rate</strong> for each segment — e.g. "of leads that attended a tour, X% went on to book." That rate <em>is</em> a real, data-grounded probability.</li>
+<li>Show it only where the sample is large enough to be meaningful; otherwise keep showing the priority score. Later, a predictive model can refine these rates per venue.</li>
+</ol>
+<p>Keep the two clearly separate in the interface: the <strong>priority score</strong> (now) and the <strong>booking probability</strong> (later, labelled as such only when it is real).</p>
+
+<!-- 7 -->
+<h2><span class="n">7</span>Implementation priorities</h2>
+<ol>
+<li><span class="tag p1">First</span> &nbsp;Confirm the CRM records each signal in the table — especially Calendly booking <em>source</em>, tour attendance/no-show, replies with timestamps, quote events, and deposit/agreement events. Flag any gaps.</li>
+<li><span class="tag p1">First</span> &nbsp;Build the server-side scoring function, the six override rules, and the "Not scored yet" state. Backfill existing leads.</li>
+<li><span class="tag p2">Next</span> &nbsp;Add automatic recalculation on every event + a nightly decay job; dedupe duplicate events; keep the audit log.</li>
+<li><span class="tag p2">Next</span> &nbsp;Show score, classification, top reasons, missing info, and next action on the lead; keep follow-up urgency separate.</li>
+<li><span class="tag p3">Later</span> &nbsp;Once booking outcomes accrue, tune the weights and thresholds, then introduce segment booking rates (real probabilities) per §6.</li>
+</ol>
+
+<div class="note"><span class="k">Decisions for leadership</span><p>Approve: (1) the weights and the 70/40 thresholds; (2) the rule that a confirmed Calendly tour = Warm and a deposit discussion = Hot; (3) treating missing info as neutral and new leads as "Not scored yet"; (4) that the number is a priority score, not a booking probability, until §6 is in place.</p></div>
+
+<div class="foot">
+<p>Lead-scoring build specification for Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard. October 2026. Proposed rules for review and implementation; all weights, thresholds and percentage bands are provisional scoring bands pending validation against real booking outcomes — not measured probabilities.</p>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead-Score Visualization Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;
+  --wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;
+  --good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;
+  --viz:#2A78D6;--viz-soft:#DCE8F8;--neg:#C23A39;--neg-soft:#F6E0DF;--grid:#E6E3DC;
+  color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;
+  --wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;
+  --good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;
+  --viz:#3987E5;--viz-soft:#1C2A3D;--neg:#E66767;--neg-soft:#3A2024;--grid:#2E2935;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;
+  --wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;
+  --good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;
+  --viz:#3987E5;--viz-soft:#1C2A3D;--neg:#E66767;--neg-soft:#3A2024;--grid:#2E2935;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 90px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:48px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr;gap:24px;padding-top:0}nav.toc{position:static;max-height:none}}
+nav.toc{position:sticky;top:24px;align-self:start;font-size:13.5px;max-height:calc(100vh - 48px);overflow:auto;padding-top:40px}
+nav.toc .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+nav.toc a{display:block;color:var(--ink);text-decoration:none;padding:4px 0;border-left:2px solid var(--line);padding-left:12px}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--wine);color:var(--wine);outline:none}
+nav.toc a.cur{border-color:var(--wine);color:var(--wine)}
+main{min-width:0;max-width:840px;padding-top:40px}
+h1,h2,h3{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:clamp(36px,5.5vw,56px);letter-spacing:-.015em}
+h2{font-size:27px;margin:62px 0 6px;padding-top:22px;border-top:1px solid var(--line)}
+h3{font-size:19px;margin:30px 0 8px}
+h4{font-family:"Source Sans 3",sans-serif;font-size:15px;font-weight:600;margin:18px 0 4px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+.sec-eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+p{margin:0 0 14px;max-width:72ch}
+.lede{font-size:20px;line-height:1.5;max-width:60ch;color:var(--ink)}
+.intro{font-size:17.5px;color:var(--muted);max-width:68ch;font-style:italic;border-left:3px solid var(--gold);padding-left:16px;margin:10px 0 22px}
+ul,ol{padding-left:20px;margin:0 0 14px;max-width:72ch}li{margin-bottom:5px}
+a{color:var(--wine)}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--code);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+sup a{text-decoration:none;font-size:.68em;padding:0 1px;font-family:"IBM Plex Mono",monospace}
+/* cover */
+header.cover{padding:66px 0 10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.meta{color:var(--muted);font-size:14.5px;margin-top:16px;font-family:"IBM Plex Mono",monospace}
+/* callouts */
+.call{border-left:3px solid var(--gold);background:var(--gold-soft);padding:14px 18px;margin:20px 0;border-radius:0 6px 6px 0}
+.call.key{border-color:var(--good);background:var(--good-soft)}
+.call.warn{border-color:var(--wine);background:var(--wine-soft)}
+.call p:last-child{margin:0}
+.call .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:5px;color:var(--muted)}
+/* tables */
+.tablewrap{overflow-x:auto;margin:16px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+caption{caption-side:top;text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-bottom:7px}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1.5px solid var(--line);vertical-align:bottom}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n,th.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:hover{background:var(--code)}
+.rate{font-family:"IBM Plex Mono",monospace;letter-spacing:1px;color:var(--viz)}
+.rate .e{color:var(--line)}
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.tag.ess{background:var(--wine-soft);color:var(--wine)}
+.tag.ben{background:var(--gold-soft);color:var(--gold)}
+.tag.opt{background:var(--slate-soft);color:var(--slate)}
+/* figure frame */
+figure{margin:20px 0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+figcaption{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:12px;line-height:1.45}
+figcaption b{color:var(--ink);font-weight:500;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
+.fig-h{font-family:"Source Sans 3";font-size:15px;font-weight:600;margin-bottom:4px}
+.illus{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--neg);border:1px solid var(--neg);border-radius:3px;padding:1px 6px;vertical-align:2px;margin-left:8px}
+/* horizontal bars */
+.hbars{margin:6px 0 2px}
+.hbar{display:grid;grid-template-columns:150px 1fr 52px;align-items:center;gap:12px;margin:9px 0;font-size:13.5px}
+@media (max-width:560px){.hbar{grid-template-columns:110px 1fr 44px;gap:8px;font-size:12.5px}}
+.hbar .lab{color:var(--ink)}
+.track{height:16px;background:var(--grid);border-radius:4px;overflow:hidden;position:relative}
+.track i{display:block;height:100%;border-radius:4px;background:var(--viz)}
+.track i.neg{background:var(--neg)}
+.track i.hot{background:var(--wine)}.track i.warm{background:var(--gold)}.track i.cold{background:var(--slate)}
+.hbar .val{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;text-align:right;color:var(--muted);font-size:12.5px}
+.axis{display:grid;grid-template-columns:150px 1fr 52px;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-top:2px}
+@media (max-width:560px){.axis{grid-template-columns:110px 1fr 44px;gap:8px}}
+.axis .ticks{display:flex;justify-content:space-between}
+/* waterfall */
+.wf{margin:4px 0}
+.wf-row{display:grid;grid-template-columns:168px 1fr 46px;align-items:center;gap:10px;font-size:13px;margin:6px 0}
+@media (max-width:560px){.wf-row{grid-template-columns:120px 1fr 40px;gap:7px;font-size:12px}}
+.wf-track{height:17px;position:relative;background:transparent;border-left:1px solid var(--grid)}
+.wf-seg{position:absolute;height:100%;border-radius:3px;background:var(--viz)}
+.wf-seg.neg{background:var(--neg)}
+.wf-seg.tot{background:var(--ink)}
+.wf-row.total{font-weight:600;border-top:1px solid var(--line);padding-top:6px;margin-top:4px}
+.wf .val{font-family:"IBM Plex Mono",monospace;text-align:right;color:var(--muted);font-size:12px}
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.viz{background:var(--viz)}.sw.neg{background:var(--neg)}.sw.ink{background:var(--ink)}
+.sw.hot{background:var(--wine)}.sw.warm{background:var(--gold)}.sw.cold{background:var(--slate)}
+/* classification range bar */
+.rangebar{display:flex;height:34px;border-radius:6px;overflow:hidden;margin:10px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.rangebar div{display:flex;align-items:center;justify-content:center;color:#fff;gap:5px}
+.rangebar .c-cold{background:var(--slate);flex:0 0 40%}
+.rangebar .c-warm{background:var(--gold);flex:0 0 30%}
+.rangebar .c-hot{background:var(--wine);flex:0 0 30%}
+.scale{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
+.cls-glyph{font-size:12px}
+/* journey */
+.journey{display:flex;gap:0;overflow-x:auto;padding:6px 0 2px;counter-reset:j}
+.jstep{flex:1;min-width:116px;position:relative;padding:0 8px}
+.jstep:not(:last-child)::after{content:"";position:absolute;top:15px;right:-2px;width:14px;height:2px;background:var(--grid)}
+.jdot{width:30px;height:30px;border-radius:50%;background:var(--panel);border:2px solid var(--slate);display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:12px;margin-bottom:8px}
+.jstep.sig .jdot{border-color:var(--viz);color:var(--viz)}
+.jstep.conv .jdot{border-color:var(--good);color:var(--good)}
+.jname{font-size:13px;font-weight:600;line-height:1.2}
+.jsig{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.35}
+.jchip{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;margin-top:6px;padding:1px 6px;border-radius:3px;background:var(--viz-soft);color:var(--viz)}
+.jchip.conv{background:var(--good-soft);color:var(--good)}
+@media (max-width:680px){.journey{flex-direction:column}.jstep{min-width:0;padding:0 0 14px 0;display:grid;grid-template-columns:34px 1fr;gap:10px}.jstep:not(:last-child)::after{top:30px;left:14px;right:auto;width:2px;height:calc(100% - 30px)}.jdot{margin-bottom:0}}
+/* confusion matrix */
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:3px;font-size:12.5px;max-width:460px;margin:12px 0}
+.cm div{padding:10px;border-radius:5px;background:var(--code)}
+.cm .hd{background:transparent;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center}
+.cm .tp{background:var(--good-soft)}.cm .tn{background:var(--good-soft)}
+.cm .fp{background:var(--gold-soft)}.cm .fn{background:var(--wine-soft)}
+.cm b{display:block;font-size:11px;font-family:"IBM Plex Mono",monospace;letter-spacing:.04em}
+.foot{margin-top:60px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.srcs{font-size:14px}.srcs li{margin-bottom:8px}
+</style>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents"><div class="eyebrow">Contents</div>
+<a href="#summary">01 · Executive summary</a>
+<a href="#current">02 · Current model</a>
+<a href="#research">03 · Research &amp; best practice</a>
+<a href="#methods">04 · Scoring methods</a>
+<a href="#framework">05 · Scoring framework</a>
+<a href="#classify">06 · Classification &amp; calc</a>
+<a href="#journey">07 · Journey &amp; buying intent</a>
+<a href="#viz">08 · Visualization best practice</a>
+<a href="#validation">09 · Data quality &amp; validation</a>
+<a href="#reco">10 · Prioritized recommendations</a>
+<a href="#sources">11 · Sources</a>
+</nav>
+<main>
+
+<header class="cover">
+<span class="eyebrow">Research report · Visualization · October 2026</span>
+<h1 style="margin-top:14px">How to Show a Lead Score So Staff Act on It</h1>
+<p class="lede" style="margin-top:18px">An evidence-based review of how to visualize an automated lead-scoring system — the display, the explanation, the buying-intent signals, and the dashboards — for the Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard CRM.</p>
+<div class="meta">Research &amp; recommendations only · not an interface design · every figure illustrative unless cited · prepared for sales leadership &amp; the CRM team</div>
+</header>
+
+<div class="call warn"><span class="k">Scope &amp; integrity</span><p>This is a <strong>research document</strong>. It visualizes the <em>findings</em> — scoring dimensions, method comparisons, the customer journey, decision logic, validation concepts — and deliberately contains <strong>no CRM screens, lead-card designs, or interface mockups</strong>. Every number in a figure is a <strong>clearly labelled illustrative example</strong> used to explain a method; none is a measured business result. Sourced findings are footnoted; everything else is our analysis and recommendation.</p></div>
+
+<!-- 01 -->
+<h2 id="summary"><span class="sec-eyebrow">01</span>Executive summary</h2>
+<p class="intro">The score is only as useful as the decision it drives. The research is consistent: a number or a coloured badge alone does not change behaviour — an <em>explained</em> score, tied to what the customer did and to a clear next step, does.</p>
+<ul>
+<li><strong>Show the score and the category together, not the number alone.</strong> A bare percentage invites false precision; a bare badge hides the gradient. Pair a compact magnitude indicator with a Hot/Warm/Cold label.<sup><a href="#s-chaffey">5</a></sup></li>
+<li><strong>Explainability is the highest-value feature.</strong> The single most useful element — beyond the number — is a short list of the <em>top positive and top negative factors</em>, which is exactly how mature predictive tools expose their scores.<sup><a href="#s-einstein">3</a></sup></li>
+<li><strong>Distinguish four things the interface routinely conflates:</strong> the <em>score</em>, the sales <em>pipeline stage</em>, <em>follow-up urgency</em>, and <em>data completeness/confidence</em>. A lead can be high-scoring and overdue, or new and promising. Research on lifecycle scoring shows the same activity means different things at different stages.<sup><a href="#s-pedowitz">8</a></sup></li>
+<li><strong>Never signal meaning by colour alone.</strong> WCAG 1.4.1 (Level A) requires a second cue — a glyph, shape or label — alongside every colour.<sup><a href="#s-woc">9</a></sup></li>
+<li><strong>Put the few decision-critical facts on the card; everything else is one click away.</strong> Progressive disclosure is a long-standing usability principle for exactly this.<sup><a href="#s-pd">15</a></sup></li>
+<li><strong>A weighted score is a priority ranking, not a probability of booking</strong> — and the interface must not imply otherwise until the model is calibrated against real outcomes.<sup><a href="#s-einstein-data">2</a></sup></li>
+</ul>
+<p>The prioritized recommendations in §10 classify each finding as <span class="tag ess">Essential</span>, <span class="tag ben">Beneficial</span> or <span class="tag opt">Optional</span> for this CRM.</p>
+
+<!-- 02 -->
+<h2 id="current"><span class="sec-eyebrow">02</span>The current model, briefly</h2>
+<p>Today the Pipeline board shows a score out of 100 and a Hot/Warm/Cold badge. The gap this research addresses is not the colour of the badge — it is that the board shows <em>a conclusion without its reasons</em>: no visible buying signals, no indication of what is missing, no next action, and no separation of the score from pipeline stage or follow-up urgency. A fuller audit of the scoring <em>methodology</em> is a separate document; this report concerns only how the result should be <em>presented</em>.</p>
+
+<!-- 03 -->
+<h2 id="research"><span class="sec-eyebrow">03</span>Research &amp; best practice</h2>
+<p class="intro">What established CRM, sales-operations, data-visualization and accessibility sources say — with the specific point values and thresholds they quote treated as examples, not standards, as the sources themselves caution.</p>
+
+<h3>Score display — number, bar, or dial?</h3>
+<p>Data-visualization guidance consistently favours <strong>length over angle</strong> for reading magnitude: people judge the length of a bar more accurately than the sweep of a dial, so a bar or bullet indicator is the safer default on a dense, comparative board; a radial gauge is reasonable only for a single, familiar, standalone metric.<sup><a href="#s-gauge">12</a></sup> Either way the rule is the same — label the value and the range clearly and avoid clutter.<sup><a href="#s-gauge">12</a></sup> The number itself should always be present; the shape is an at-a-glance aid, not a replacement for the figure.</p>
+
+<h3>Explaining the score</h3>
+<p>The strongest pattern in mature scoring products is to surface, next to the score, the <strong>top positive and top negative factors</strong> that drove it — a compact, ranked, plain-language breakdown rather than a full audit of every rule.<sup><a href="#s-einstein">3</a></sup> This is more actionable to a salesperson than either the raw number or a long rule dump, because it answers the only question they have: <em>what makes this lead worth my time, and what is the risk?</em></p>
+
+<h3>Recency &amp; decay</h3>
+<p>Behavioural signals should lose weight as they age, so a stale action does not keep a dead lead looking hot;<sup><a href="#s-mautic">4</a></sup> HubSpot-oriented guidance describes decaying engagement points over roughly a month.<sup><a href="#s-hubspot">1</a></sup> For visualization this means a score history is only meaningful if the display also conveys <em>when</em> the last real activity happened.</p>
+
+<h3>Speed, and why "new" ≠ "low"</h3>
+<p>Response speed is decisive: classic studies found firms contacting a lead within an hour were far more likely to reach a qualifying conversation, with the odds of qualifying dropping sharply after the first minutes.<sup><a href="#s-speed">7</a></sup> The visualization implication is direct — a <strong>brand-new lead must never be rendered as low-priority</strong> merely because little is known; doing so buries exactly the leads where speed matters most.</p>
+
+<h3>Accessibility &amp; decluttering</h3>
+<p>Colour must carry a redundant cue (WCAG 1.4.1, Level A);<sup><a href="#s-woc">9</a></sup> text needs a 4.5:1 contrast ratio and large text 3:1 (1.4.3, AA);<sup><a href="#s-contrast">10</a></sup> and non-text UI indicators such as a score bar need 3:1 against their background (1.4.11).<sup><a href="#s-nontext">11</a></sup> On density, the enduring principle is to maximise the share of the display devoted to information and mute everything else — thin lines, soft neutral grid, no 3-D, shadows or decorative fills.<sup><a href="#s-fewink">13</a></sup> Detail is revealed on demand through progressive disclosure, not crammed onto the first view.<sup><a href="#s-pd">15</a></sup></p>
+
+<!-- 04 -->
+<h2 id="methods"><span class="sec-eyebrow">04</span>Comparison of scoring methodologies</h2>
+<p class="intro">How a score is computed shapes how honestly it can be shown. Four approaches, rated for an event-venue CRM with modest data volume. Ratings are our assessment, informed by the cited sources.</p>
+<figure>
+<div class="fig-h">Scoring method suitability</div>
+<div class="tablewrap"><table>
+<caption>● = strong · ◐ = partial · ○ = weak — our rating</caption>
+<thead><tr><th>Method</th><th>Explainability</th><th>Data needed</th><th>Accuracy</th><th>Fit for us now</th></tr></thead>
+<tbody>
+<tr><td><strong>Fixed weighted</strong><br><span style="color:var(--muted);font-size:12.5px">points per factor, summed</span></td><td><span class="rate">●●●</span></td><td><span class="rate">●<span class="e">●●</span></span> low</td><td><span class="rate">●●<span class="e">●</span></span></td><td><span class="rate">●●●</span> high</td></tr>
+<tr><td><strong>Normalized</strong><br><span style="color:var(--muted);font-size:12.5px">score ÷ data available</span></td><td><span class="rate">●●<span class="e">●</span></span></td><td><span class="rate">●<span class="e">●●</span></span> low</td><td><span class="rate">●<span class="e">●●</span></span></td><td><span class="rate">●<span class="e">●●</span></span> low — inflates thin data</td></tr>
+<tr><td><strong>Hybrid</strong><br><span style="color:var(--muted);font-size:12.5px">weighted + overrides + states</span></td><td><span class="rate">●●●</span></td><td><span class="rate">●●<span class="e">●</span></span> med</td><td><span class="rate">●●<span class="e">●</span></span></td><td><span class="rate">●●●</span> recommended</td></tr>
+<tr><td><strong>Predictive (ML)</strong><br><span style="color:var(--muted);font-size:12.5px">learned from outcomes</span></td><td><span class="rate">●◐<span class="e">●</span></span> top-factors only</td><td><span class="rate">●●●</span> high</td><td><span class="rate">●●●</span> once trained</td><td><span class="rate">○<span class="e">●●</span></span> not yet — volume</td></tr>
+</tbody></table></div>
+<figcaption><b>Finding</b> &nbsp;A hybrid weighted model is both the most explainable and the most honest at current data volumes. Predictive scoring is the most accurate once trained, but needs substantial history — Salesforce cites on the order of 1,000 leads and 120 conversions before its predictive score is reliable.<sup><a href="#s-einstein-data">2</a></sup> Rating = our assessment.</figcaption>
+</figure>
+
+<!-- 05 -->
+<h2 id="framework"><span class="sec-eyebrow">05</span>Recommended scoring framework</h2>
+<p class="intro">The research supports scoring <em>fit</em> and <em>behaviour</em> on separate axes and reading them together.<sup><a href="#s-prospeo">6</a></sup> Six dimensions capture this for a venue. The weighting below is an <strong>illustrative, proposed allocation</strong> of a 100-point priority score — the starting point to validate against bookings, not a measured result.</p>
+<figure>
+<div class="fig-h">Proposed weight of each scoring dimension <span class="illus">Illustrative</span></div>
+<div class="hbars" role="img" aria-label="Proposed point allocation: Buying intent 55, Fit 35, Engagement 10, with a reversible negative pool up to minus 25.">
+<div class="hbar"><span class="lab">Buying intent</span><span class="track"><i style="width:55%"></i></span><span class="val">55</span></div>
+<div class="hbar"><span class="lab">Lead &amp; venue fit</span><span class="track"><i style="width:35%"></i></span><span class="val">35</span></div>
+<div class="hbar"><span class="lab">Engagement</span><span class="track"><i style="width:10%"></i></span><span class="val">10</span></div>
+<div class="hbar"><span class="lab">Negative signals</span><span class="track"><i class="neg" style="width:25%"></i></span><span class="val">−25</span></div>
+</div>
+<div class="axis"><span></span><span class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></span><span></span></div>
+<div class="legend"><span><span class="sw viz"></span>positive contribution</span><span><span class="sw neg"></span>reversible deduction (capped)</span></div>
+<figcaption><b>Role of each dimension</b> &nbsp;<strong>Intent</strong> (tour, quote, deposit talk) dominates because it predicts booking most directly. <strong>Fit</strong> (event type, date, guest count vs capacity, budget alignment) qualifies but does not indicate desire. <strong>Engagement</strong> is the only pool that <em>decays</em> with silence.<sup><a href="#s-mautic">4</a></sup> <strong>Negative signals</strong> (no-show, repeated non-response) are capped and reversible. Tour behaviour and booking progress sit inside Intent; inactivity sits inside Engagement/Negative. Weights = proposed, to be calibrated.</figcaption>
+</figure>
+
+<!-- 06 -->
+<h2 id="classify"><span class="sec-eyebrow">06</span>Classification &amp; a worked calculation</h2>
+<figure>
+<div class="fig-h">Recommended classification bands</div>
+<div class="rangebar" role="img" aria-label="0 to 39 Cold, 40 to 69 Warm, 70 to 100 Hot">
+<div class="c-cold"><span class="cls-glyph">○</span>Cold</div>
+<div class="c-warm"><span class="cls-glyph">◐</span>Warm</div>
+<div class="c-hot"><span class="cls-glyph">●</span>Hot</div>
+</div>
+<div class="scale"><span>0</span><span>40</span><span>70</span><span>100</span></div>
+<div class="tablewrap" style="margin-top:14px"><table>
+<thead><tr><th>Class</th><th>Range</th><th>Characteristic</th><th>Follow-up priority</th><th>Key exception / override</th></tr></thead>
+<tbody>
+<tr><td><span style="color:var(--wine)">● Hot</span></td><td class="n">70–100</td><td>Toured + quoting / deposit talk</td><td>Act today</td><td>Deposit discussion floors a lead at Hot</td></tr>
+<tr><td><span style="color:var(--gold)">◐ Warm</span></td><td class="n">40–69</td><td>Qualified / promising</td><td>Keep engaging</td><td>A self-booked tour floors a lead at Warm even with an empty profile</td></tr>
+<tr><td><span style="color:var(--slate)">○ Cold</span></td><td class="n">0–39</td><td>Worked, low intent</td><td>Re-engage or rest</td><td>Explicit disinterest caps at Cold</td></tr>
+<tr><td><span style="color:var(--muted)">◇ Not scored</span></td><td class="n">—</td><td>Too little information yet</td><td>Respond &amp; qualify</td><td>Shown with missing fields, never as a low %</td></tr>
+</tbody></table></div>
+<figcaption><b>Important</b> &nbsp;These bands are a <strong>priority ranking</strong>, not a validated probability of booking. The letters/glyphs (●◐○◇) ensure the categories read without colour, satisfying WCAG 1.4.1.<sup><a href="#s-woc">9</a></sup> Ranges are proposed, to be recalibrated against outcomes.</figcaption>
+</figure>
+
+<figure>
+<div class="fig-h">How a score is built — worked example <span class="illus">Illustrative</span></div>
+<p style="font-size:13.5px;color:var(--muted);margin:2px 0 12px">A quinceañera lead who self-booked a tour, gave a serviceable date and event type, and is replying — but whose guest count and budget are still unknown (unknown ≠ penalty).</p>
+<div class="wf" role="img" aria-label="Waterfall: event type +6, event date +10, tour booked +25, actively replying +6, unknown fields 0, total 47.">
+<div class="wf-row"><span>Event type</span><span class="wf-track"><span class="wf-seg" style="left:0%;width:6%"></span></span><span class="val">+6</span></div>
+<div class="wf-row"><span>Serviceable date</span><span class="wf-track"><span class="wf-seg" style="left:6%;width:10%"></span></span><span class="val">+10</span></div>
+<div class="wf-row"><span>Tour booked (Calendly)</span><span class="wf-track"><span class="wf-seg" style="left:16%;width:25%"></span></span><span class="val">+25</span></div>
+<div class="wf-row"><span>Actively replying</span><span class="wf-track"><span class="wf-seg" style="left:41%;width:6%"></span></span><span class="val">+6</span></div>
+<div class="wf-row"><span style="color:var(--muted)">Guest count · budget</span><span class="wf-track"><span class="wf-seg" style="left:47%;width:0.6%;background:var(--grid)"></span></span><span class="val" style="color:var(--muted)">0</span></div>
+<div class="wf-row total"><span>Priority score</span><span class="wf-track"><span class="wf-seg tot" style="left:0%;width:47%"></span></span><span class="val" style="color:var(--ink)">47</span></div>
+</div>
+<div class="legend"><span><span class="sw viz"></span>positive factor</span><span><span class="sw ink"></span>running total</span><span style="color:var(--muted)">grey = unknown, scored 0 (not negative)</span></div>
+<figcaption><b>Reading it</b> &nbsp;The tour booking is the single largest contributor. The lead lands at 47 (Warm) — and the override would hold it at Warm regardless, because a self-booked tour is a strong buying signal even while qualification fields are blank. All figures illustrative.</figcaption>
+</figure>
+
+<!-- 07 -->
+<h2 id="journey"><span class="sec-eyebrow">07</span>Customer journey &amp; buying intent</h2>
+<p class="intro">A conceptual map of the venue sales journey, annotated with where meaningful buying signals occur and how they should influence the score. This is a research diagram of the <em>process</em> — not a proposed CRM screen.</p>
+<figure>
+<div class="fig-h">Where buying intent appears along the journey</div>
+<div class="journey" role="img" aria-label="Journey: Inquiry, Qualification, Tour booked (signal), Tour attended (signal), Quotation (signal), Deposit (signal), Agreement, Booked (conversion). Intent and score rise across the stages.">
+<div class="jstep"><div class="jdot">1</div><div class="jname">Inquiry</div><div class="jsig">First contact; little known yet</div></div>
+<div class="jstep"><div class="jdot">2</div><div class="jname">Qualify</div><div class="jsig">Event type, date, guests, budget</div><span class="jchip">fit</span></div>
+<div class="jstep sig"><div class="jdot">◆</div><div class="jname">Tour booked</div><div class="jsig">Esp. self-booked — strong proactive intent</div><span class="jchip">intent ↑↑</span></div>
+<div class="jstep sig"><div class="jdot">◆</div><div class="jname">Tour attended</div><div class="jsig">Demonstrated commitment</div><span class="jchip">intent ↑↑</span></div>
+<div class="jstep sig"><div class="jdot">◆</div><div class="jname">Quotation</div><div class="jsig">Requested / sent (72h deposit link)</div><span class="jchip">intent ↑↑</span></div>
+<div class="jstep sig"><div class="jdot">◆</div><div class="jname">Deposit talk</div><div class="jsig">Asks how to reserve / deposit</div><span class="jchip">intent ↑↑↑</span></div>
+<div class="jstep conv"><div class="jdot">✓</div><div class="jname">Booked</div><div class="jsig">Deposit paid / agreement signed</div><span class="jchip conv">conversion</span></div>
+</div>
+<div class="legend"><span><span class="sw" style="background:var(--slate)"></span>ordinary stage</span><span><span class="sw viz"></span>buying signal (raises score)</span><span><span class="sw" style="background:var(--good)"></span>conversion (exits scoring)</span></div>
+<figcaption><b>Finding</b> &nbsp;Buying intent is concentrated in the <em>behavioural</em> milestones (◆), not in profile completeness. A proactive action — a self-booked tour — should register immediately as interest even when qualification is incomplete. Sales prioritization should follow these signals, and a booking is a <strong>conversion</strong>, not a top-scoring prospect to keep working.<sup><a href="#s-pedowitz">8</a></sup></figcaption>
+</figure>
+<div class="call"><span class="k">Visual distinction that matters</span><p>The interface must keep <strong>buying intent</strong>, <strong>pipeline stage</strong> and <strong>follow-up urgency</strong> as three separate cues. A lead can show high intent (booked a tour) while its stage is still early and a follow-up is overdue — three facts, three indicators, never merged into one colour.</p></div>
+
+<!-- 08 -->
+<h2 id="viz"><span class="sec-eyebrow">08</span>Visualization best practice</h2>
+<p class="intro">The core of this report: eight ways to present scoring information, each rated for what it is for, what it costs, and whether it is essential, beneficial or optional for this CRM. Essentiality is our assessment, grounded in the cited evidence.</p>
+<figure>
+<div class="fig-h">Visualization methods compared</div>
+<div class="tablewrap"><table>
+<thead><tr><th>Method</th><th>Primary purpose</th><th>Advantages</th><th>Limitations</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td><strong>Numerical score</strong></td><td>The current value</td><td>Precise; compact; sortable</td><td>False precision; no context alone</td><td><span class="tag ess">Essential</span></td></tr>
+<tr><td><strong>Hot/Warm/Cold badge</strong></td><td>Priority category</td><td>Instant grouping; filterable</td><td>Hides the gradient; colour-only risk<sup><a href="#s-woc">9</a></sup></td><td><span class="tag ess">Essential</span></td></tr>
+<tr><td><strong>Progress / bar indicator</strong></td><td>Relative magnitude</td><td>Length read accurately;<sup><a href="#s-gauge">12</a></sup> compact</td><td>Adds little beyond the number if space is tight</td><td><span class="tag ben">Beneficial</span></td></tr>
+<tr><td><strong>Score breakdown</strong><br><span style="color:var(--muted);font-size:12px">top + / − factors</span></td><td>Explain the score</td><td>Most actionable; builds trust<sup><a href="#s-einstein">3</a></sup></td><td>Needs per-factor data; too much if shown in full</td><td><span class="tag ess">Essential</span></td></tr>
+<tr><td><strong>Activity timeline</strong></td><td>Customer history &amp; recency</td><td>Shows <em>why</em> &amp; <em>when</em>; context for decay<sup><a href="#s-mautic">4</a></sup></td><td>Verbose; belongs in the record, not the card</td><td><span class="tag ben">Beneficial</span></td></tr>
+<tr><td><strong>Score-history chart</strong><br><span style="color:var(--muted);font-size:12px">sparkline / step line</span></td><td>Change over time</td><td>Trend at a glance; word-sized<sup><a href="#s-spark">14</a></sup></td><td>Needs enough history; redundant if a timeline exists</td><td><span class="tag opt">Optional</span></td></tr>
+<tr><td><strong>Prioritization list</strong></td><td>Organise follow-up</td><td>Turns scores into a work queue</td><td>Must rank by urgency, not score alone</td><td><span class="tag ess">Essential</span></td></tr>
+<tr><td><strong>Aggregate conversion chart</strong></td><td>Evaluate the model</td><td>Validates calibration; manager view</td><td>Not a per-lead signal; needs real data</td><td><span class="tag opt">Optional</span></td></tr>
+</tbody></table></div>
+<figcaption><b>Headline</b> &nbsp;The essentials are the <em>number + badge</em> (together), the <em>top-factor breakdown</em>, and a <em>prioritization list</em>. The timeline is strongly beneficial in the record. History charts and aggregate charts are optional and should wait until data supports them. Verdicts = our assessment.</figcaption>
+</figure>
+
+<h3>Where each thing belongs</h3>
+<div class="tablewrap"><table>
+<thead><tr><th>Surface</th><th>Show</th><th>Don't show (avoid duplication)</th></tr></thead>
+<tbody>
+<tr><td><strong>Pipeline card</strong></td><td>Score + badge, event date &amp; days-out, tour status, last activity, one next action</td><td>Full breakdown, timeline, every factor</td></tr>
+<tr><td><strong>Lead record</strong></td><td>Top + / − factor breakdown, activity timeline, confidence / missing fields</td><td>Aggregate dashboard metrics</td></tr>
+<tr><td><strong>All Leads list</strong></td><td>Score + badge, sortable columns</td><td>Repeating the record's detail inline</td></tr>
+<tr><td><strong>Dashboard</strong></td><td>Distribution, priority queue, buying-intent &amp; follow-up alerts, (later) conversion by class</td><td>Individual per-lead breakdowns</td></tr>
+</tbody></table></div>
+<p>This division follows progressive disclosure — decision-critical facts first, detail on demand<sup><a href="#s-pd">15</a></sup> — and prevents the same information appearing on three screens.</p>
+
+<h3>Colour, accessibility &amp; responsiveness</h3>
+<ul>
+<li><strong>Redundant encoding.</strong> Every class carries a glyph + label as well as colour (●◐○◇), per WCAG 1.4.1.<sup><a href="#s-woc">9</a></sup> The page should remain legible in greyscale — a standard test.<sup><a href="#s-woc">9</a></sup></li>
+<li><strong>Contrast.</strong> Labels meet 4.5:1 (large text 3:1);<sup><a href="#s-contrast">10</a></sup> a score bar or ring meets 3:1 as a non-text indicator.<sup><a href="#s-nontext">11</a></sup></li>
+<li><strong>Restraint.</strong> Mute non-data elements — thin rules, soft grid, no 3-D or shadows — so the score and signals dominate.<sup><a href="#s-fewink">13</a></sup></li>
+<li><strong>Desktop vs mobile.</strong> The card essentials and the breakdown list survive on a phone; multi-series charts and the wide dashboard simplify to stacked bars or move behind an expander. Because the score is computed server-side, desktop and mobile always agree.</li>
+</ul>
+
+<!-- 09 -->
+<h2 id="validation"><span class="sec-eyebrow">09</span>Data quality, missing information &amp; validation</h2>
+<p class="intro">Two research questions decide whether the visualization is trustworthy: how to treat what is <em>not known</em>, and how to prove the score actually predicts bookings.</p>
+
+<h3>Four states the interface must tell apart</h3>
+<figure>
+<div class="fig-h">Unknown is not negative — a decision matrix</div>
+<div class="tablewrap"><table>
+<thead><tr><th>State</th><th>Example</th><th>Score effect</th><th>How to show it</th></tr></thead>
+<tbody>
+<tr><td><strong>Unknown / uncollected</strong></td><td>Budget blank</td><td>0 — neutral</td><td>Grey "still unknown"; a data-readiness meter</td></tr>
+<tr><td><strong>Confirmed negative</strong></td><td>No-show; said "not interested"</td><td>Capped, reversible penalty / Lost state</td><td>Amber/red attention item, labelled</td></tr>
+<tr><td><strong>Positive, not yet occurred</strong></td><td>No tour booked yet</td><td>0</td><td>Neutral "next opportunity", not a risk</td></tr>
+<tr><td><strong>Insufficient to score</strong></td><td>New lead, few fields</td><td>— (no number)</td><td>"Not scored yet" + the missing fields</td></tr>
+</tbody></table></div>
+<figcaption><b>Principle</b> &nbsp;Missing information must never be rendered as evidence of low intent — that would bury new leads, exactly where speed matters most.<sup><a href="#s-speed">7</a></sup> A high-intent action (a tour booking) should surface immediately even while qualification fields are blank. Score, classification and <em>confidence</em> are three distinct ideas needing three distinct cues.</figcaption>
+</figure>
+
+<h3>Proving the score works — concepts only</h3>
+<p>Before any conversion figure is shown as fact, it must come from the CRM's own closed outcomes; until then these are conceptual illustrations of <em>what to measure</em>, not results.</p>
+<figure>
+<div class="fig-h">Conversion rate by class — the shape a working model should show <span class="illus">Conceptual</span></div>
+<div class="hbars" role="img" aria-label="Conceptual: Hot converts much higher than Warm, Warm higher than Cold.">
+<div class="hbar"><span class="lab">● Hot</span><span class="track"><i class="hot" style="width:85%"></i></span><span class="val">high</span></div>
+<div class="hbar"><span class="lab">◐ Warm</span><span class="track"><i class="warm" style="width:45%"></i></span><span class="val">mid</span></div>
+<div class="hbar"><span class="lab">○ Cold</span><span class="track"><i class="cold" style="width:12%"></i></span><span class="val">low</span></div>
+</div>
+<figcaption><b>Conceptual only — no real values.</b> &nbsp;A well-calibrated model shows a clear monotonic gap between classes. Bars are illustrative shapes, not measured rates; replace with real data from the Bookings/Accounting records before presenting to management.</figcaption>
+</figure>
+<figure>
+<div class="fig-h">Error framing — false positives vs false negatives</div>
+<div class="cm" role="img" aria-label="Confusion matrix: Hot and booked = true positive; Hot and not booked = false positive, wasted effort; Cold and booked = false negative, missed revenue; Cold and not booked = true negative.">
+<div class="hd"></div><div class="hd">Booked</div><div class="hd">Not booked</div>
+<div class="hd">Scored Hot</div><div class="tp"><b>True positive</b>correctly prioritised</div><div class="fp"><b>False positive</b>wasted effort</div>
+<div class="hd">Scored Cold</div><div class="fn"><b>False negative</b>missed revenue — costliest</div><div class="tn"><b>True negative</b>correctly rested</div>
+</div>
+<figcaption><b>What to watch</b> &nbsp;<em>False negatives</em> (a Cold lead that booked) are the expensive misses and the main reason never to let missing data push a new lead to Cold. Track both error types as outcomes accumulate; review weights roughly quarterly.<sup><a href="#s-mautic">4</a></sup></figcaption>
+</figure>
+<div class="call key"><span class="k">Calibration — the honesty test</span><p>A weighted score becomes a <em>probability of booking</em> only after it is validated against real outcomes and the predicted likelihoods match observed rates. That needs volume — Salesforce cites ~1,000 leads with ~120 conversions for its predictive score<sup><a href="#s-einstein-data">2</a></sup> — which two venues may take 12–24 months to reach. Until then, present and label the number as a <strong>priority score</strong>, never a probability.</p></div>
+
+<!-- 10 -->
+<h2 id="reco"><span class="sec-eyebrow">10</span>Prioritized recommendations</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Priority</th><th>Recommendation</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td><span class="tag ess">Essential</span></td><td>Show score <em>and</em> badge together, with a glyph + label (not colour alone)</td><td>Gradient + category; WCAG 1.4.1<sup><a href="#s-woc">9</a></sup></td></tr>
+<tr><td><span class="tag ess">Essential</span></td><td>Add a top positive / negative factor breakdown in the lead record</td><td>Highest-value explainability<sup><a href="#s-einstein">3</a></sup></td></tr>
+<tr><td><span class="tag ess">Essential</span></td><td>Separate score, pipeline stage, follow-up urgency &amp; confidence as distinct cues</td><td>The same signal means different things by stage<sup><a href="#s-pedowitz">8</a></sup></td></tr>
+<tr><td><span class="tag ess">Essential</span></td><td>Give new/thin leads a "Not scored yet" state with missing fields — never a low %</td><td>Speed matters most on new leads<sup><a href="#s-speed">7</a></sup></td></tr>
+<tr><td><span class="tag ess">Essential</span></td><td>Build a prioritization list ranked by urgency, not score alone</td><td>Turns scores into a work queue</td></tr>
+<tr><td><span class="tag ess">Essential</span></td><td>Label the number a priority score, not a probability, until calibrated</td><td>Integrity<sup><a href="#s-einstein-data">2</a></sup></td></tr>
+<tr><td><span class="tag ben">Beneficial</span></td><td>A compact bar/ring beside the number; an activity timeline in the record</td><td>Length reads fast;<sup><a href="#s-gauge">12</a></sup> timeline shows why &amp; when</td></tr>
+<tr><td><span class="tag ben">Beneficial</span></td><td>Dashboard: distribution + buying-intent &amp; follow-up alerts (kept separate from score)</td><td>Daily prioritization without clutter<sup><a href="#s-fewink">13</a></sup></td></tr>
+<tr><td><span class="tag ben">Beneficial</span></td><td>Apply progressive disclosure: card = essentials, record = detail</td><td>Avoids overload &amp; duplication<sup><a href="#s-pd">15</a></sup></td></tr>
+<tr><td><span class="tag opt">Optional</span></td><td>Score-history sparkline on the card</td><td>Only once history &amp; space allow<sup><a href="#s-spark">14</a></sup></td></tr>
+<tr><td><span class="tag opt">Optional</span></td><td>Aggregate conversion / calibration charts for managers</td><td>Only with validated data</td></tr>
+</tbody></table></div>
+<h3>Data requirements &amp; assumptions (for the dev team)</h3>
+<p>Several recommendations assume data the CRM may not yet expose: a per-factor contribution record (for the breakdown), reliable activity timestamps (for recency/decay and the timeline), a tour <em>source</em> flag (self-booked vs staff-arranged) and no-show capture (for buying-intent and negative cues), and a closed-outcome history (for validation). These should be confirmed against the real schema before building; none is assumed to already exist.</p>
+
+<!-- 11 -->
+<h2 id="sources"><span class="sec-eyebrow">11</span>Sources &amp; references</h2>
+<p style="font-size:14px;color:var(--muted)">Primary standards are distinguished from vendor and practitioner guidance. Point values and thresholds in vendor sources are examples, not standards, as those sources note. Ratings, verdicts and weights in this report are our analysis unless a citation is attached.</p>
+<ol class="srcs">
+<li id="s-hubspot"><a href="https://grain.com/blog/hubspot-lead-scoring">A Complete Guide to HubSpot Lead Scoring</a> — explicit vs. implicit scoring; engagement decay (vendor guide).</li>
+<li id="s-einstein-data"><a href="https://www.octavehq.com/post/salesforce-einstein-ai-sales-lead-scoring-guide">Salesforce Einstein AI Lead Scoring Guide</a> — predictive-model data volume (~1,000 leads / 120 conversions); verify against Salesforce docs (secondary).</li>
+<li id="s-einstein"><a href="https://trailhead.salesforce.com/content/learn/modules/lead-scoring-and-grading-in-account-engagement/einstein-scoring-in-account-engagement">Salesforce Trailhead — Einstein Scoring</a>: top positive / top negative predictive factors as the explainability mechanism.</li>
+<li id="s-mautic"><a href="https://kb.mautic.org/print-64.html">Mautic — Lead scoring best practices</a>: decay for inactivity, negative scoring, score floors; corroborated by the <a href="https://experienceleaguecommunities.adobe.com/adobe-marketo-engage-27/reset-lead-score-to-zero-for-leads-197458">Adobe Marketo community</a>.</li>
+<li id="s-chaffey"><a href="https://www.davechaffey.com/digital-marketing-glossary/lead-scoring-and-grading/">Dave Chaffey — Lead scoring &amp; grading</a>: the fit × interest "A1" grid (industry reference).</li>
+<li id="s-prospeo"><a href="https://prospeo.io/s/marketing-qualified-lead-criteria">MQL Criteria: Scoring &amp; SLA</a>: fit and engagement both required (vendor guide).</li>
+<li id="s-speed"><a href="https://hbr.org/2011/03/the-short-life-of-online-sales-leads">HBR — The Short Life of Online Sales Leads</a> (2011): ~7× qualifying odds within the first hour; the separate Lead Response Management (2007) study on 5- vs 30-minute odds, summarised <a href="https://verse.ai/blog/speed-to-lead-statistics">here</a> (relative odds, not conversion rates).</li>
+<li id="s-pedowitz"><a href="https://www.pedowitzgroup.com/why-align-lead-scoring-with-lifecycle-stages">Why Align Lead Scoring with Lifecycle Stages</a>: the same behaviour means different things at different stages (vendor guide).</li>
+<li id="s-woc"><a href="https://www.w3.org/WAI/WCAG21/Understanding/use-of-color.html">WCAG 2.1 — 1.4.1 Use of Color (Level A)</a>: colour must not be the only visual means of conveying information (W3C standard).</li>
+<li id="s-contrast"><a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html">WCAG 2.1 — 1.4.3 Contrast Minimum (AA)</a>: 4.5:1 for text, 3:1 for large text (W3C standard).</li>
+<li id="s-nontext"><a href="https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html">WCAG 2.1 — 1.4.11 Non-text Contrast (AA)</a>: 3:1 for UI components &amp; graphical objects (W3C standard).</li>
+<li id="s-gauge"><a href="https://vis4.net/blog/lets-break-the-rules/">vis4.net — on gauges</a> (length is judged more accurately than angle); <a href="https://dundas.com/support/learning/blog/types-of-data-visualizations-radial-gauges">Dundas</a> and <a href="https://help.qlik.com/en-us/sense/1.0/Subsystems/WorkingWith/Content/Visualizations/Gauge/Gauge.htm">Qlik</a> on gauge use (vendor / practitioner).</li>
+<li id="s-fewink"><a href="https://learn.saylor.org/mod/book/tool/print/index.php?id=82385">Design Principles for Dashboards (Saylor)</a> and <a href="https://analyticsdemystified.com/excel-tips/stephen-fews-derivation-of-tufte-the-data-pixel-ratio/">Few's data-pixel ratio</a> — reduce non-data ink, mute the rest (after Tufte, 1983).</li>
+<li id="s-spark"><a href="https://www.edwardtufte.com/notebook/sparkline-theory-and-practice-edward-tufte/">Edward Tufte — Sparkline theory &amp; practice</a>: small, intense, word-sized trend graphics.</li>
+<li id="s-pd"><a href="https://www.nngroup.com/articles/progressive-disclosure/">Nielsen Norman Group — Progressive Disclosure</a>: show what's relevant now, reveal detail on demand (usability principle).</li>
+</ol>
+
+<div class="foot">
+<p>Research report prepared for Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard — lead-score visualization. October 2026. Findings and recommendations only; no interface has been designed or built. Every figure is illustrative or conceptual unless a cited source is attached.</p>
+</div>
+
+</main></div>
+<script>
+// TOC active-section highlight — progressive enhancement only
+(function(){
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var map={}; links.forEach(function(a){var id=a.getAttribute('href').slice(1);var el=document.getElementById(id);if(el)map[id]=a;});
+  if(!('IntersectionObserver' in window))return;
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('cur')});var a=map[e.target.id];if(a)a.classList.add('cur');}});},{rootMargin:'-10% 0px -80% 0px'});
+  Object.keys(map).forEach(function(id){obs.observe(document.getElementById(id));});
+})();
+</script>
+</body>
+</html>

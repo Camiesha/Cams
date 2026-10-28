@@ -1,0 +1,102 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["EventVenue", "LocalBusiness"],
+  "@id": "https://crownprincehall.com/#venue",
+  "name": "Crown Prince Event Hall",
+  "alternateName": "Crown Prince Hall",
+  "description": "Crown Prince Event Hall is a 4,100 sq ft banquet hall and event venue in San Jose, CA for weddings, quinceañeras, debuts, birthdays, graduations and corporate events for up to 300 guests, with a stage, dance floor, red-carpet entrance, full bar and a private gated lot with 100+ parking spaces.",
+  "url": "https://crownprincehall.com/",
+  "telephone": "+1-408-408-1654",
+  "email": "REPLACE_WITH_BOOKING_EMAIL@crownprincehall.com",
+  "image": [
+    "https://crownprincehall.com/REPLACE/hall-wide-16x9.jpg",
+    "https://crownprincehall.com/REPLACE/hall-4x3.jpg",
+    "https://crownprincehall.com/REPLACE/hall-1x1.jpg"
+  ],
+  "logo": "https://crownprincehall.com/REPLACE/logo.png",
+  "priceRange": "$$$",
+  "currenciesAccepted": "USD",
+  "paymentAccepted": "Cash, Credit Card, Debit Card, Bank Transfer",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1654 Burdette Dr",
+    "addressLocality": "San Jose",
+    "addressRegion": "CA",
+    "postalCode": "95121",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "REPLACE_FROM_GOOGLE_MAPS e.g. 37.3xxx",
+    "longitude": "REPLACE_FROM_GOOGLE_MAPS e.g. -121.8xxx"
+  },
+  "hasMap": "https://www.google.com/maps/search/?api=1&query=1654+Burdette+Dr,+San+Jose,+CA+95121",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "09:00",
+      "closes": "21:00",
+      "description": "Inquiry and tour hours. Event rentals available all day, 7 days a week. EDIT to match the hours shown on Google Business Profile."
+    }
+  ],
+  "maximumAttendeeCapacity": 300,
+  "additionalProperty": [
+    { "@type": "PropertyValue", "name": "Floor area", "value": "4100", "unitText": "sq ft" },
+    { "@type": "PropertyValue", "name": "Seated capacity", "value": "300", "unitText": "guests" },
+    { "@type": "PropertyValue", "name": "Parking spaces", "value": "100+", "unitText": "gated on-site spaces" }
+  ],
+  "smokingAllowed": false,
+  "publicAccess": false,
+  "amenityFeature": [
+    { "@type": "LocationFeatureSpecification", "name": "Stage", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Dance floor", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Full bar", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Red-carpet entrance", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Gold Chiavari chairs and tables", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Big-screen TVs and sound system", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Bridal / VIP prep room", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Private gated parking lot (100+ spaces)", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Valet parking available", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Outside catering welcome with approval", "value": true },
+    { "@type": "LocationFeatureSpecification", "name": "Wheelchair accessible", "value": "REPLACE true/false" }
+  ],
+  "areaServed": [
+    { "@type": "City", "name": "San Jose" },
+    { "@type": "City", "name": "Santa Clara" },
+    { "@type": "City", "name": "Milpitas" },
+    { "@type": "City", "name": "Campbell" },
+    { "@type": "City", "name": "Sunnyvale" },
+    { "@type": "City", "name": "Fremont" },
+    { "@type": "AdministrativeArea", "name": "Santa Clara County" },
+    { "@type": "Place", "name": "San Francisco Bay Area" }
+  ],
+  "sameAs": [
+    "https://www.yelp.com/biz/crown-prince-event-hall-san-jose",
+    "REPLACE_WITH_GOOGLE_BUSINESS_PROFILE_URL",
+    "REPLACE_WITH_INSTAGRAM_URL",
+    "REPLACE_WITH_FACEBOOK_URL"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Crown Prince Event Hall Packages",
+    "itemListElement": [
+      { "@type": "Offer", "name": "Weekday Flex", "description": "Monday–Thursday hourly rental for meetings, rehearsals, community events and small gatherings.", "priceCurrency": "USD", "price": "REPLACE_HOURLY_RATE", "url": "https://crownprincehall.com/pricing/#weekday-flex" },
+      { "@type": "Offer", "name": "Weekend Essentials", "description": "Friday–Sunday event-ready rental: 6-hour event window, 2 hours setup, 8 hours of on-site attendants, Gold Chiavari chairs and tables, big-screen TVs.", "priceCurrency": "USD", "price": "REPLACE_PACKAGE_PRICE", "url": "https://crownprincehall.com/pricing/#weekend-essentials" },
+      { "@type": "Offer", "name": "Celebration Plus", "description": "Birthdays, graduations and anniversaries with the extras handled.", "priceCurrency": "USD", "price": "REPLACE_PACKAGE_PRICE", "url": "https://crownprincehall.com/pricing/#celebration-plus" },
+      { "@type": "Offer", "name": "Wedding & Debut Premium", "description": "Weddings, quinceañeras and debuts with full red-carpet treatment, bridal/VIP prep room and VIP grand entrance.", "priceCurrency": "USD", "price": "REPLACE_PACKAGE_PRICE", "url": "https://crownprincehall.com/pricing/#wedding-debut-premium" }
+    ]
+  },
+  "potentialAction": {
+    "@type": "ReserveAction",
+    "name": "Book a private tour",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://crownprincehall.com/book-a-tour/",
+      "actionPlatform": ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"]
+    },
+    "result": { "@type": "Reservation", "name": "Venue tour" }
+  }
+}
+</script>
