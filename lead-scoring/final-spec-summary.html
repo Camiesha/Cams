@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Scoring — Final Spec (Summary)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600&family=Source+Sans+3:ital,wght@0,400;0,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#F3F2EE;--panel:#FFFFFF;--ink:#1C1A1F;--muted:#6B6772;--line:#DAD7D0;--wine:#6B1F2E;--wine-soft:#F1E3E5;--gold:#A5812A;--gold-soft:#F4EBD4;--slate:#5B6B7A;--slate-soft:#E4E9ED;--good:#2F6B45;--good-soft:#E1EFE6;--code:#F8F7F4;--viz:#2A78D6;--neg:#C23A39;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#17141A;--panel:#211D25;--ink:#ECE8E3;--muted:#A49FA9;--line:#39343F;--wine:#D0687C;--wine-soft:#3A2028;--gold:#D6B05A;--gold-soft:#3A3120;--slate:#9DB0C0;--slate-soft:#26303A;--good:#6FB98A;--good-soft:#1F3328;--code:#1B1820;--viz:#3987E5;--neg:#E66767;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Source Sans 3",Segoe UI,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.55}
+main{max-width:800px;margin:0 auto;padding:52px 24px 80px}
+h1,h2{font-family:"Bodoni Moda",Didot,"Times New Roman",serif;font-weight:600;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.015em}
+h2{font-size:23px;margin:46px 0 10px;padding-top:18px;border-top:1px solid var(--line)}
+.num{font-family:"IBM Plex Mono",monospace;color:var(--wine);font-size:.6em;margin-right:8px;vertical-align:3px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+.meta{color:var(--muted);font-size:14px;margin-top:14px;font-family:"IBM Plex Mono",monospace}
+p{margin:0 0 13px;max-width:70ch}ul,ol{padding-left:20px;margin:0 0 13px;max-width:70ch}li{margin-bottom:6px}
+.lede{font-size:18.5px;color:var(--muted);max-width:60ch;border-left:3px solid var(--gold);padding-left:16px;font-style:italic;margin:16px 0 0}
+code{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--code);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+.formula{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--viz);border-radius:0 8px 8px 0;padding:16px 18px;margin:14px 0}
+.formula .f{font-family:"Bodoni Moda",serif;font-size:21px;font-weight:600;line-height:1.3}
+.formula .clamp{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:12px 0}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1.5px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n{text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cls{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:12px;text-transform:uppercase}
+.cls .g{font-size:12px}
+.hot{color:var(--wine)}.warm{color:var(--gold)}.cold{color:var(--slate)}.won{color:var(--good)}.ns{color:var(--muted)}
+.dims{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}@media(max-width:620px){.dims{grid-template-columns:1fr}}
+.dim{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.dim .h{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between}
+.dim .h b{color:var(--viz)}.dim.negdim .h b{color:var(--neg)}
+.dim p{font-size:13.5px;color:var(--muted);margin:6px 0 0}
+.note{background:var(--gold-soft);border-left:3px solid var(--gold);padding:13px 16px;border-radius:0 6px 6px 0;margin:16px 0}
+.note.key{background:var(--good-soft);border-color:var(--good)}
+.note p:last-child{margin:0}.note .k{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.foot{margin-top:52px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px}
+a{color:var(--wine)}
+</style>
+<body>
+<main>
+<span class="eyebrow">Final specification · Summary · October 2026</span>
+<h1 style="margin-top:12px">Lead Scoring — Final Specification</h1>
+<div class="meta">Crown Prince Event Hall (CPH, ≤300) &amp; Alvin Studio &amp; Courtyard (ACD, ≤100)</div>
+<p class="lede">Replace completeness-based scoring with a behaviour-driven system that identifies high-intent leads, prioritises follow-ups, and avoids overlooking promising inquiries.</p>
+
+<h2><span class="num">1</span>Objective</h2>
+<p>Replace the current completeness-based scoring with a behaviour-driven lead-scoring system that helps the sales team identify high-intent leads, prioritise follow-ups, and avoid overlooking promising inquiries.</p>
+
+<h2><span class="num">2</span>Scoring formula</h2>
+<div class="formula">
+<div class="f">Priority Score = Fit (35) + Buying Intent (55) + Engagement (10) − Negative Signals (up to 25)</div>
+<div class="clamp">clamp(score, 0, 100)</div>
+</div>
+<div class="dims">
+<div class="dim"><div class="h">Fit <b>35</b></div><p>Event type, date, guest capacity, availability, and budget compatibility.</p></div>
+<div class="dim"><div class="h">Buying intent <b>55</b></div><p>Tour activity, quotation requests, and deposit discussions.</p></div>
+<div class="dim"><div class="h">Engagement <b>10</b></div><p>Recent customer replies and interaction frequency.</p></div>
+<div class="dim negdim"><div class="h">Negative signals <b>−25</b></div><p>No-shows, repeated rescheduling, and prolonged silence after prior engagement.</p></div>
+</div>
+<p><strong>Data completeness:</strong> tracked separately — missing information must not reduce the score.</p>
+<p class="meta" style="margin-top:4px">All weights are proposed and require validation against actual CRM outcomes.</p>
+
+<h2><span class="num">3</span>Classification rules</h2>
+<table>
+<thead><tr><th>Classification</th><th class="n">Score</th><th>Key rule</th></tr></thead>
+<tbody>
+<tr><td><span class="cls cold"><span class="g">○</span>Cold</span></td><td class="n">0–39</td><td>Low current priority</td></tr>
+<tr><td><span class="cls warm"><span class="g">◐</span>Warm</span></td><td class="n">40–69</td><td>Moderate intent or confirmed tour</td></tr>
+<tr><td><span class="cls hot"><span class="g">●</span>Hot</span></td><td class="n">70–100</td><td>Strong buying intent</td></tr>
+<tr><td><span class="cls ns"><span class="g">◇</span>Not scored yet</span></td><td class="n">—</td><td>Insufficient information</td></tr>
+<tr><td><span class="cls won"><span class="g">✓</span>Won</span></td><td class="n">—</td><td>Deposit received or agreement signed</td></tr>
+<tr><td><span class="cls cold"><span class="g">✕</span>Lost</span></td><td class="n">—</td><td>Disqualified or explicitly uninterested</td></tr>
+</tbody></table>
+<p><strong>Required overrides:</strong></p>
+<ul>
+<li>A <strong>confirmed tour</strong> immediately qualifies for at least Warm.</li>
+<li>An <strong>unconfirmed tour request</strong> signals intent but does not automatically qualify for Warm.</li>
+<li>Asking about a <strong>deposit</strong> or securing a date triggers Hot.</li>
+<li>Disqualification and explicit disinterest override the score.</li>
+<li>Won and Lost leads leave the ordinary prospect queue.</li>
+<li>New leads must not be classified as Cold simply because their records are incomplete.</li>
+</ul>
+
+<h2><span class="num">4</span>Automation requirements</h2>
+<p>Implement <strong>one server-side scoring function</strong> as the single source of truth for desktop and mobile. Recalculate scores when:</p>
+<ul>
+<li>A lead is created or customer details change.</li>
+<li>A tour is booked, rescheduled, cancelled, attended, or missed.</li>
+<li>A customer replies.</li>
+<li>A quotation is requested or sent.</li>
+<li>A deposit is discussed, received, or an agreement is signed.</li>
+<li>Engagement becomes stale, requiring decay or dormancy evaluation.</li>
+</ul>
+<p>Prevent duplicate events from changing scores twice. Record score changes, contributing factors, timestamps, and correction history. Negative signals must be reversible when appropriate.</p>
+
+<h2><span class="num">5</span>Separate follow-up urgency</h2>
+<p>Do <strong>not</strong> combine urgency with the priority score. Prioritise new inquiries awaiting first contact, upcoming tours, post-tour quotations, active deposit discussions, overdue tasks, and previously engaged leads that have gone dormant.</p>
+<p>Display the score, classification, reasons for the score, missing information, and recommended next action.</p>
+
+<h2><span class="num">6</span>Validation &amp; acceptance tests</h2>
+<p>Before launch, verify that:</p>
+<ul>
+<li>Confirmed tours and deposit inquiries trigger the correct classifications.</li>
+<li>Missing data does not unfairly lower scores.</li>
+<li>Milestones replace earlier milestones instead of double-counting them.</li>
+<li>Duplicate events are ignored.</li>
+<li>Corrections and negative-signal recovery work correctly.</li>
+<li>Follow-up urgency remains independent of scoring.</li>
+<li>Payments and signed agreements transition leads to Won.</li>
+<li>Desktop and mobile display consistent results.</li>
+</ul>
+<p>Test the rules against historical CRM data before adjusting weights and thresholds. Treat conversion probability as a separate future feature requiring sufficient data and statistical validation.</p>
+
+<h2><span class="num">7</span>Implementation priorities</h2>
+<ol>
+<li>Audit existing CRM fields, integrations, and event tracking.</li>
+<li>Approve the scoring matrix, thresholds, and override rules.</li>
+<li>Build the scoring engine, audit log, and automation.</li>
+<li>Test against acceptance criteria before rollout.</li>
+<li>Validate and refine using actual booking outcomes.</li>
+</ol>
+
+<div class="note key"><span class="k">Important</span><p>The 0–100 score represents <strong>lead priority, not the percentage chance of booking.</strong> All proposed weights and thresholds remain provisional until validated against real outcomes.</p></div>
+
+<div class="foot">
+<p>Condensed final specification — the at-a-glance canonical summary. The full audited version, with the complete scoring matrix, override precedence tree, 15 recalculated worked examples, automation trigger table, validation framework, acceptance tests, roadmap and references, is in <code>lead-scoring/final-specification.html</code>. Crown Prince Event Hall &amp; Alvin Studio &amp; Courtyard · October 2026.</p>
+</div>
+</main>
+</body>
+</html>
